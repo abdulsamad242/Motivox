@@ -7,6 +7,9 @@ import '../../widgets/buttons/primary_button.dart';
 class WhySummaryPage extends StatelessWidget {
   const WhySummaryPage({super.key});
 
+  // ---------------------------------------------------------------------------
+  // CARD BUILDER (updated brightness + spacing exactly like mockup)
+  // ---------------------------------------------------------------------------
   Widget _buildInfoCard({
     required IconData icon,
     required String title,
@@ -14,31 +17,35 @@ class WhySummaryPage extends StatelessWidget {
   }) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 18),
       decoration: BoxDecoration(
-        color: const Color(0xFF2A3A5C).withOpacity(0.35),
+        color: const Color(0xFF314365).withOpacity(0.55), // brighter glass
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: Colors.white.withOpacity(0.14),
-          width: 1,
+          color: Colors.white.withOpacity(0.22), // brighter border
+          width: 1.2,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.20),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Title Row
           Row(
             children: [
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.12),
+                  color: Colors.white.withOpacity(0.15),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
-                  icon,
-                  color: Colors.white,
-                  size: 18,
-                ),
+                child: Icon(icon, color: Colors.white, size: 18),
               ),
               const SizedBox(width: 10),
               Expanded(
@@ -54,12 +61,13 @@ class WhySummaryPage extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
 
+          // Value text
           Text(
             value,
             style: AppTextStyles.body.copyWith(
-              color: Colors.white.withOpacity(0.85),
+              color: Colors.white.withOpacity(0.90),
               fontSize: 14.5,
               height: 1.45,
             ),
@@ -68,6 +76,8 @@ class WhySummaryPage extends StatelessWidget {
       ),
     );
   }
+
+  // ---------------------------------------------------------------------------
 
   @override
   Widget build(BuildContext context) {
@@ -82,41 +92,68 @@ class WhySummaryPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
-                // TOP HEADER
+                //------------------------------------------------------------------
+                // TOP HEADER CARD (logo)
+                //------------------------------------------------------------------
                 const AppHeader(),
-                const SizedBox(height: 26),
+                const SizedBox(height: 28),
 
-                // TITLE
-                Text(
-                  "The Power Behind My Why",
-                  style: AppTextStyles.heading1.copyWith(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                  ),
-                ),
-
-                const SizedBox(height: 6),
-
-                Text(
-                  "A reminder of why I started and where I'm heading.",
-                  style: AppTextStyles.label.copyWith(
-                    fontSize: 14,
-                    color: Colors.white.withOpacity(0.70),
-                    height: 1.4,
-                  ),
+                //------------------------------------------------------------------
+                // MAIN TITLE + ICON (mockup-accurate)
+                //------------------------------------------------------------------
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.12),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.favorite,
+                        color: Colors.white,
+                        size: 19,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "The Power Behind My Why",
+                            style: AppTextStyles.heading1.copyWith(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            "A reminder of why I started and where I'm heading.",
+                            style: AppTextStyles.label.copyWith(
+                              fontSize: 14,
+                              color: Colors.white.withOpacity(0.70),
+                              height: 1.4,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
 
                 const SizedBox(height: 28),
 
-                // CARDS
+                //------------------------------------------------------------------
+                // INFO CARDS
+                //------------------------------------------------------------------
                 _buildInfoCard(
                   icon: Icons.explore,
                   title: "Your niche",
                   value: "Entrepreneurship",
                 ),
-
                 const SizedBox(height: 18),
 
                 _buildInfoCard(
@@ -124,7 +161,6 @@ class WhySummaryPage extends StatelessWidget {
                   title: "Your Micro Niche",
                   value: "Providing Item to People",
                 ),
-
                 const SizedBox(height: 18),
 
                 _buildInfoCard(
@@ -133,7 +169,6 @@ class WhySummaryPage extends StatelessWidget {
                   value:
                       "Helping people to fulfill their dreams to live a happy and fulfilled life.",
                 ),
-
                 const SizedBox(height: 18),
 
                 _buildInfoCard(
@@ -142,7 +177,6 @@ class WhySummaryPage extends StatelessWidget {
                   value:
                       "Helping 1 million people to build second source of income using their skills and knowledge to live a happy and freedom life.",
                 ),
-
                 const SizedBox(height: 18),
 
                 _buildInfoCard(
@@ -151,7 +185,6 @@ class WhySummaryPage extends StatelessWidget {
                   value:
                       "As a freedom coach Helping 1 million people to build second source of income using their skills and knowledge to live a happy and freedom life.",
                 ),
-
                 const SizedBox(height: 18),
 
                 _buildInfoCard(
@@ -160,15 +193,15 @@ class WhySummaryPage extends StatelessWidget {
                   value:
                       "Yet to be decided. It’s all right. Take your time and figure it out.",
                 ),
-
                 const SizedBox(height: 35),
 
+                //------------------------------------------------------------------
                 // BUTTON
+                //------------------------------------------------------------------
                 PrimaryButton(
                   label: "View Your Vision Board",
                   onTap: () {},
                 ),
-
                 const SizedBox(height: 26),
               ],
             ),

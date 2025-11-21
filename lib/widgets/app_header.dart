@@ -9,32 +9,23 @@ class AppHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        // Gradient background like in mockup - blue/purple tint
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            const Color(0xFF3A5A8C).withOpacity(0.35), // Blue tint
-            const Color(0xFF2A4870).withOpacity(0.25), // Darker blue
-          ],
-        ),
-        borderRadius: BorderRadius.circular(20),
-        // Optional: subtle border for depth
-        border: Border.all(
-          color: Colors.white.withOpacity(0.08),
-          width: 1,
-        ),
-      ),
-      child: Center(
-        child: Image.asset(
-          "assets/images/logo.png",
-          height: 60, // Slightly smaller for better proportion
-          fit: BoxFit.contain,
-        ),
-      ),
-    );
+                height: 90,
+                width: double.infinity,
+                margin: const EdgeInsets.only(bottom: 18),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF374E8C), Color(0xFF223365)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Center(
+                  child: Image.asset(
+                    "assets/images/logo.png", // Your logo asset
+                    height: 60,
+                  ),
+                ),
+              );
   }
 }

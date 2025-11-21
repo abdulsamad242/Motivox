@@ -48,6 +48,7 @@ class _SplashPageState extends State<SplashPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       body: Container(
         decoration: const BoxDecoration(
           gradient: AppGradients.mainBackground,
@@ -68,6 +69,7 @@ class _SplashPageState extends State<SplashPage>
           ),
         ),
       ),
+      
     );
   }
 }

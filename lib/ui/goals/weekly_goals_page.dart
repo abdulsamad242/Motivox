@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
-class YearlyGoalsPage extends StatefulWidget {
-  const YearlyGoalsPage({super.key});
+class WeeklyGoalsPage extends StatefulWidget {
+  const WeeklyGoalsPage({super.key});
   @override
-  State<YearlyGoalsPage> createState() => _YearlyGoalsPageState();
+  State<WeeklyGoalsPage> createState() => _WeeklyGoalsPageState();
 }
 
-class _YearlyGoalsPageState extends State<YearlyGoalsPage> {
-  final List<int> years = [2019, 2020, 2021, 2022, 2023, 2024, 2025];
-  int selectedYear = 2025;
+class _WeeklyGoalsPageState extends State<WeeklyGoalsPage> {
+  final List<String> week = ["1st Week", "2nd Week", "3rd Week", "4th Week"];
+  final List<String> month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  String selectedMonth = "Sep";
+  String selectedWeek = "1st Week";
 
   final goalTitleController = TextEditingController();
   final dateController = TextEditingController();
@@ -25,7 +27,7 @@ class _YearlyGoalsPageState extends State<YearlyGoalsPage> {
     "Learning AI Tools",
   ];
 
-  final List<Map<String, String>> yearlyGoals = [
+  final List<Map<String, String>> weeklyGoals = [
     {"title": "Preparing a Coaching Program", "status": "Pending"},
     {"title": "Building Product and Service", "status": "Completed"},
     {"title": "Designing a Landing Page", "status": "Pending"},
@@ -38,6 +40,33 @@ class _YearlyGoalsPageState extends State<YearlyGoalsPage> {
     "Completed": Color(0xFF26BA6A),
     "Remove": Color(0xFFF44D4D),
   };
+
+  // Month selector popup
+  void _showMonthSelector() async {
+    final String? selected = await showDialog<String>(
+      context: context,
+      builder: (ctx) => SimpleDialog(
+        backgroundColor: const Color(0xFF212A49),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        title: const Text('Select Month', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
+        children: month.map((m) => SimpleDialogOption(
+          onPressed: () => Navigator.of(ctx).pop(m),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6),
+            child: Text(
+              m,
+              style: TextStyle(
+                color: m == selectedMonth ? Color(0xFF2C51FC) : Colors.white,
+                fontWeight: m == selectedMonth ? FontWeight.bold : FontWeight.normal,
+                fontSize: 16,
+              ),
+            ),
+          ),
+        )).toList(),
+      ),
+    );
+    if (selected != null) setState(() => selectedMonth = selected);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +99,7 @@ class _YearlyGoalsPageState extends State<YearlyGoalsPage> {
                 ),
               ),
             ),
-            // Yearly Goals Header + Add New
+            // Weekly Goals Header + Add New
             Container(
               decoration: BoxDecoration(
                 color: cardColor.withOpacity(0.93),
@@ -88,7 +117,7 @@ class _YearlyGoalsPageState extends State<YearlyGoalsPage> {
                     ),
                     child: Center(
                       child: Image.asset(
-                        'assets/icons/yearly_goals.png',
+                        'assets/icons/weekly_goals.png', // your PNG icon
                         width: 27,
                         height: 27,
                         fit: BoxFit.contain,
@@ -98,7 +127,7 @@ class _YearlyGoalsPageState extends State<YearlyGoalsPage> {
                   const SizedBox(width: 13),
                   const Expanded(
                     child: Text(
-                      "My Yearly Goals",
+                      "My Weekly Goals",
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w700,
@@ -276,7 +305,7 @@ class _YearlyGoalsPageState extends State<YearlyGoalsPage> {
             ),
             const SizedBox(height: 16),
 
-            // --- Year Selector: All in one container, blue pill for selected ---
+            // --- Month & Week Selector Container ---
             Container(
               margin: const EdgeInsets.only(bottom: 10),
               decoration: BoxDecoration(
@@ -291,7 +320,7 @@ class _YearlyGoalsPageState extends State<YearlyGoalsPage> {
                   Row(
                     children: [
                       const Text(
-                        "Yearly Goals",
+                        "Weekly Goals",
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w700,
@@ -299,29 +328,33 @@ class _YearlyGoalsPageState extends State<YearlyGoalsPage> {
                         ),
                       ),
                       const Spacer(),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF2C51FC),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 9),
-                        child: Row(
-                          children: [
-                            Text(
-                              selectedYear.toString(),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 15,
+                      InkWell(
+                        onTap: _showMonthSelector,
+                        borderRadius: BorderRadius.circular(14),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF2C51FC),
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                          child: Row(
+                            children: [
+                              Text(
+                                selectedMonth,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 15.5,
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: 10),
-                            Icon(
-                              Icons.calendar_today_outlined,
-                              color: Colors.white,
-                              size: 18,
-                            ),
-                          ],
+                              const SizedBox(width: 10),
+                              Icon(
+                                Icons.calendar_today_outlined,
+                                color: Colors.white,
+                                size: 18,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -330,28 +363,30 @@ class _YearlyGoalsPageState extends State<YearlyGoalsPage> {
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
-                      children: years.map((y) {
-                        final bool isSelected = y == selectedYear;
+                      children: week.map((w) {
+                        final bool isSelected = w == selectedWeek;
                         return GestureDetector(
-                          onTap: () => setState(() => selectedYear = y),
+                          onTap: () => setState(() => selectedWeek = w),
                           child: Container(
                             margin: const EdgeInsets.only(right: 10),
                             decoration: BoxDecoration(
                               color: isSelected ? const Color(0xFF2C51FC) : Colors.transparent,
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(
-                                color: isSelected ? const Color(0xFF2C51FC) : Colors.transparent,
-                                width: 1.3,
-                              ),
                             ),
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 25),
-                            child: Text(
-                              y.toString(),
-                              style: TextStyle(
-                                color: isSelected ? Colors.white : Colors.white.withOpacity(0.86),
-                                fontWeight: FontWeight.w600,
-                                fontSize: 15,
-                              ),
+                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                            child: Row(
+                              children: [
+                                Text(
+                                  w,
+                                  style: TextStyle(
+                                    color: isSelected ? Colors.white : Colors.white.withOpacity(0.86),
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                const SizedBox(width: 9),
+                                Icon(Icons.calendar_month, color: Colors.white, size: 20),
+                              ],
                             ),
                           ),
                         );
@@ -362,7 +397,7 @@ class _YearlyGoalsPageState extends State<YearlyGoalsPage> {
               ),
             ),
 
-            // --- Yearly Goals List in Main Container ---
+            // --- Weekly Goals List in Main Container ---
             Container(
               decoration: BoxDecoration(
                 color: cardColor.withOpacity(0.96),
@@ -376,7 +411,7 @@ class _YearlyGoalsPageState extends State<YearlyGoalsPage> {
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 7, vertical: 2),
                     child: Text(
-                      "My Yearly Goals List",
+                      "My Weekly Goals List",
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w700,
@@ -386,7 +421,7 @@ class _YearlyGoalsPageState extends State<YearlyGoalsPage> {
                   ),
                   const SizedBox(height: 10),
                   Column(
-                    children: List.generate(yearlyGoals.length, (i) {
+                    children: List.generate(weeklyGoals.length, (i) {
                       return Padding(
                         padding: EdgeInsets.only(left: 8, right: 8, top: i == 0 ? 0 : 9, bottom: 0),
                         child: Container(
@@ -396,7 +431,7 @@ class _YearlyGoalsPageState extends State<YearlyGoalsPage> {
                           ),
                           child: ListTile(
                             title: Text(
-                              yearlyGoals[i]["title"]!,
+                              weeklyGoals[i]["title"]!,
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w500,
@@ -406,11 +441,11 @@ class _YearlyGoalsPageState extends State<YearlyGoalsPage> {
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                _statusChip(yearlyGoals[i]["status"]!),
+                                _statusChip(weeklyGoals[i]["status"]!),
                                 const SizedBox(width: 8),
                                 _removeChip(() {
                                   setState(() {
-                                    yearlyGoals.removeAt(i);
+                                    weeklyGoals.removeAt(i);
                                   });
                                 }),
                               ],

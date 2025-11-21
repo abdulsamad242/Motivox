@@ -15,48 +15,52 @@ class LargeTextArea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: const Color(0xFF1A2441).withOpacity(0.6), // Darker card background
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.15),
-          width: 1,
-        ),
+    return TextFormField(
+      controller: controller,
+      minLines: minLines,
+      maxLines: null,
+      keyboardType: TextInputType.multiline,
+      textInputAction: TextInputAction.newline,
+      cursorColor: const Color(0xFFFF8C42), // Orange cursor
+      cursorWidth: 2,
+      cursorHeight: 20,
+      style: AppTextStyles.body.copyWith(
+        color: Colors.white.withOpacity(0.9),
+        fontSize: 14.5,
+        height: 1.5,
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      child: TextFormField(
-        controller: controller,
-        minLines: minLines,
-        maxLines: null,
-        keyboardType: TextInputType.multiline,
-        textInputAction: TextInputAction.newline,
-        cursorColor: const Color(0xFFFF8C42), // Orange cursor
-        cursorWidth: 2,
-        cursorHeight: 20,
-        style: AppTextStyles.body.copyWith(
-          color: Colors.white.withOpacity(0.9),
-          fontSize: 14.5,
+      decoration: InputDecoration(
+        hintText: hint,
+        hintStyle: AppTextStyles.label.copyWith(
+          color: Colors.white.withOpacity(0.35),
+          fontSize: 14,
           height: 1.5,
         ),
-        decoration: InputDecoration(
-          hintText: hint,
-          hintStyle: AppTextStyles.label.copyWith(
-            color: Colors.white.withOpacity(0.35),
-            fontSize: 14,
-            height: 1.5,
+        filled: true,
+        fillColor: const Color(0xFF1A2441).withOpacity(0.8), // background color for the field
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(
+            color: Colors.white.withOpacity(0.15),
+            width: 1,
           ),
-          border: InputBorder.none,
-          enabledBorder: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          errorBorder: InputBorder.none,
-          disabledBorder: InputBorder.none,
-          focusedErrorBorder: InputBorder.none,
-          contentPadding: EdgeInsets.zero,
-          isDense: true,
-          isCollapsed: true,
         ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(
+            color: Colors.white.withOpacity(0.15),
+            width: 1,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(
+            color: Colors.white.withOpacity(0.18),
+            width: 1.2,
+          ),
+        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        isDense: true,
       ),
     );
   }
