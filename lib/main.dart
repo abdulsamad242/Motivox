@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:motivix/ui/giver/imagination_page.dart';
+import 'package:motivix/ui/home/main_page.dart';
 import 'package:motivix/ui/onboarding/welcome_page.dart';
 
 import 'theme/app_theme.dart';
@@ -20,14 +22,14 @@ class MotivoxApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: const Size(390, 844),  // Figma size (iPhone 14 Pro)
+      designSize: const Size(390, 844), // Figma size (iPhone 14 Pro)
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (_, __) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: AppTheme.darkTheme,
-          home: const WhySummaryPage(),   // <-- START FROM SPLASH
+          home: const VisonBoardScreen(), // <-- START FROM SPLASH
         );
       },
     );

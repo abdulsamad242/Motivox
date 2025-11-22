@@ -21,6 +21,12 @@ class AppGradients {
       Color(0xFFFF8C42), // Main orange
     ],
   );
+  static const LinearGradient dailygiver = LinearGradient(
+    begin: Alignment.topRight,
+    end: Alignment.bottomLeft,
+    colors: [Color(0xFFFF9D5C), Color(0xFF0F1936)],
+    stops: [0.2, 0.8], // Adjusted stops for a smoother gradient
+  );
 
   // Glass Card Effect - Very subtle
   static const LinearGradient glassCard = LinearGradient(
@@ -33,10 +39,4 @@ class AppGradients {
   );
 
   // Logo Card Background - Darker version
-  static const LinearGradient logoCard = LinearGradient(
-    colors: [
-      Color(0xFF1A2745),
-      Color(0xFF131F3A),
-    ],
-  );
 }
