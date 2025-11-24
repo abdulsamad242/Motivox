@@ -3,15 +3,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../theme/app_text_style.dart';
 import '../../theme/app_gradients.dart';
 import '../../widgets/buttons/social_button.dart';
+import '../onboarding/identity_setup_page.dart'; // ✅ Adjust this import path as per your project structure
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
-      
       body: Container(
         width: double.infinity,
         decoration: const BoxDecoration(
@@ -25,7 +24,6 @@ class WelcomePage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-
                   /// LOGO CARD
                   Container(
                     height: 120.h,
@@ -83,25 +81,40 @@ class WelcomePage extends StatelessWidget {
 
                   SizedBox(height: 25.h),
 
-                  /// SOCIAL BUTTONS
+                  /// SOCIAL BUTTONS — with pushReplacement
                   SocialButton(
                     icon: "assets/icons/google.png",
                     label: "Continue with Google",
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => const IdentityStepOne()),
+                      );
+                    },
                   ),
                   SizedBox(height: 12.h),
 
                   SocialButton(
                     icon: "assets/icons/facebook.png",
                     label: "Continue with Facebook",
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => const IdentityStepOne()),
+                      );
+                    },
                   ),
                   SizedBox(height: 12.h),
 
                   SocialButton(
                     icon: "assets/icons/linkedin.png",
                     label: "Continue with LinkedIn",
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => const IdentityStepOne()),
+                      );
+                    },
                   ),
 
                   SizedBox(height: 35.h),

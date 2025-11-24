@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ImaginationScreen extends StatefulWidget {
   const ImaginationScreen({super.key});
@@ -8,28 +9,95 @@ class ImaginationScreen extends StatefulWidget {
 }
 
 class _ImaginationScreenState extends State<ImaginationScreen> {
-  final List<String> days = [
-    "17 Sa",
-    "18 Su",
-    "19 Mon",
-    "20 Tu",
-    "21 Wed",
-    "22 Th",
-    "23 Fri",
+  final List<String> months = [
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
   ];
-  int selectedDayIndex = 3;
+  String selectedMonth = "Aug";
+  int selectedDay = DateTime.now().day;
 
-  final TextEditingController imaginationNoteController = TextEditingController();
+  final goalTitleController = TextEditingController();
+  final dateController = TextEditingController();
+  final ringtoneController = TextEditingController(text: "Default");
+  String dropDownValue = "";
 
-  // This will be your uploaded image path for the sparkling background
-  final String sparkleBg = 'assets/images/sparkling.png';
-  // And your icon at the top
-  final String imaginationIcon = 'assets/icons/giver_imagination.png';
+  String selectedPriority = "Medium";
+  bool reminderRequired = false;
+
+  final List<String> dropDownGoals = [
+    "Suppose Making 1 CR",
+    "Setup a Sales Funnel",
+    "Designing a Landing Page",
+    "Learning AI Tools",
+  ];
+
+  final List<Map<String, String>> monthlyGoals = [
+    {"title": "Analyzing Your Skills and Experience", "status": "Pending"},
+    {"title": "Finding a problem you can solve", "status": "Completed"},
+    {"title": "Analyzing the audience of the Problem", "status": "Pending"},
+    {"title": "Analyzing the market for the Pricing", "status": "Pending"},
+    {"title": "Thinking About tech Pricing Formats", "status": "Pending"},
+  ];
+
+  final Map<String, Color> statusColors = {
+    "Pending": Color(0xFFFFB33D),
+    "Completed": Color(0xFF26BA6A),
+    "Remove": Color(0xFFF44D4D),
+  };
+
+  int _daysInMonth(String month, [int? year]) {
+    final monthNum = months.indexOf(month) + 1;
+    final y = year ?? DateTime.now().year;
+    final nextMonth = monthNum < 12 ? monthNum + 1 : 1;
+    final nextMonthYear = monthNum < 12 ? y : y + 1;
+    return DateTime(nextMonthYear, nextMonth, 1).subtract(const Duration(days: 1)).day;
+  }
+
+  List<String> get days {
+    final daysInMonth = _daysInMonth(selectedMonth);
+    return List.generate(
+      daysInMonth,
+      (index) => "${index + 1} ${DateFormat('E').format(DateTime(2023, months.indexOf(selectedMonth) + 1, index + 1))}",
+    );
+  }
+
+  void _showMonthSelector() async {
+    final String? selected = await showDialog<String>(
+      context: context,
+      builder: (ctx) => SimpleDialog(
+        backgroundColor: const Color(0xFF212A49),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        title: const Text('Select Month', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
+        children: months.map((m) => SimpleDialogOption(
+          onPressed: () => Navigator.of(ctx).pop(m),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6),
+            child: Text(
+              m,
+              style: TextStyle(
+                color: m == selectedMonth ? Color(0xFF2C51FC) : Colors.white,
+                fontWeight: m == selectedMonth ? FontWeight.bold : FontWeight.normal,
+                fontSize: 16,
+              ),
+            ),
+          ),
+        )).toList(),
+      ),
+    );
+    if (selected != null) {
+      setState(() {
+        selectedMonth = selected;
+        selectedDay = 1; // Reset to first day of selected month
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     const mainBg = Color(0xFF0B1732);
     const cardColor = Color(0xFF212A49);
+
+    final now = DateTime.now();
+    final currentYear = now.year;
 
     return Scaffold(
       backgroundColor: mainBg,
@@ -72,7 +140,7 @@ class _ImaginationScreenState extends State<ImaginationScreen> {
                     ),
                     child: Center(
                       child: Image.asset(
-                        imaginationIcon,
+                        'assets/icons/giver_imagination.png', // Your image path here
                         width: 25,
                         height: 25,
                         fit: BoxFit.contain,
@@ -114,7 +182,7 @@ class _ImaginationScreenState extends State<ImaginationScreen> {
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(color: Colors.white.withOpacity(0.5)),
                   image: DecorationImage(
-                    image: AssetImage(sparkleBg),
+                    image: AssetImage('assets/images/sparkling.png'), // Your image path here
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -133,7 +201,7 @@ class _ImaginationScreenState extends State<ImaginationScreen> {
               ),
               const SizedBox(height: 12),
 
-              // Imagination Card List (style as in screenshot)
+              // Imagination Card List
               _ImaginationCard(
                 text:
                     "Do you know what every successful person has in common? The power of imagination. They dare to dream big, visualize how those dreams can become reality, and then work tirelessly—day and night—until they achieve success. If you can’t dream it and imagine it, you’ll never be able to make it happen, right?",
@@ -150,79 +218,96 @@ class _ImaginationScreenState extends State<ImaginationScreen> {
               ),
 
               const SizedBox(height: 15),
-              // Date & Day Selector (Updated here)
+
+              // Month & Date Selector Container
               Container(
+                margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                   color: const Color(0xFF192042),
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(color: Colors.white.withOpacity(0.15), width: 1.1),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 13),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Date Row (just for the UI, could be dynamic)
                     Row(
                       children: [
                         Text(
-                          "Aug 20, 2025",
+                          DateFormat('MMM dd, yyyy').format(DateTime(currentYear, months.indexOf(selectedMonth) + 1, selectedDay)),
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w700,
-                            fontSize: 15.3,
+                            fontSize: 16,
                           ),
                         ),
                         const Spacer(),
                         InkWell(
+                          onTap: _showMonthSelector,
                           borderRadius: BorderRadius.circular(14),
-                          onTap: () {},
                           child: Container(
                             decoration: BoxDecoration(
                               color: const Color(0xFF2C51FC),
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(14),
                             ),
-                            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                             child: Row(
-                              children: const [
+                              children: [
                                 Text(
-                                  "August",
-                                  style: TextStyle(
+                                  selectedMonth,
+                                  style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w700,
-                                    fontSize: 14.5,
+                                    fontSize: 15.5,
                                   ),
                                 ),
-                                SizedBox(width: 7),
-                                Icon(Icons.calendar_today_outlined, color: Colors.white, size: 16),
+                                const SizedBox(width: 10),
+                                Icon(
+                                  Icons.calendar_today_outlined,
+                                  color: Colors.white,
+                                  size: 18,
+                                ),
                               ],
                             ),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 13),
-                    // Days Row (below date, on a new line)
+                    const SizedBox(height: 12),
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         children: List.generate(days.length, (i) {
-                          bool isSelected = selectedDayIndex == i;
+                          bool isSelected = selectedDay == i + 1;
                           return GestureDetector(
-                            onTap: () => setState(() => selectedDayIndex = i),
+                            onTap: () => setState(() => selectedDay = i + 1),
                             child: Container(
                               margin: const EdgeInsets.only(right: 10),
                               decoration: BoxDecoration(
                                 color: isSelected ? const Color(0xFF2C51FC) : Colors.transparent,
-                                borderRadius: BorderRadius.circular(11),
+                                borderRadius: BorderRadius.circular(12),
                               ),
-                              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 9),
-                              child: Text(
-                                days[i],
-                                style: TextStyle(
-                                  color: isSelected ? Colors.white : Colors.white.withOpacity(0.92),
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 15,
-                                ),
+                              padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 10),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    (i + 1).toString(),
+                                    style: TextStyle(
+                                      color: isSelected ? Colors.white : Colors.white.withOpacity(0.86),
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 17,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    DateFormat('E').format(DateTime(currentYear, months.indexOf(selectedMonth) + 1, i + 1)),
+                                    style: TextStyle(
+                                      color: isSelected ? Colors.white : Colors.white.withOpacity(0.65),
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           );
@@ -232,11 +317,12 @@ class _ImaginationScreenState extends State<ImaginationScreen> {
                   ],
                 ),
               ),
+
               const SizedBox(height: 19),
 
               // Text area - No background color, just the placeholder
               TextField(
-                controller: imaginationNoteController,
+                controller: goalTitleController,
                 minLines: 5,
                 maxLines: 8,
                 style: const TextStyle(
@@ -267,8 +353,8 @@ class _ImaginationScreenState extends State<ImaginationScreen> {
                   ),
                 ),
               ),
-
               const SizedBox(height: 18),
+
               // Save button
               SizedBox(
                 width: double.infinity,
@@ -300,8 +386,7 @@ class _ImaginationScreenState extends State<ImaginationScreen> {
     );
   }
 }
-
-// Card style with edit/delete as in screenshot
+// Card style for imagination items
 class _ImaginationCard extends StatelessWidget {
   final String text;
   const _ImaginationCard({required this.text});
@@ -320,18 +405,23 @@ class _ImaginationCard extends StatelessWidget {
         children: [
           // Main text
           Padding(
-            padding: const EdgeInsets.only(right: 65),
-            child: Text(
-              text,
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w400,
-                fontSize: 14.6,
-                height: 1.42,
+            padding: const EdgeInsets.only(right: 90), // Adjust padding to avoid overlap with icons
+            child: Container(
+              width: MediaQuery.of(context).size.width - 40, // Limit the width of the text
+              child: Text(
+                text,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14.6,
+                  height: 1.42,
+                ),
+               // Justified text
+                overflow: TextOverflow.clip, // Ensures that the text doesn't overflow
               ),
             ),
           ),
-          // Edit and Delete buttons
+          // Edit and Delete buttons at the top-right corner
           Positioned(
             top: 0,
             right: 0,
@@ -344,7 +434,7 @@ class _ImaginationCard extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                 ),
-                SizedBox(width: 2),
+                const SizedBox(width: 2),
                 IconButton(
                   onPressed: () {},
                   icon: Icon(Icons.delete, color: Colors.white.withOpacity(0.78), size: 22),
@@ -360,3 +450,4 @@ class _ImaginationCard extends StatelessWidget {
     );
   }
 }
+
