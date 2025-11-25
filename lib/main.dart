@@ -59,7 +59,7 @@ class MotivoxApp extends StatelessWidget {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: AppTheme.darkTheme,
-          home: const VisionBoardPage(),   // <-- START FROM SPLASH
+          home: const ProfileProgressPage(),   // <-- START FROM SPLASH
         );
       },
     );
