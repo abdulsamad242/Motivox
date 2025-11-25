@@ -28,9 +28,11 @@ import 'package:motivix/ui/home/home_page.dart';
 import 'package:motivix/ui/identity/identity_add_page.dart';
 import 'package:motivix/ui/onboarding/profile_progress_page.dart';
 import 'package:motivix/ui/onboarding/welcome_page.dart';
+import 'package:motivix/ui/productivity/action_dashboard.dart';
 import 'package:motivix/ui/productivity/productivity_dashboard.dart';
 import 'package:motivix/ui/productivity/todo_add_page.dart';
 import 'package:motivix/ui/productivity/todo_list_page.dart';
+import 'package:motivix/ui/productivity/vision_board.dart';
 
 import 'theme/app_theme.dart';
 import 'ui/onboarding/splash_page.dart';
@@ -57,7 +59,7 @@ class MotivoxApp extends StatelessWidget {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: AppTheme.darkTheme,
-          home: const AiBuddyPage(),   // <-- START FROM SPLASH
+          home: const VisionBoardPage(),   // <-- START FROM SPLASH
         );
       },
     );

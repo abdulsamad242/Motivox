@@ -457,6 +457,8 @@ class _AiBuddyPageState extends State<AiBuddyPage> {
                     decoration: InputDecoration(
                       hintText: "Type your question and press enter",
                       hintStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
+                       filled: false,
+                    fillColor: Colors.transparent,
                       border: InputBorder.none,
                       contentPadding: const EdgeInsets.symmetric(vertical: 14),
                     ),
