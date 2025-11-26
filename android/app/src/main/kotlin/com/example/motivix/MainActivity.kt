@@ -1,4 +1,4 @@
-package com.example.motivix
+package com.motivox.motivox
 
 import io.flutter.embedding.android.FlutterActivity
 
