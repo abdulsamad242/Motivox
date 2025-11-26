@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:motivix/ui/account/settings_page.dart';
+
 import 'package:motivix/ui/giver/imagination_page.dart';
+import 'package:motivix/ui/gratitude/family_gratitude_page.dart';
 import 'package:motivix/ui/home/main_page.dart';
+import 'package:motivix/ui/onboarding/profile_progress_page.dart';
+import 'package:motivix/ui/onboarding/v1.dart';
 import 'package:motivix/ui/onboarding/welcome_page.dart';
 import 'package:motivix/ui/productivity/action_dashboard.dart';
 import 'package:motivix/ui/productivity/productivity_dashboard.dart';
@@ -34,7 +39,7 @@ class MotivoxApp extends StatelessWidget {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: AppTheme.darkTheme,
-          home: const VisonBoardScreen(), // <-- START FROM SPLASH
+          home: const WhySummaryPage(), // <-- START FROM SPLASH
         );
       },
     );
