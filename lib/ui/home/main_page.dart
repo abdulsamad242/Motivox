@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:motivix/theme/app_colors.dart';
 import 'package:motivix/theme/app_gradients.dart';
 import 'package:motivix/ui/home/bottom_nav.dart';
 import 'package:motivix/widgets/emojie_widget.dart';
@@ -18,11 +19,10 @@ class MyMotivationalApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomNav(currentIndex: 0, onTap: (a){}),
       body: Container(
-        decoration: BoxDecoration(gradient: AppGradients.mainBackground),
+        decoration: BoxDecoration(color: Color(0xFF0B1732)),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 40),
+          padding: const EdgeInsets.only(left: 16.0, right: 14, top: 40),
           child: SingleChildScrollView(
             child: Column(
               children: [

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:motivix/routes/app_routes.dart';
 import '../../theme/app_gradients.dart';
 import '../../theme/app_text_style.dart';
 import '../../widgets/app_header.dart';
@@ -83,9 +85,7 @@ class WhySummaryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppGradients.mainBackground,
-        ),
+        decoration: const BoxDecoration(gradient: AppGradients.mainBackground),
         child: SafeArea(
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 16),
@@ -200,7 +200,9 @@ class WhySummaryPage extends StatelessWidget {
                 //------------------------------------------------------------------
                 PrimaryButton(
                   label: "View Your Vision Board",
-                  onTap: () {},
+                  onTap: () {
+                    context.go(AppRoutes.visionBoard);
+                  },
                 ),
                 const SizedBox(height: 26),
               ],

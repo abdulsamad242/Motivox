@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:motivix/theme/app_colors.dart';
+import 'package:motivix/theme/app_gradients.dart';
 
 class DailyActivityWidget extends StatelessWidget {
   final int progress;
@@ -11,12 +12,7 @@ class DailyActivityWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Color(0xFF0F1936), Color(0xFFFF9D5C)],
-          stops: [0.2, 0.8],
-        ),
+        gradient: AppGradients.dailygiver,
         borderRadius: BorderRadius.circular(16.0),
         boxShadow: [
           BoxShadow(

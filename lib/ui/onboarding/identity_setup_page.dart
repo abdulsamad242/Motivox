@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
+import 'package:motivix/routes/app_routes.dart';
 import '../../theme/app_gradients.dart';
 import '../../theme/app_text_style.dart';
 import '../../widgets/app_header.dart';
@@ -31,45 +33,42 @@ class _IdentityStepOneState extends State<IdentityStepOne> {
   }
 
   // Email regex — now a RegExp
-static final RegExp _emailPattern = RegExp(
-  r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$',
-);
+  static final RegExp _emailPattern = RegExp(
+    r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$',
+  );
 
   // Universal phone validator helper
   String? _validatePhoneNumber(String? input) {
-  if (input == null || input.trim().isEmpty) {
-    return 'Phone number is required';
-  }
+    if (input == null || input.trim().isEmpty) {
+      return 'Phone number is required';
+    }
 
-  // Check if input contains any alphabetic character (a-z or A-Z)
-  if (RegExp(r'[a-zA-Z]').hasMatch(input)) {
-    return 'Alphabets are not allowed in phone number';
-  }
+    // Check if input contains any alphabetic character (a-z or A-Z)
+    if (RegExp(r'[a-zA-Z]').hasMatch(input)) {
+      return 'Alphabets are not allowed in phone number';
+    }
 
-  // Remove all non-digit characters (keep only digits for length check)
-  String digitsOnly = input.replaceAll(RegExp(r'[^0-9]'), '');
+    // Remove all non-digit characters (keep only digits for length check)
+    String digitsOnly = input.replaceAll(RegExp(r'[^0-9]'), '');
 
-  // Must be between 7 and 15 digits (ITU standard)
-  if (digitsOnly.isEmpty) {
-    return 'Phone number must contain digits';
-  }
-  if (digitsOnly.length < 7) {
-    return 'Phone number is too short (minimum 7 digits)';
-  }
-  if (digitsOnly.length > 15) {
-    return 'Phone number is too long (maximum 15 digits)';
-  }
+    // Must be between 7 and 15 digits (ITU standard)
+    if (digitsOnly.isEmpty) {
+      return 'Phone number must contain digits';
+    }
+    if (digitsOnly.length < 7) {
+      return 'Phone number is too short (minimum 7 digits)';
+    }
+    if (digitsOnly.length > 15) {
+      return 'Phone number is too long (maximum 15 digits)';
+    }
 
-  return null; // Valid
-}
+    return null; // Valid
+  }
 
   void _onNextPressed() {
     if (_formKey.currentState?.validate() ?? false) {
       // Proceed only if valid
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const GrowthAreaStepTwo()),
-      );
+      context.push(AppRoutes.identitySteptwo);
     }
   }
 
@@ -77,9 +76,7 @@ static final RegExp _emailPattern = RegExp(
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppGradients.mainBackground,
-        ),
+        decoration: const BoxDecoration(gradient: AppGradients.mainBackground),
         child: SafeArea(
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 12),
@@ -136,8 +133,11 @@ static final RegExp _emailPattern = RegExp(
                           color: Colors.white.withOpacity(0.12),
                           borderRadius: BorderRadius.circular(50),
                         ),
-                        child: const Icon(Icons.person,
-                            color: Colors.white, size: 20),
+                        child: const Icon(
+                          Icons.person,
+                          color: Colors.white,
+                          size: 20,
+                        ),
                       ),
                       const SizedBox(width: 10),
                       Text(
@@ -170,7 +170,9 @@ static final RegExp _emailPattern = RegExp(
                       if (value.trim().length < 2) {
                         return 'Name must be at least 2 characters';
                       }
-                      if (!RegExp(r"^[a-zA-Z\s\-'.]+$").hasMatch(value.trim())) {
+                      if (!RegExp(
+                        r"^[a-zA-Z\s\-'.]+$",
+                      ).hasMatch(value.trim())) {
                         return 'Name can only contain letters, spaces, hyphens, apostrophes, or dots';
                       }
                       return null;
@@ -217,15 +219,11 @@ static final RegExp _emailPattern = RegExp(
                     keyboardType: TextInputType.phone,
                     controller: _phoneController,
                     validator: _validatePhoneNumber,
-                   
                   ),
 
                   const SizedBox(height: 30),
 
-                  PrimaryButton(
-                    label: "Next",
-                    onTap: _onNextPressed,
-                  ),
+                  PrimaryButton(label: "Next", onTap: _onNextPressed),
 
                   const SizedBox(height: 20),
                 ],

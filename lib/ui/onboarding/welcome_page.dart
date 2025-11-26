@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:motivix/routes/app_routes.dart';
 import '../../theme/app_text_style.dart';
 import '../../theme/app_gradients.dart';
 import '../../widgets/buttons/social_button.dart';
@@ -13,9 +15,7 @@ class WelcomePage extends StatelessWidget {
     return Scaffold(
       body: Container(
         width: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: AppGradients.mainBackground,
-        ),
+        decoration: const BoxDecoration(gradient: AppGradients.mainBackground),
         child: SafeArea(
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
@@ -67,9 +67,7 @@ class WelcomePage extends StatelessWidget {
                   /// TITLE
                   Text(
                     "Let’s Get You Started",
-                    style: AppTextStyles.heading2.copyWith(
-                      fontSize: 20.sp,
-                    ),
+                    style: AppTextStyles.heading2.copyWith(fontSize: 20.sp),
                   ),
 
                   SizedBox(height: 6.h),
@@ -86,10 +84,8 @@ class WelcomePage extends StatelessWidget {
                     icon: "assets/icons/google.png",
                     label: "Continue with Google",
                     onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => const IdentityStepOne()),
-                      );
+                      context.push(AppRoutes.identitySetup);
+                      //  context.push(AppRoutes.visionBoard);
                     },
                   ),
                   SizedBox(height: 12.h),
@@ -98,10 +94,7 @@ class WelcomePage extends StatelessWidget {
                     icon: "assets/icons/facebook.png",
                     label: "Continue with Facebook",
                     onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => const IdentityStepOne()),
-                      );
+                      context.push(AppRoutes.identitySetup);
                     },
                   ),
                   SizedBox(height: 12.h),
@@ -110,10 +103,7 @@ class WelcomePage extends StatelessWidget {
                     icon: "assets/icons/linkedin.png",
                     label: "Continue with LinkedIn",
                     onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => const IdentityStepOne()),
-                      );
+                      context.push(AppRoutes.identitySteptwo);
                     },
                   ),
 

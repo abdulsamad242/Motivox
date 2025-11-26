@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:motivix/routes/app_routes.dart';
 import 'welcome_page.dart';
 import '../../theme/app_gradients.dart';
-
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -24,18 +25,16 @@ class _SplashPageState extends State<SplashPage>
       duration: const Duration(seconds: 2),
     );
 
-    _fade = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
-    );
+    _fade = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
 
     _controller.forward();
 
     Future.delayed(const Duration(seconds: 2), () {
       if (!mounted) return;
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const WelcomePage()),
-      );
+      context.go(AppRoutes.welcome);
     });
   }
 
@@ -48,28 +47,18 @@ class _SplashPageState extends State<SplashPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppGradients.mainBackground,
-        ),
+        decoration: const BoxDecoration(gradient: AppGradients.mainBackground),
         child: Center(
           child: FadeTransition(
             opacity: _fade,
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              children: [
-                Image.asset(
-                  "assets/images/logo.png",
-                  height: 200,
-                ),
-                
-              ],
+              children: [Image.asset("assets/images/logo.png", height: 200)],
             ),
           ),
         ),
       ),
-      
     );
   }
 }

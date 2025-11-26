@@ -1,6 +1,8 @@
 // identity_step_four.dart
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:motivix/routes/app_routes.dart';
 import '../../theme/app_gradients.dart';
 import '../../theme/app_text_style.dart';
 import '../../widgets/app_header.dart';
@@ -58,10 +60,7 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
     }
 
     // All valid → go to summary
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const WhySummaryPage()),
-    );
+    context.push(AppRoutes.summaryPage);
   }
 
   Widget _buildTextAreaSection({
@@ -138,7 +137,10 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
                     width: 1,
                   ),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 12,
+                ),
                 child: TextField(
                   controller: controller,
                   minLines: 3,
@@ -186,19 +188,17 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
   @override
   Widget build(BuildContext context) {
     return Theme(
-  data: ThemeData.from(
-    colorScheme: Theme.of(context).colorScheme,
-  ).copyWith(
-    textSelectionTheme: const TextSelectionThemeData(
-      cursorColor: Color(0xFFFF8C42),
-      selectionColor: Color(0x4DFF8C42),
-      selectionHandleColor: Color(0xFFFF8C42),
-    ),
-    inputDecorationTheme: const InputDecorationTheme(
-      border: InputBorder.none,
-    ),
-  ),
-  
+      data: ThemeData.from(colorScheme: Theme.of(context).colorScheme).copyWith(
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: Color(0xFFFF8C42),
+          selectionColor: Color(0x4DFF8C42),
+          selectionHandleColor: Color(0xFFFF8C42),
+        ),
+        inputDecorationTheme: const InputDecorationTheme(
+          border: InputBorder.none,
+        ),
+      ),
+
       child: Scaffold(
         body: Container(
           decoration: const BoxDecoration(
@@ -262,7 +262,8 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
                     icon: Icons.shield_outlined,
                     exampleText:
                         'Ex : A friendly, inspiring fitness coach who helps working women stay healthy.',
-                    hintText: "The trusted fitness coach for busy professionals etc.",
+                    hintText:
+                        "The trusted fitness coach for busy professionals etc.",
                     controller: _positioningController,
                     validator: _validatePositioning,
                   ),
@@ -281,10 +282,7 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
 
                   const SizedBox(height: 35),
 
-                  PrimaryButton(
-                    label: "Submit",
-                    onTap: _onSubmitPressed,
-                  ),
+                  PrimaryButton(label: "Submit", onTap: _onSubmitPressed),
 
                   const SizedBox(height: 28),
                 ],

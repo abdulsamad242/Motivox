@@ -8,11 +8,19 @@ class GrowthActionsWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Color(0xFF0F1936), Color(0xFFFF9D5C)],
-          stops: [0.2, 0.8],
+          colors: [
+            Color(0xFF0F1936), // deep navy base
+            Color(0xFF1B274B), // smooth mid tone (important)
+            Color(0xFFFF9D5C), // orange corner
+          ],
+          stops: [
+            0.0, // full navy start
+            0.55, // soft mid-blend (not too harsh)
+            1.0, // orange only at the far edge
+          ],
         ),
         borderRadius: BorderRadius.circular(16.0),
         boxShadow: [

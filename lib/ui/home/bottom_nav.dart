@@ -6,11 +6,7 @@ class BottomNav extends StatelessWidget {
   final int currentIndex;
   final void Function(int) onTap;
 
-  const BottomNav({
-    super.key,
-    required this.currentIndex,
-    required this.onTap,
-  });
+  const BottomNav({super.key, required this.currentIndex, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +16,8 @@ class BottomNav extends StatelessWidget {
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
         border: Border.all(color: Colors.white.withOpacity(0.1), width: 1),
       ),
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -81,17 +78,15 @@ class BottomNav extends StatelessWidget {
             height: 56,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: isActive ? const Color(0xFF2D7AFF) : Colors.black.withOpacity(0.6),
+              color: isActive
+                  ? const Color(0xFF2D7AFF)
+                  : Colors.black.withOpacity(0.6),
               border: Border.all(
                 color: isActive ? Colors.white : Colors.white.withOpacity(0.2),
                 width: 2,
               ),
             ),
-            child: Icon(
-              icon,
-              color: Colors.white,
-              size: 24,
-            ),
+            child: Icon(icon, color: Colors.white, size: 24),
           ),
           const SizedBox(height: 4),
           if (isActive)

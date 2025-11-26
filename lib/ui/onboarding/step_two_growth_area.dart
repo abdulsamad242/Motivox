@@ -1,12 +1,15 @@
 // growth_step_two.dart
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:motivix/routes/app_routes.dart';
 import '../../theme/app_gradients.dart';
 import '../../theme/app_text_style.dart';
 import '../../widgets/app_header.dart';
 import '../../widgets/step_progress.dart';
 import '../../widgets/buttons/primary_button.dart';
 import '../onboarding/purpose_step_three.dart';
+
 class GrowthAreaStepTwo extends StatefulWidget {
   const GrowthAreaStepTwo({super.key});
 
@@ -37,14 +40,7 @@ class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
 
   void _onNextPressed() {
     if (_formKey.currentState?.validate() ?? false) {
-      // Optional: access values
-      // String niche = _selectedNiche!;
-      // String microNiche = _microNicheController.text.trim();
-
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const PurposeStepThree()),
-      );
+      context.push(AppRoutes.identityStepthree);
     }
   }
 
@@ -127,7 +123,11 @@ class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
                             color: Colors.white.withOpacity(0.08),
                             shape: BoxShape.circle,
                           ),
-                          child: const Icon(Icons.explore, color: Colors.white, size: 18),
+                          child: const Icon(
+                            Icons.explore,
+                            color: Colors.white,
+                            size: 18,
+                          ),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
@@ -163,15 +163,23 @@ class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.white.withOpacity(0.3)),
+                          borderSide: BorderSide(
+                            color: Colors.white.withOpacity(0.3),
+                          ),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: Colors.white, width: 2),
+                          borderSide: const BorderSide(
+                            color: Colors.white,
+                            width: 2,
+                          ),
                         ),
                         errorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: Colors.red, width: 2),
+                          borderSide: const BorderSide(
+                            color: Colors.red,
+                            width: 2,
+                          ),
                         ),
                       ),
                       hint: Text(
@@ -185,7 +193,9 @@ class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
                           value: niche,
                           child: Text(
                             niche,
-                            style: AppTextStyles.body.copyWith(color: Colors.white),
+                            style: AppTextStyles.body.copyWith(
+                              color: Colors.white,
+                            ),
                           ),
                         );
                       }).toList(),
@@ -224,7 +234,11 @@ class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
                             color: Colors.white.withOpacity(0.08),
                             shape: BoxShape.circle,
                           ),
-                          child: const Icon(Icons.filter_alt, color: Colors.white, size: 18),
+                          child: const Icon(
+                            Icons.filter_alt,
+                            color: Colors.white,
+                            size: 18,
+                          ),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
@@ -254,25 +268,37 @@ class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white.withOpacity(0.06),
-                        hintText: "Ex : Helping Working Moms Stay Fit with Yoga",
+                        hintText:
+                            "Ex : Helping Working Moms Stay Fit with Yoga",
                         hintStyle: AppTextStyles.label.copyWith(
                           color: Colors.white.withOpacity(0.55),
                           fontSize: 14,
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.white.withOpacity(0.3)),
+                          borderSide: BorderSide(
+                            color: Colors.white.withOpacity(0.3),
+                          ),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: Colors.white, width: 2),
+                          borderSide: const BorderSide(
+                            color: Colors.white,
+                            width: 2,
+                          ),
                         ),
                         errorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: Colors.red, width: 2),
+                          borderSide: const BorderSide(
+                            color: Colors.red,
+                            width: 2,
+                          ),
                         ),
                       ),
-                      style: AppTextStyles.body.copyWith(color: Colors.white, fontSize: 15),
+                      style: AppTextStyles.body.copyWith(
+                        color: Colors.white,
+                        fontSize: 15,
+                      ),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
                           return 'Micro niche is required';
@@ -286,10 +312,7 @@ class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
 
                     const SizedBox(height: 35),
 
-                    PrimaryButton(
-                      label: "Next",
-                      onTap: _onNextPressed,
-                    ),
+                    PrimaryButton(label: "Next", onTap: _onNextPressed),
 
                     const SizedBox(height: 30),
                   ],

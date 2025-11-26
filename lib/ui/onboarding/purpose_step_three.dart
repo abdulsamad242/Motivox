@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
+import 'package:motivix/routes/app_routes.dart';
 import '../../theme/app_gradients.dart';
 import '../../theme/app_text_style.dart';
 import '../../widgets/app_header.dart';
@@ -56,10 +58,7 @@ class _PurposeStepThreeState extends State<PurposeStepThree> {
       return;
     }
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const IdentityStepFour()),
-    );
+    context.push(AppRoutes.identityStepfour);
   }
 
   Widget _buildTextAreaSection({
@@ -137,7 +136,10 @@ class _PurposeStepThreeState extends State<PurposeStepThree> {
                     width: 1,
                   ),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 12,
+                ),
                 child: TextField(
                   controller: controller,
                   minLines: 3,
@@ -256,7 +258,8 @@ class _PurposeStepThreeState extends State<PurposeStepThree> {
                   _buildTextAreaSection(
                     title: "Your Mission (Your Goal / Milestone / Why)",
                     icon: Icons.flag,
-                    exampleText: 'Example: "I want to help 1 million working women stay fit and healthy to live happier lives."',
+                    exampleText:
+                        'Example: "I want to help 1 million working women stay fit and healthy to live happier lives."',
                     hintText: "Helping people live healthier lives",
                     controller: _missionController,
                     validator: _validateMission,
@@ -265,9 +268,11 @@ class _PurposeStepThreeState extends State<PurposeStepThree> {
                   const SizedBox(height: 35),
 
                   _buildTextAreaSection(
-                    title: "Your Vision (The Bigger Picture / The Change You Want to Create)",
+                    title:
+                        "Your Vision (The Bigger Picture / The Change You Want to Create)",
                     icon: Icons.lightbulb_outline,
-                    exampleText: "Ex : To empower working women to build a culture of fitness, confidence, and joy.",
+                    exampleText:
+                        "Ex : To empower working women to build a culture of fitness, confidence, and joy.",
                     hintText: "Share Your dream impact here...",
                     controller: _visionController,
                     validator: _validateVision,
@@ -275,10 +280,7 @@ class _PurposeStepThreeState extends State<PurposeStepThree> {
 
                   const SizedBox(height: 35),
 
-                  PrimaryButton(
-                    label: "Continue",
-                    onTap: _onContinuePressed,
-                  ),
+                  PrimaryButton(label: "Continue", onTap: _onContinuePressed),
 
                   const SizedBox(height: 28),
                 ],

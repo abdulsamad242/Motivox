@@ -14,7 +14,7 @@ plugins {
 }
 
 android {
-    namespace = "com.motivox.motivox"
+    namespace = "com.motivoxapp.motivox"
     compileSdk = 36
     ndkVersion = "28.0.12433566"
    packaging {
@@ -34,7 +34,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.motivox.motivox"
+        applicationId = "com.motivoxapp.motivox"
         minSdk = 24
         targetSdk = 36
         versionCode = flutter.versionCode

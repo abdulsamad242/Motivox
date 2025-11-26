@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:motivix/routes/app_routes.dart';
+import 'package:motivix/theme/app_colors.dart';
 
 const Color _mainBg = Color(0xFF0B1732);
 const Color _cardColor = Color(0xFF212A49);
 const Color _orangePrimary = Color(0xFFFF9001);
-const Color _blueButton = Color(0xFF2196F3); // Blue for the new button
+const Color _blueButton = AppColors.buttonBackground; // Blue for the new button
 
 class VisionBoardPage extends StatelessWidget {
   const VisionBoardPage({super.key});
@@ -30,10 +33,7 @@ class VisionBoardPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Center(
-                child: Image.asset(
-                  "assets/images/logo.png",
-                  height: 60,
-                ),
+                child: Image.asset("assets/images/logo.png", height: 60),
               ),
             ),
             // My Vision Board Section
@@ -97,8 +97,18 @@ class VisionBoardPage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 14),
               child: ElevatedButton(
                 onPressed: () {
-                  // TODO: Implement add identity logic
+                  context.push(AppRoutes.addIdentityStep);
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: _blueButton,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 24,
+                  ),
+                ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -113,13 +123,6 @@ class VisionBoardPage extends StatelessWidget {
                       ),
                     ),
                   ],
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: _blueButton,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
                 ),
               ),
             ),
@@ -242,7 +245,10 @@ class VisionBoardPage extends StatelessWidget {
                   ),
                   const SizedBox(width: 4),
                   Expanded(
-                    child: _buildIdentityTag("target.png", "Consistent Achiever"),
+                    child: _buildIdentityTag(
+                      "target.png",
+                      "Consistent Achiever",
+                    ),
                   ),
                 ],
               ),
@@ -267,7 +273,7 @@ class VisionBoardPage extends StatelessWidget {
             'assets/icons/$iconPath',
             width: 18,
             height: 18,
-            
+
             fit: BoxFit.contain,
           ),
           const SizedBox(width: 6),
@@ -340,9 +346,15 @@ class VisionBoardPage extends StatelessWidget {
               Expanded(
                 child: Column(
                   children: [
-                    _buildDreamCard("assets/images/startup.jpg", "Build a startup that helps people grow"),
+                    _buildDreamCard(
+                      "assets/images/startup.jpg",
+                      "Build a startup that helps people grow",
+                    ),
                     const SizedBox(height: 8),
-                    _buildDreamCard("assets/images/house.jpg", "Buy my dream house"),
+                    _buildDreamCard(
+                      "assets/images/house.jpg",
+                      "Buy my dream house",
+                    ),
                   ],
                 ),
               ),
@@ -350,9 +362,15 @@ class VisionBoardPage extends StatelessWidget {
               Expanded(
                 child: Column(
                   children: [
-                    _buildDreamCard("assets/images/bmw.jpg", "I want to own a BMW car"),
+                    _buildDreamCard(
+                      "assets/images/bmw.jpg",
+                      "I want to own a BMW car",
+                    ),
                     const SizedBox(height: 8),
-                    _buildDreamCard("assets/images/travel.jpg", "Travel the world"),
+                    _buildDreamCard(
+                      "assets/images/travel.jpg",
+                      "Travel the world",
+                    ),
                   ],
                 ),
               ),
@@ -374,42 +392,42 @@ class VisionBoardPage extends StatelessWidget {
   }
 
   Widget _buildDreamCard(String imagePath, String caption) {
-  return Container(
-    decoration: BoxDecoration(
-      color: Colors.white.withOpacity(0.05), // Background of the card
-      borderRadius: BorderRadius.circular(12),
-    ),
-    child: Column(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-          child: Image.asset(
-            imagePath,
-            width: double.infinity,
-            height: 100,
-            fit: BoxFit.cover,
-            // Explicitly ensure no color filter is applied
- 
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: Text(
-            caption,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.05), // Background of the card
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+            child: Image.asset(
+              imagePath,
+              width: double.infinity,
+              height: 100,
+              fit: BoxFit.cover,
+
+              // Explicitly ensure no color filter is applied
             ),
-            textAlign: TextAlign.center,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
           ),
-        ),
-      ],
-    ),
-  );
-}
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Text(
+              caption,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget _buildDashedCard({
     required IconData icon,
@@ -465,18 +483,27 @@ class VisionBoardPage extends StatelessWidget {
             color: Colors.white.withOpacity(0.6),
             fontSize: 14,
           ),
-          
+
           contentPadding: const EdgeInsets.only(top: 12, bottom: 12, right: 8),
           border: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white.withOpacity(0.2), width: 1.5),
+            borderSide: BorderSide(
+              color: Colors.white.withOpacity(0.2),
+              width: 1.5,
+            ),
             borderRadius: BorderRadius.circular(12),
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white.withOpacity(0.2), width: 1.5),
+            borderSide: BorderSide(
+              color: Colors.white.withOpacity(0.2),
+              width: 1.5,
+            ),
             borderRadius: BorderRadius.circular(12),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white.withOpacity(0.5), width: 2.0),
+            borderSide: BorderSide(
+              color: Colors.white.withOpacity(0.5),
+              width: 2.0,
+            ),
             borderRadius: BorderRadius.circular(12),
           ),
           fillColor: Colors.transparent,
@@ -534,11 +561,19 @@ class DashedBorderPainter extends CustomPainter {
     }
     // Right
     for (double y = 0; y < size.height; y += dashWidth + dashSpace) {
-      canvas.drawLine(Offset(size.width, y), Offset(size.width, y + dashWidth), paint);
+      canvas.drawLine(
+        Offset(size.width, y),
+        Offset(size.width, y + dashWidth),
+        paint,
+      );
     }
     // Bottom
     for (double x = 0; x < size.width; x += dashWidth + dashSpace) {
-      canvas.drawLine(Offset(x, size.height), Offset(x + dashWidth, size.height), paint);
+      canvas.drawLine(
+        Offset(x, size.height),
+        Offset(x + dashWidth, size.height),
+        paint,
+      );
     }
     // Left
     for (double y = 0; y < size.height; y += dashWidth + dashSpace) {

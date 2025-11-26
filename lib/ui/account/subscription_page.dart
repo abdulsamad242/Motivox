@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:motivix/theme/app_gradients.dart';
 
 class SubscriptionScreen extends StatelessWidget {
   const SubscriptionScreen({super.key});
@@ -6,7 +7,6 @@ class SubscriptionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const mainBg = Color(0xFF0B1732);
-    const cardColor = Color(0xFF212A49);
 
     return Scaffold(
       backgroundColor: mainBg,
@@ -31,10 +31,7 @@ class SubscriptionScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Center(
-                  child: Image.asset(
-                    "assets/images/logo.png",
-                    height: 60,
-                  ),
+                  child: Image.asset("assets/images/logo.png", height: 60),
                 ),
               ),
 
@@ -142,7 +139,9 @@ class SubscriptionScreen extends StatelessWidget {
                                   value: 0.72,
                                   strokeWidth: 5,
                                   backgroundColor: Colors.transparent,
-                                  valueColor: AlwaysStoppedAnimation<Color>(const Color(0xFFFF9001)),
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    const Color(0xFFFF9001),
+                                  ),
                                 ),
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -181,11 +180,7 @@ class SubscriptionScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF483A74), Color(0xFF2E2849)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
+                  gradient: AppGradients.dailygiver2,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Column(
@@ -200,7 +195,11 @@ class SubscriptionScreen extends StatelessWidget {
                             shape: BoxShape.circle,
                             color: const Color(0xFFFF9001).withOpacity(0.2),
                           ),
-                          child: Icon(Icons.bolt, color: const Color(0xFFFF9001), size: 18),
+                          child: Icon(
+                            Icons.bolt,
+                            color: const Color(0xFFFF9001),
+                            size: 18,
+                          ),
                         ),
                         const SizedBox(width: 8),
                         Text(
@@ -247,37 +246,43 @@ class SubscriptionScreen extends StatelessWidget {
                     _featureItem(
                       icon: Icons.sunny,
                       title: "Positivity and GIVER Tracker",
-                      subtitle: "Stay inspired and track how you give back daily",
+                      subtitle:
+                          "Stay inspired and track how you give back daily",
                     ),
                     const SizedBox(height: 8),
                     _featureItem(
                       icon: Icons.bar_chart,
                       title: "Daily Productivity Dashboard",
-                      subtitle: "See your progress and stay focused on what matters",
+                      subtitle:
+                          "See your progress and stay focused on what matters",
                     ),
                     const SizedBox(height: 8),
                     _featureItem(
                       icon: Icons.shield,
                       title: "Manage Your Daily Tasks & Reminders",
-                      subtitle: "Stay organized and never miss what's important.",
+                      subtitle:
+                          "Stay organized and never miss what's important.",
                     ),
                     const SizedBox(height: 8),
                     _featureItem(
                       icon: Icons.flag,
                       title: "Set and Manage Your Life Goals",
-                      subtitle: "Define your Dreams and break them into achievable steps.",
+                      subtitle:
+                          "Define your Dreams and break them into achievable steps.",
                     ),
                     const SizedBox(height: 8),
                     _featureItem(
                       icon: Icons.note,
                       title: "Write Your Daily Diary & Thoughts",
-                      subtitle: "Reflect, release, and grow with mindful journaling",
+                      subtitle:
+                          "Reflect, release, and grow with mindful journaling",
                     ),
                     const SizedBox(height: 8),
                     _featureItem(
                       icon: Icons.smart_toy,
                       title: "Access Your AI Buddy",
-                      subtitle: "Get guidance, clarity, and answers to your career or business questions.",
+                      subtitle:
+                          "Get guidance, clarity, and answers to your career or business questions.",
                     ),
                     const SizedBox(height: 20),
 
@@ -311,11 +316,7 @@ class SubscriptionScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF483A74), Color(0xFF2E2849)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
+                  gradient: AppGradients.dailygiver2,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Column(
@@ -330,7 +331,11 @@ class SubscriptionScreen extends StatelessWidget {
                             shape: BoxShape.circle,
                             color: const Color(0xFFFF9001).withOpacity(0.2),
                           ),
-                          child: Icon(Icons.eco, color: const Color(0xFFFF9001), size: 18),
+                          child: Icon(
+                            Icons.eco,
+                            color: const Color(0xFFFF9001),
+                            size: 18,
+                          ),
                         ),
                         const SizedBox(width: 8),
                         Text(
@@ -443,23 +448,26 @@ class SubscriptionScreen extends StatelessWidget {
               ),
 
               const SizedBox(height: 10),
-              Container(            
+              Container(
                 padding: EdgeInsets.all(9),
                 decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.25),
-    // Set the color here
-    borderRadius: BorderRadius.circular(10), // Adjust the radius (e.g., 10) for round corners
-  ),
-              child: Center(
-                child: Text(
-                  "Your Journey to success starts with a single decision",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontStyle: FontStyle.italic,
+                  color: Colors.white.withOpacity(0.25),
+                  // Set the color here
+                  borderRadius: BorderRadius.circular(
+                    10,
+                  ), // Adjust the radius (e.g., 10) for round corners
+                ),
+                child: Center(
+                  child: Text(
+                    "Your Journey to success starts with a single decision",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontStyle: FontStyle.italic,
+                    ),
                   ),
                 ),
-              ),),
+              ),
 
               const SizedBox(height: 40),
             ],

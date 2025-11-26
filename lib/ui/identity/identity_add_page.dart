@@ -1,5 +1,8 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:motivix/routes/app_routes.dart';
+import 'package:motivix/theme/app_colors.dart';
 
 class AddIdentityPage extends StatefulWidget {
   const AddIdentityPage({super.key});
@@ -43,10 +46,7 @@ class _AddIdentityPageState extends State<AddIdentityPage> {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Center(
-                child: Image.asset(
-                  "assets/images/logo.png",
-                  height: 60,
-                ),
+                child: Image.asset("assets/images/logo.png", height: 60),
               ),
             ),
             const SizedBox(height: 5),
@@ -54,8 +54,11 @@ class _AddIdentityPageState extends State<AddIdentityPage> {
             // Title
             Row(
               children: [
-                Icon(Icons.account_circle_outlined,
-                    color: Colors.white.withOpacity(0.24), size: 26),
+                Icon(
+                  Icons.account_circle_outlined,
+                  color: Colors.white.withOpacity(0.24),
+                  size: 26,
+                ),
                 const SizedBox(width: 9),
                 const Text(
                   "Add Your Identity",
@@ -109,8 +112,11 @@ class _AddIdentityPageState extends State<AddIdentityPage> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.camera_alt_outlined,
-                              color: Colors.white54, size: 32),
+                          Icon(
+                            Icons.camera_alt_outlined,
+                            color: Colors.white54,
+                            size: 32,
+                          ),
                           const SizedBox(height: 7),
                           Text(
                             "uploads his/her picture",
@@ -118,7 +124,7 @@ class _AddIdentityPageState extends State<AddIdentityPage> {
                               color: Colors.white.withOpacity(0.38),
                               fontSize: 15,
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
@@ -141,37 +147,45 @@ class _AddIdentityPageState extends State<AddIdentityPage> {
 
             // List of Identities
             // List of Identities WITHOUT main container
-Column(
-  children: List.generate(identities.length, (i) {
-    return Padding(
-      padding: EdgeInsets.only(
-          left: 0, right: 0, top: i == 0 ? 0 : 10, bottom: 0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.07),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: ListTile(
-          leading: _identityIcon(i),
-          title: Text(
-            identities[i],
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w500,
-              fontSize: 15,
+            Column(
+              children: List.generate(identities.length, (i) {
+                return Padding(
+                  padding: EdgeInsets.only(
+                    left: 0,
+                    right: 0,
+                    top: i == 0 ? 0 : 10,
+                    bottom: 0,
+                  ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.07),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: ListTile(
+                      leading: _identityIcon(i),
+                      title: Text(
+                        identities[i],
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15,
+                        ),
+                      ),
+                      trailing: Icon(
+                        Icons.delete_outline,
+                        color: Colors.white.withOpacity(0.62),
+                        size: 24,
+                      ),
+                      dense: true,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 18,
+                        vertical: 0,
+                      ),
+                    ),
+                  ),
+                );
+              }),
             ),
-          ),
-          trailing: Icon(Icons.delete_outline,
-              color: Colors.white.withOpacity(0.62), size: 24),
-          dense: true,
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 18, vertical: 0),
-        ),
-      ),
-    );
-  }),
-),
-
 
             const SizedBox(height: 17),
 
@@ -181,7 +195,7 @@ Column(
               child: ElevatedButton.icon(
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF2C51FC),
+                  backgroundColor: AppColors.buttonBackground,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(11),
                   ),
@@ -209,7 +223,9 @@ Column(
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  context.go(AppRoutes.home);
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFFF9001),
                   shape: RoundedRectangleBorder(
@@ -238,15 +254,35 @@ Column(
   Widget _identityIcon(int i) {
     switch (i) {
       case 0:
-        return const Icon(Icons.emoji_emotions_outlined, color: Colors.white, size: 22);
+        return const Icon(
+          Icons.emoji_emotions_outlined,
+          color: Colors.white,
+          size: 22,
+        );
       case 1:
-        return const Icon(Icons.emoji_events_outlined, color: Colors.white, size: 22);
+        return const Icon(
+          Icons.emoji_events_outlined,
+          color: Colors.white,
+          size: 22,
+        );
       case 2:
-        return const Icon(Icons.menu_book_outlined, color: Colors.white, size: 22);
+        return const Icon(
+          Icons.menu_book_outlined,
+          color: Colors.white,
+          size: 22,
+        );
       case 3:
-        return const Icon(Icons.record_voice_over_outlined, color: Colors.white, size: 22);
+        return const Icon(
+          Icons.record_voice_over_outlined,
+          color: Colors.white,
+          size: 22,
+        );
       case 4:
-        return const Icon(Icons.workspace_premium_outlined, color: Colors.white, size: 22);
+        return const Icon(
+          Icons.workspace_premium_outlined,
+          color: Colors.white,
+          size: 22,
+        );
       default:
         return const Icon(Icons.person_outline, color: Colors.white, size: 22);
     }
@@ -264,8 +300,9 @@ class _DashedBorderPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.4;
 
-    final RRect rRect =
-        borderRadius.toRRect(Rect.fromLTWH(0, 0, size.width, size.height));
+    final RRect rRect = borderRadius.toRRect(
+      Rect.fromLTWH(0, 0, size.width, size.height),
+    );
     final Path path = Path()..addRRect(rRect);
 
     const dashWidth = 7.0;
@@ -298,10 +335,7 @@ class _IdentityInputField extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.21),
-          width: 1,
-        ),
+        border: Border.all(color: Colors.white.withOpacity(0.21), width: 1),
         // No color here!
       ),
       child: Row(
@@ -316,11 +350,17 @@ class _IdentityInputField extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
             child: Row(
               children: [
-                Icon(Icons.account_circle_outlined,
-                    color: Colors.white.withOpacity(0.34), size: 22),
+                Icon(
+                  Icons.account_circle_outlined,
+                  color: Colors.white.withOpacity(0.34),
+                  size: 22,
+                ),
                 const SizedBox(width: 4),
-                Icon(Icons.keyboard_arrow_down_rounded,
-                    color: Colors.white.withOpacity(0.36), size: 18),
+                Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  color: Colors.white.withOpacity(0.36),
+                  size: 18,
+                ),
               ],
             ),
           ),
@@ -336,11 +376,13 @@ class _IdentityInputField extends StatelessWidget {
               decoration: const InputDecoration(
                 border: InputBorder.none,
                 hintText: "Enter Your Identity",
-                hintStyle: TextStyle(
-                    color: Colors.white54, fontSize: 15),
+                hintStyle: TextStyle(color: Colors.white54, fontSize: 15),
                 isDense: true,
                 filled: false, // <- make sure this is false!
-                contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 0),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 17,
+                  horizontal: 0,
+                ),
               ),
             ),
           ),
@@ -349,4 +391,3 @@ class _IdentityInputField extends StatelessWidget {
     );
   }
 }
-
