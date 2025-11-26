@@ -4,7 +4,6 @@ import 'package:motivix/ui/account/settings_page.dart';
 
 import 'package:motivix/ui/giver/imagination_page.dart';
 import 'package:motivix/ui/gratitude/family_gratitude_page.dart';
-import 'package:motivix/ui/home/home_page.dart';
 import 'package:motivix/ui/home/main_page.dart';
 import 'package:motivix/ui/onboarding/profile_progress_page.dart';
 import 'package:motivix/ui/onboarding/v1.dart';
