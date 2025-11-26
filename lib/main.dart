@@ -4,6 +4,7 @@ import 'package:motivix/ui/account/settings_page.dart';
 
 import 'package:motivix/ui/giver/imagination_page.dart';
 import 'package:motivix/ui/gratitude/family_gratitude_page.dart';
+import 'package:motivix/ui/home/home_page.dart';
 import 'package:motivix/ui/home/main_page.dart';
 import 'package:motivix/ui/onboarding/profile_progress_page.dart';
 import 'package:motivix/ui/onboarding/v1.dart';
@@ -39,7 +40,7 @@ class MotivoxApp extends StatelessWidget {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: AppTheme.darkTheme,
-          home: const WhySummaryPage(), // <-- START FROM SPLASH
+          home: const MyMotivationalApp(), // <-- START FROM SPLASH
         );
       },
     );

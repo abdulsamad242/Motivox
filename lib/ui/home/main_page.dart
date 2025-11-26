@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:motivix/theme/app_gradients.dart';
+import 'package:motivix/ui/home/bottom_nav.dart';
 import 'package:motivix/widgets/emojie_widget.dart';
 import 'package:motivix/widgets/greeting_card.dart';
 import 'package:motivix/widgets/growth_section.dart';
@@ -17,6 +18,7 @@ class MyMotivationalApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: BottomNav(currentIndex: 0, onTap: (a){}),
       body: Container(
         decoration: BoxDecoration(gradient: AppGradients.mainBackground),
         child: Padding(
