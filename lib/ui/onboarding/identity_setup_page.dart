@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import '../../theme/app_gradients.dart';
-import '../../theme/app_text_style.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+
 import '../../widgets/app_header.dart';
 import '../../widgets/step_progress.dart';
 import '../../widgets/inputs/custom_text_field.dart';
 import '../../widgets/buttons/primary_button.dart';
+import '../../widgets/app_background.dart';
+import '../../theme/app_typography.dart';
 import '../onboarding/step_two_growth_area.dart';
 
 class IdentityStepOne extends StatefulWidget {
@@ -30,45 +32,26 @@ class _IdentityStepOneState extends State<IdentityStepOne> {
     super.dispose();
   }
 
-  // Email regex — now a RegExp
-static final RegExp _emailPattern = RegExp(
-  r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$',
-);
+  static final RegExp _emailPattern = RegExp(
+    r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$',
+  );
 
-  // Universal phone validator helper
-  String? _validatePhoneNumber(String? input) {
-  if (input == null || input.trim().isEmpty) {
-    return 'Phone number is required';
+  String? _validatePhone(String? input) {
+    if (input == null || input.trim().isEmpty) return 'Phone number is required';
+    if (RegExp(r'[a-zA-Z]').hasMatch(input)) return 'Alphabets not allowed';
+
+    final digits = input.replaceAll(RegExp(r'\D'), '');
+    if (digits.length < 7) return 'Too short';
+    if (digits.length > 15) return 'Too long';
+
+    return null;
   }
 
-  // Check if input contains any alphabetic character (a-z or A-Z)
-  if (RegExp(r'[a-zA-Z]').hasMatch(input)) {
-    return 'Alphabets are not allowed in phone number';
-  }
-
-  // Remove all non-digit characters (keep only digits for length check)
-  String digitsOnly = input.replaceAll(RegExp(r'[^0-9]'), '');
-
-  // Must be between 7 and 15 digits (ITU standard)
-  if (digitsOnly.isEmpty) {
-    return 'Phone number must contain digits';
-  }
-  if (digitsOnly.length < 7) {
-    return 'Phone number is too short (minimum 7 digits)';
-  }
-  if (digitsOnly.length > 15) {
-    return 'Phone number is too long (maximum 15 digits)';
-  }
-
-  return null; // Valid
-}
-
-  void _onNextPressed() {
+  void _onNext() {
     if (_formKey.currentState?.validate() ?? false) {
-      // Proceed only if valid
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const GrowthAreaStepTwo()),
+        MaterialPageRoute(builder: (_) => const GrowthAreaStepTwo()),
       );
     }
   }
@@ -76,164 +59,144 @@ static final RegExp _emailPattern = RegExp(
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppGradients.mainBackground,
-        ),
-        child: SafeArea(
+      body: AppBackground(
+        
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 12),
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 12.h),
             child: Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const AppHeader(),
-                  const SizedBox(height: 22),
 
-                  Row(
+                  /// HEADER
+                  const AppHeader(),
+                  SizedBox(height: 20.h),
+
+                  /// 1/4 + progress bar aligned together
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      const Expanded(child: StepProgress(currentStep: 1)),
-                      const SizedBox(width: 10),
                       Text(
                         "1/4",
-                        style: AppTextStyles.label.copyWith(
-                          fontSize: 14,
+                        style: AppTypography.formLabel.copyWith(
+                          fontSize: 14.sp,
                           color: Colors.white.withOpacity(0.9),
                         ),
                       ),
+                      SizedBox(height: 4.h),
+                      const StepProgress(currentStep: 1),
                     ],
                   ),
 
-                  const SizedBox(height: 28),
+                  SizedBox(height: 28.h),
 
-                  Text(
-                    "Welcome aboard, Imtiyaz!",
-                    style: AppTextStyles.heading1.copyWith(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                      height: 1.3,
+                  /// CENTERED TITLE + SUBTITLE
+                  Center(
+                    child: Column(
+                      children: [
+                        Text(
+                          "Welcome aboard, Imtiyaz!",
+                          style: AppTypography.title.copyWith(fontSize: 24.sp),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: 6.h),
+                        Text(
+                          "Let’s set up your Motivo journey.",
+                          style: AppTypography.subtitle.copyWith(
+                            fontSize: 18.sp,
+                            color: Colors.white.withOpacity(0.65),
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
                   ),
 
-                  const SizedBox(height: 6),
+                  SizedBox(height: 30.h),
 
-                  Text(
-                    "Let’s set up your Motivo journey.",
-                    style: AppTextStyles.label.copyWith(
-                      fontSize: 15,
-                      color: Colors.white.withOpacity(0.65),
-                    ),
-                  ),
-
-                  const SizedBox(height: 30),
-
+                  /// SECTION TITLE
                   Row(
                     children: [
                       Container(
-                        padding: const EdgeInsets.all(8),
+                        padding: EdgeInsets.all(8.w),
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.12),
-                          borderRadius: BorderRadius.circular(50),
+                          borderRadius: BorderRadius.circular(50.r),
                         ),
-                        child: const Icon(Icons.person,
-                            color: Colors.white, size: 20),
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        "Your Basic Identity",
-                        style: AppTextStyles.heading2.copyWith(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                        child: Icon(
+                          Icons.person,
+                          color: Colors.white,
+                          size: 26.sp,
                         ),
                       ),
+                      SizedBox(width: 10.w),
+                      Text("Your Basic Identity", style: AppTypography.sectionTitle),
                     ],
                   ),
 
-                  const SizedBox(height: 18),
+                  SizedBox(height: 18.h),
 
-                  Text(
-                    "Name",
-                    style: AppTextStyles.label.copyWith(
-                      color: Colors.white.withOpacity(0.8),
-                    ),
-                  ),
-                  const SizedBox(height: 6),
+                  /// NAME FIELD
+                  Text("Name", style: AppTypography.formLabel),
+                  SizedBox(height: 6.h),
                   PrimaryTextField(
                     hint: "Enter Your Name",
                     icon: Icons.person,
                     controller: _nameController,
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return 'Name is required';
-                      }
-                      if (value.trim().length < 2) {
-                        return 'Name must be at least 2 characters';
-                      }
-                      if (!RegExp(r"^[a-zA-Z\s\-'.]+$").hasMatch(value.trim())) {
-                        return 'Name can only contain letters, spaces, hyphens, apostrophes, or dots';
+                    validator: (v) {
+                      if (v == null || v.trim().isEmpty) return 'Name required';
+                      if (v.trim().length < 2) return 'Too short';
+                      if (!RegExp(r"^[a-zA-Z\s\-'.]+$").hasMatch(v.trim())) {
+                        return 'Invalid characters';
                       }
                       return null;
                     },
                   ),
 
-                  const SizedBox(height: 18),
+                  SizedBox(height: 18.h),
 
-                  Text(
-                    "Email",
-                    style: AppTextStyles.label.copyWith(
-                      color: Colors.white.withOpacity(0.8),
-                    ),
-                  ),
-                  const SizedBox(height: 6),
+                  /// EMAIL FIELD
+                  Text("Email", style: AppTypography.formLabel),
+                  SizedBox(height: 6.h),
                   PrimaryTextField(
                     hint: "Enter Your Email",
                     icon: Icons.email_outlined,
                     keyboardType: TextInputType.emailAddress,
                     controller: _emailController,
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return 'Email is required';
-                      }
-                      if (!_emailPattern.hasMatch(value.trim())) {
-                        return 'Please enter a valid email address';
-                      }
+                    validator: (v) {
+                      if (v == null || v.trim().isEmpty) return 'Email required';
+                      if (!_emailPattern.hasMatch(v.trim())) return 'Invalid email';
                       return null;
                     },
                   ),
 
-                  const SizedBox(height: 18),
+                  SizedBox(height: 18.h),
 
-                  Text(
-                    "Phone Number",
-                    style: AppTextStyles.label.copyWith(
-                      color: Colors.white.withOpacity(0.8),
-                    ),
-                  ),
-                  const SizedBox(height: 6),
+                  /// PHONE FIELD
+                  Text("Phone Number", style: AppTypography.formLabel),
+                  SizedBox(height: 6.h),
                   PrimaryTextField(
-                    hint: "Enter phone number (e.g. +1 555 123 4567)",
+                    hint: "Enter phone number",
                     icon: Icons.phone_outlined,
                     keyboardType: TextInputType.phone,
                     controller: _phoneController,
-                    validator: _validatePhoneNumber,
-                   
+                    validator: _validatePhone,
                   ),
 
-                  const SizedBox(height: 30),
+                  SizedBox(height: 30.h),
 
-                  PrimaryButton(
-                    label: "Next",
-                    onTap: _onNextPressed,
-                  ),
-
-                  const SizedBox(height: 20),
+                  /// NEXT BUTTON
+                  PrimaryButton(label: "Next", onTap: () {
+  context.go('/steptwo');
+}),
+                  SizedBox(height: 30.h),
                 ],
               ),
             ),
           ),
         ),
-      ),
+      
     );
   }
 }

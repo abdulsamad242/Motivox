@@ -1,465 +1,207 @@
 import 'package:flutter/material.dart';
+import '../../widgets/app_background.dart';
+import '../../widgets/app_header.dart';
+import '../../theme/app_typography.dart';
 
 class SubscriptionScreen extends StatelessWidget {
   const SubscriptionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    const mainBg = Color(0xFF0B1732);
-    const cardColor = Color(0xFF212A49);
-
     return Scaffold(
-      backgroundColor: mainBg,
-      body: SafeArea(
+      body: AppBackground(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 12),
-
-              // ===== TOP HEADER — CENTERED LOGO ONLY =====
-              Container(
-                height: 90,
-                margin: const EdgeInsets.only(bottom: 17),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF374E8C), Color(0xFF223365)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Center(
-                  child: Image.asset(
-                    "assets/images/logo.png",
-                    height: 60,
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 5),
-
-              // ===== SUBSCRIPTION PLAN HEADER =====
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white.withOpacity(0.15),
-                    ),
-                    child: Icon(Icons.money, color: Colors.white, size: 20),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    "Subscription Plan",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-
+              
+              const AppHeader(),
               const SizedBox(height: 15),
 
-              // ===== START FOR FREE CARD =====
-              Container(
-                height: 160,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/subscription_bg.png'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
+              // -------------------------------
+              // TOP HEADER
+              // -------------------------------
+              Row(
+  crossAxisAlignment: CrossAxisAlignment.center,
+  children: [
+    // icon with frosted background
+    Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.12),
+        borderRadius: BorderRadius.circular(27),
+      ),
+      child: Image.asset(
+        "assets/icons/subs.png",
+        width: 20,
+        height: 20,
+        color: Colors.white,
+      ),
+    ),
+
+    const SizedBox(width: 12), // space between icon and text
+
+    // text outside the container
+    Text(
+      "Subscription Plan",
+      style: AppTypography.title.copyWith(
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+      ),
+    ),
+  ],
+),
+
+              const SizedBox(height: 20),
+
+              // ===============================
+              // FREE TRIAL BIG CARD
+              // ===============================
+              ClipRRect(
+                borderRadius: BorderRadius.circular(18),
                 child: Stack(
                   children: [
-                    // Dark Gradient Overlay (for text contrast)
+                    // Background Image
+                    Image.asset(
+                      "assets/images/subscription_bg.png",
+                      width: double.infinity,
+                      height: 180,
+                      fit: BoxFit.cover,
+                    ),
+
+                    // Subtle dark overlay
                     Positioned.fill(
                       child: Container(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
                           gradient: LinearGradient(
                             colors: [
-                              Colors.black.withOpacity(0.6),
-                              Colors.transparent,
+                              Colors.black.withOpacity(0.28),
+                              Colors.black.withOpacity(0.05),
                             ],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
+                            begin: Alignment.bottomLeft,
+                            end: Alignment.topRight,
                           ),
                         ),
                       ),
                     ),
 
-                    // Content
-                    Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Left: Text
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "START FOR FREE",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
+                    // CONTENT
+                    Positioned.fill(
+                      child: Padding(
+                        padding: const EdgeInsets.all(22),
+                        child: Row(
+                          children: [
+                            // Left Text
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "START FOR FREE",
+                                    style: AppTypography.sectionTitle.copyWith(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  "Experience motivation redefined. 7 days free trial.",
-                                  style: TextStyle(
-                                    color: Colors.white.withOpacity(0.8),
-                                    fontSize: 14,
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    "Experience motivation redefined. 7 days free trial.",
+                                    style: AppTypography.bodySmall.copyWith(
+                                      color: Colors.white.withOpacity(0.85),
+                                      fontSize: 12,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
 
-                          // Right: Progress Circle
-                          Container(
-                            width: 100,
-                            height: 100,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white.withOpacity(0.1),
-                            ),
-                            child: Stack(
-                              fit: StackFit.expand,
-                              children: [
-                                CircularProgressIndicator(
-                                  value: 0.72,
-                                  strokeWidth: 5,
-                                  backgroundColor: Colors.transparent,
-                                  valueColor: AlwaysStoppedAnimation<Color>(const Color(0xFFFF9001)),
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "72%",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                    Text(
-                                      "Complete",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 15,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                            // Premium Progress Circle
+                            _PremiumProgressCircle(percent: 0.72),
+                          ],
+                        ),
                       ),
-                    ),
+                    )
                   ],
                 ),
               ),
 
               const SizedBox(height: 30),
 
-              // ===== MONTHLY PLAN CARD =====
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF483A74), Color(0xFF2E2849)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Header: Lightning Icon + Tagline
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: const Color(0xFFFF9001).withOpacity(0.2),
-                          ),
-                          child: Icon(Icons.bolt, color: const Color(0xFFFF9001), size: 18),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          "STAY CONSISTENT. GROW DAILY",
-                          style: TextStyle(
-                            color: Colors.white.withOpacity(0.8),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-
-                    // Title + Price
-                    Text(
-                      "Monthly",
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      "₹299 / month",
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      "Stay Consistent. Build Habits. Grow Daily.",
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.7),
-                        fontSize: 14,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Feature List
-                    _featureItem(
-                      icon: Icons.sunny,
-                      title: "Positivity and GIVER Tracker",
-                      subtitle: "Stay inspired and track how you give back daily",
-                    ),
-                    const SizedBox(height: 8),
-                    _featureItem(
-                      icon: Icons.bar_chart,
-                      title: "Daily Productivity Dashboard",
-                      subtitle: "See your progress and stay focused on what matters",
-                    ),
-                    const SizedBox(height: 8),
-                    _featureItem(
-                      icon: Icons.shield,
-                      title: "Manage Your Daily Tasks & Reminders",
-                      subtitle: "Stay organized and never miss what's important.",
-                    ),
-                    const SizedBox(height: 8),
-                    _featureItem(
-                      icon: Icons.flag,
-                      title: "Set and Manage Your Life Goals",
-                      subtitle: "Define your Dreams and break them into achievable steps.",
-                    ),
-                    const SizedBox(height: 8),
-                    _featureItem(
-                      icon: Icons.note,
-                      title: "Write Your Daily Diary & Thoughts",
-                      subtitle: "Reflect, release, and grow with mindful journaling",
-                    ),
-                    const SizedBox(height: 8),
-                    _featureItem(
-                      icon: Icons.smart_toy,
-                      title: "Access Your AI Buddy",
-                      subtitle: "Get guidance, clarity, and answers to your career or business questions.",
-                    ),
-                    const SizedBox(height: 20),
-
-                    // Start Free Trial Button
-                    ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFFF9001),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        minimumSize: const Size(double.infinity, 0),
-                      ),
-                      child: const Text(
-                        "Start Free Trial",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 16.5,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              // ===============================
+              // MONTHLY PLAN
+              // ===============================
+              _subscriptionCard(
+                iconPath: "assets/icons/monthly.png",
+                title: "Monthly",
+                price: "₹299 / month",
+                tagline: "STAY CONSISTENT. GROW DAILY",
+                buttonText: "Start Free Trial",
+                saveTag: "Stay Consistent. Build Habits. Grow Daily.",
+                features: const [
+                  "Positivity and GIVER Tracker",
+                  "Daily Productivity Dashboard",
+                  "Manage Your Daily Tasks & Reminders",
+                  "Set and Manage Your Life Goals",
+                  "Write Your Daily Diary & Thoughts",
+                  "Access Your AI Buddy",
+                ],
+                subtitles: const [
+                  "Stay inspired and track how you give back daily",
+                  "See your progress and stay focused on what matters",
+                  "Never miss what's important.",
+                  "Break dreams into achievable steps.",
+                  "Reflect, release, and grow daily",
+                  "Get clarity & guidance instantly.",
+                ],
+                iconNumbers: [1, 2, 3, 4, 5, 6]
               ),
 
-              const SizedBox(height: 30),
+              const SizedBox(height: 25),
 
-              // ===== YEARLY PLAN CARD =====
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF483A74), Color(0xFF2E2849)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Header: Leaf Icon + Tagline
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: const Color(0xFFFF9001).withOpacity(0.2),
-                          ),
-                          child: Icon(Icons.eco, color: const Color(0xFFFF9001), size: 18),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          "COMMIT FOR A YEAR. TRANSFORM FOR LIFE.",
-                          style: TextStyle(
-                            color: Colors.white.withOpacity(0.8),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-
-                    // Title + Price
-                    Text(
-                      "Yearly",
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      "₹2,499 / Year",
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      "(Save 30%)",
-                      style: TextStyle(
-                        color: const Color(0xFFFF9001),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Feature List
-                    _featureItem(
-                      icon: Icons.shield,
-                      title: "Everything in monthly plan",
-                      subtitle: "",
-                    ),
-                    const SizedBox(height: 8),
-                    _featureItem(
-                      icon: Icons.bookmark,
-                      title: "Lifetime Habit Tracker",
-                      subtitle: "",
-                    ),
-                    const SizedBox(height: 8),
-                    _featureItem(
-                      icon: Icons.headphones,
-                      title: "Priority Support & Early Access Features",
-                      subtitle: "",
-                    ),
-                    const SizedBox(height: 8),
-                    _featureItem(
-                      icon: Icons.person,
-                      title: "Personalized Insights & motivational Reports",
-                      subtitle: "",
-                    ),
-                    const SizedBox(height: 8),
-                    _featureItem(
-                      icon: Icons.group,
-                      title: "FREE 1-1 Monthly Business Guidance",
-                      subtitle: "",
-                    ),
-                    const SizedBox(height: 8),
-                    _featureItem(
-                      icon: Icons.people,
-                      title: "FREE Lifetime Community Access",
-                      subtitle: "",
-                    ),
-                    const SizedBox(height: 8),
-                    _featureItem(
-                      icon: Icons.analytics,
-                      title: "Monthly Progress Report",
-                      subtitle: "",
-                    ),
-                    const SizedBox(height: 20),
-
-                    // Go Yearly Button
-                    ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFFF9001),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        minimumSize: const Size(double.infinity, 0),
-                      ),
-                      child: const Text(
-                        "Go Yearly & Save 30%",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 16.5,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              // ===============================
+              // YEARLY
+              // ===============================
+              _subscriptionCard(
+                iconPath: "assets/icons/yearly.png",
+                title: "Yearly",
+                price: "₹2,499 / year",
+                tagline: "COMMIT FOR A YEAR. TRANSFORM FOR LIFE.",
+                saveTag: "(Save 30%)",
+                buttonText: "Go Yearly & Save 30%",
+                features: const [
+                  "Everything in Monthly Plan",
+                  "Lifetime Habit Tracker",
+                  "Priority Support",
+                  "Motivational Insights",
+                  "FREE Monthly Business Guidance",
+                  "Lifetime Community Access",
+                ],
+                subtitles: const ["", "", "", "", "", ""],
+                iconNumbers: [7, 8, 9, 10, 11, 12, 13]
+                
               ),
 
-              const SizedBox(height: 10),
-              Container(            
-                padding: EdgeInsets.all(9),
+              const SizedBox(height: 25),
+
+              // FOOTER MESSAGE
+              Container(
+                padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.25),
-    // Set the color here
-    borderRadius: BorderRadius.circular(10), // Adjust the radius (e.g., 10) for round corners
-  ),
-              child: Center(
-                child: Text(
-                  "Your Journey to success starts with a single decision",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontStyle: FontStyle.italic,
+                  color: Colors.white.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Center(
+                  child: Text(
+                    "Your journey to success starts with a single decision.",
+                    style: AppTypography.quote.copyWith(
+                      fontSize: 14,
+                      fontStyle: FontStyle.italic,
+                    ),
                   ),
                 ),
-              ),),
+              ),
 
               const SizedBox(height: 40),
             ],
@@ -469,54 +211,251 @@ class SubscriptionScreen extends StatelessWidget {
     );
   }
 
-  // Reusable Feature Item
-  Widget _featureItem({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.12),
-        borderRadius: BorderRadius.circular(12),
+  // ===================================================================
+  // REUSABLE SUBSCRIPTION CARD
+  // ===================================================================
+  Widget _subscriptionCard({
+  required String iconPath,
+  required String title,
+  required String price,
+  required String tagline,
+  required String buttonText,
+  required String saveTag,
+  required List<String> features,
+  required List<String> subtitles,
+  required List<int> iconNumbers, // 👈 NEW
+}) {
+  return Container(
+    padding: const EdgeInsets.all(15),
+    decoration: BoxDecoration(
+    gradient: LinearGradient(
+        begin: Alignment.bottomLeft,
+        end: Alignment.topRight,
+        colors: [
+          const Color(0xFF4562FF).withOpacity(0.22), // soft blue
+          const Color(0xFFFF861F).withOpacity(0.28), // soft orange
+        ],
       ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white.withOpacity(0.1),
+      borderRadius: BorderRadius.circular(18),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        
+        Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withOpacity(0.18),
+              ),
+              child: Image.asset(
+                iconPath,
+                width: 30,
+                height: 30,
+              ),
             ),
-            child: Icon(icon, color: Colors.white, size: 18),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                  ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                tagline,
+                style: AppTypography.bodySmall.copyWith(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
                 ),
-                if (subtitle.isNotEmpty) ...[
-                  const SizedBox(height: 4),
-                  Text(
+              ),
+            ),
+          ],
+        ),
+
+        const SizedBox(height: 12),
+
+        Text(
+          title,
+          style: AppTypography.sectionTitle.copyWith(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 4),
+
+        Text(
+          price,
+          style: AppTypography.sectionTitle.copyWith(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+
+        if (saveTag.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(top: 6),
+            child: Text(
+              saveTag,
+              style: AppTypography.bodySmall.copyWith(
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+              ),
+            ),
+          ),
+
+        const SizedBox(height: 18),
+
+        // 🔥 NEW: numbered icons
+        for (int i = 0; i < features.length; i++) ...[
+          _featureItem(
+            numIcon: iconNumbers[i],   // 👈 pass icon number
+            title: features[i],
+            subtitle: subtitles[i],
+          ),
+          const SizedBox(height: 10),
+        ],
+
+        const SizedBox(height: 18),
+
+        ElevatedButton(
+          onPressed: () {},
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Color.fromRGBO(255, 134, 31, 1),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            minimumSize: const Size(double.infinity, 0),
+          ),
+          child: Text(
+            buttonText,
+            style: AppTypography.sectionTitle.copyWith(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        )
+      ],
+    ),
+  );
+}
+
+
+  // Feature Item
+  Widget _featureItem({
+  required int numIcon,
+  required String title,
+  required String subtitle,
+}) {
+  return Container(
+    padding: const EdgeInsets.all(12),
+    decoration: BoxDecoration(
+      color: Colors.white.withOpacity(0.12),
+      borderRadius: BorderRadius.circular(12),
+    ),
+    child: Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(7),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.white.withOpacity(0.15),
+          ),
+          child: Image.asset(
+            "assets/icons/$numIcon.png",  // 👈 YOUR NUMBERED ICONS
+            width: 22,
+            height: 22,
+          ),
+        ),
+        const SizedBox(width: 12),
+
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: AppTypography.sectionTitle.copyWith(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              if (subtitle.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Text(
                     subtitle,
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(0.7),
+                    style: AppTypography.bodySmall.copyWith(
+                      color: Colors.white70,
                       fontSize: 13,
                     ),
                   ),
-                ],
-              ],
+                ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+}
+
+
+// ===================================================================
+// PREMIUM GLOSSY PROGRESS CIRCLE
+// ===================================================================
+class _PremiumProgressCircle extends StatelessWidget {
+  final double percent;
+  const _PremiumProgressCircle({required this.percent});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 120,
+      height: 120,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: RadialGradient(
+          colors: [
+            Colors.white.withOpacity(0.35),
+            Colors.white.withOpacity(0.10),
+            Colors.transparent,
+          ],
+          radius: 0.85,
+        ),
+      ),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          SizedBox(
+            width: 120,
+            height: 120,
+            child: CircularProgressIndicator(
+              value: percent,
+              strokeWidth: 6,
+              backgroundColor: Colors.white.withOpacity(0.15),
+              valueColor: const AlwaysStoppedAnimation(Color(0xFFFF9001)),
             ),
           ),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "${(percent * 100).round()}%",
+                style: AppTypography.sectionTitle.copyWith(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              Text(
+                "Complete",
+                style: AppTypography.bodySmall.copyWith(
+                  fontSize: 16,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          )
         ],
       ),
     );

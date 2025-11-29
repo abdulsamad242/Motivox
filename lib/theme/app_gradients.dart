@@ -1,38 +1,33 @@
+// app_gradients.dart
 import 'package:flutter/material.dart';
 import 'app_colors.dart';
 
 class AppGradients {
-  // Main Background - MUCH DARKER navy from mockup
-  static const LinearGradient mainBackground = LinearGradient(
-    begin: Alignment.topCenter,
-    end: Alignment.bottomCenter,
-    colors: [
-      Color(0xFF0F1936), // Dark navy at top
-      Color(0xFF070B1F), // Almost black navy at bottom
-    ],
+  // For splash screen - using solid color with glow overlays instead of gradient
+  static const BoxDecoration mainBackground = BoxDecoration(
+    color: AppColors.splashBackground,
   );
 
-  // Button Orange - Vibrant orange gradient
+
+  // Keep your other gradients for different parts of the app
   static const LinearGradient buttonOrange = LinearGradient(
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
     colors: [
-      Color(0xFFFF9D5C), // Lighter orange
-      Color(0xFFFF8C42), // Main orange
+      Color(0xFFFF9D5C),
+      Color(0xFFFF8C42),
     ],
   );
 
-  // Glass Card Effect - Very subtle
   static const LinearGradient glassCard = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     colors: [
-      Color(0x12FFFFFF), // 7% white
-      Color(0x08FFFFFF), // 3% white
+      Color(0x12FFFFFF),
+      Color(0x08FFFFFF),
     ],
   );
 
-  // Logo Card Background - Darker version
   static const LinearGradient logoCard = LinearGradient(
     colors: [
       Color(0xFF1A2745),

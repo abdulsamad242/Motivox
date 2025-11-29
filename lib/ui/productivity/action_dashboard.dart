@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import '../../widgets/app_header.dart';
+import '../../widgets/app_background.dart';
+import '../../theme/app_typography.dart';
 
-const Color _mainBg = Color(0xFF0B1732);
-const Color _cardColor = Color(0xFF212A49);
-const Color _orangePrimary = Color(0xFFFF9001);
+const Color _orangePrimary = Color.fromRGBO(255, 134, 31, 1);
+
 
 class ActionDashboard extends StatelessWidget {
   const ActionDashboard({super.key});
@@ -10,213 +13,188 @@ class ActionDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0B1732),
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 0),
-          children: [
-            const SizedBox(height: 10),
-            // Logo/Header
-            Container(
-              height: 90,
-              margin: const EdgeInsets.only(bottom: 17),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF374E8C), Color(0xFF223365)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(20),
+      body: AppBackground(child:  Stack(
+        children: [
+          
+
+          ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+            children: [
+              const AppHeader(),
+              const SizedBox(height: 18),
+
+              _buildHeaderRow(context),
+              const SizedBox(height: 22),
+
+              GlassCard(
+                padding: const EdgeInsets.all(16),
+                child: _buildDailySummary(),
               ),
-              child: Center(
-                child: Image.asset(
-                  "assets/images/logo.png",
-                  height: 60,
-                ),
+
+              const SizedBox(height: 24),
+
+              GlassCard(
+                padding: const EdgeInsets.all(16),
+                child: _buildLifetimeGoals(),
               ),
-            ),
-            // Section Title
-            Padding(
-              padding: const EdgeInsets.only(left: 8, right: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+              const SizedBox(height: 16),
+
+              Row(
                 children: [
-                  Text(
-                    "Productivity and Action\nDashboard",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
+                  Expanded(
+                    child: GlassCard(
+                      padding: const EdgeInsets.all(16),
+                      child: _buildProgressCard(
+                        title: "Daily Goals\nCompletion",
+                        percentage: 50,
+                      ),
                     ),
                   ),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("Today's view opened")),
-                      );
-                    },
-                    icon: Icon(Icons.calendar_today, size: 16),
-                    label: Text("Today"),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF007AFF),
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: GlassCard(
+                      padding: const EdgeInsets.all(16),
+                      child: _buildProgressCard(
+                        title: "Daily To Do\nTasks",
+                        percentage: 76,
                       ),
-                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                     ),
                   ),
                 ],
               ),
-            ),
-            const SizedBox(height: 16),
-            // Daily Summary Card
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: const Color(0xFF212A49),
-                borderRadius: BorderRadius.circular(15),
+
+              const SizedBox(height: 24),
+
+              GlassCard(
+                padding: const EdgeInsets.all(16),
+                child: _buildProductivitySection(),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Daily Summary and Dashboard",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    "Boost your productivity and stay on track by creating your daily To Do list. A Clear list helps you :",
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(0.7),
-                      fontSize: 14,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  ...[
-                    "Stay focused on important tasks",
-                    "Manage your time effectively",
-                    "Achieve your daily goals step by step",
-                  ].map((point) => _buildBulletPoint(point)).toList(),
-                ],
+
+              const SizedBox(height: 24),
+
+              GlassCard(
+                padding: const EdgeInsets.all(16),
+                child: _buildGiverSection(),
               ),
-            ),
-            const SizedBox(height: 24),
-            // Lifetime Goals Progress — centered group
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: _cardColor,
-                borderRadius: BorderRadius.circular(15),
+
+              const SizedBox(height: 24),
+
+              GlassCard(
+                padding: const EdgeInsets.all(16),
+                child: _buildMoodSummarySection(),
               ),
-              height: 120,
-              child: Center(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      "lifetime goals",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        SizedBox(
-                          width: 80,
-                          height: 80,
-                          child: CircularProgressIndicator(
-                            value: 50 / 100,
-                            strokeWidth: 6,
-                            backgroundColor: Colors.white.withOpacity(0.2),
-                            valueColor: AlwaysStoppedAnimation(_orangePrimary),
-                          ),
-                        ),
-                        Text(
-                          "50%",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+
+              const SizedBox(height: 24),
+
+              GlassCard(
+                padding: const EdgeInsets.all(16),
+                child: _buildSleepNoteSection(context),
               ),
-            ),
-            const SizedBox(height: 16),
-            // Daily Goals + To Do Cards
-            Row(
-              children: [
-                Expanded(
-                  child: _buildProgressCard(
-                    title: "Daily Goals\nCompletion",
-                    percentage: 50,
-                    color: _orangePrimary,
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: _buildProgressCard(
-                    title: "Daily To Do\nTasks",
-                    percentage: 76,
-                    color: _orangePrimary,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
-            // 🔹 Daily Productivity Section
-            _buildProductivitySection(),
-            const SizedBox(height: 24),
-            // 🆕 GIVER SECTION
-            _buildGiverSection(),
-            const SizedBox(height: 24),
-            // 📊 DAILY MOOD SUMMARY SECTION — FIXED
-            _buildMoodSummarySection(),
-            const SizedBox(height: 24),
-            // 🛌 SLEEP NOTE SECTION — FINAL & CORRECTED
-            _buildSleepNoteSection(),
-            const SizedBox(height: 32),
-          ],
-        ),
+
+              const SizedBox(height: 40),
+            ],
+          ),
+        ],
       ),
+    ),
     );
   }
 
-  Widget _buildBulletPoint(String text) {
+  // ─────────────────────────────────────────────
+  // 🔶 HEADER ROW
+  // ─────────────────────────────────────────────
+  Widget _buildHeaderRow(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          "Productivity and Action \n Dashboard",
+          style: AppTypography.sectionTitle.copyWith(
+            color: Colors.white,
+            fontSize: 24,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+
+        ElevatedButton(
+  onPressed: () {},
+  style: ElevatedButton.styleFrom(
+    backgroundColor: const Color(0xFF2196F3),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(14),
+    ),
+    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+  ),
+  child: Row(
+    mainAxisSize: MainAxisSize.min, // Important: Makes the button only as wide as its children
+    // FIX: Text and Image are now separate items in the children list.
+    children: [
+      Text(
+        "Today",
+        style: AppTypography.sectionTitle.copyWith(
+          color: Colors.white,
+          fontSize: 16,
+        ),
+      ),
+      
+      // Add a small space between the text and the icon
+      const SizedBox(width: 6), 
+
+      Image.asset(
+        "assets/icons/calendar-2.png",
+        width: 20,
+        height: 20,
+        color: Colors.white,
+      ),
+    ],
+  ),
+),
+      ],
+    );
+  }
+
+  // ─────────────────────────────────────────────
+  // 🔶 DAILY SUMMARY
+  // ─────────────────────────────────────────────
+  Widget _buildDailySummary() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("Daily Summary and Dashboard",
+            style: AppTypography.sectionTitle.copyWith(fontSize: 20)),
+        const SizedBox(height: 10),
+        Text(
+          "Boost your productivity and stay on track by creating your daily To Do list.",
+          style: AppTypography.bodySmall.copyWith(color: Colors.white70, fontSize: 14),
+        ),
+        
+        const SizedBox(height: 16),
+        _bullet("Stay focused on important tasks"),
+        _bullet("Manage your time effectively"),
+        _bullet("Achieve your daily goals step by step"),
+      ],
+    );
+  }
+
+  Widget _bullet(String text) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             width: 6,
             height: 6,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.white.withOpacity(0.7),
+              color: Colors.white70,
             ),
-            margin: const EdgeInsets.only(top: 6),
+            margin: const EdgeInsets.only(right: 12),
           ),
-          const SizedBox(width: 12),
           Expanded(
             child: Text(
               text,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-              ),
+              style: AppTypography.bodySmall.copyWith(color: Colors.white),
             ),
           ),
         ],
@@ -224,418 +202,397 @@ class ActionDashboard extends StatelessWidget {
     );
   }
 
-  Widget _buildProgressCard({
-    required String title,
-    required int percentage,
-    required Color color,
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: _cardColor,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Column(
-        children: [
-          Text(
-            title,
-            style: TextStyle(
+  // ─────────────────────────────────────────────
+  // 🔶 LIFETIME GOALS
+  // ─────────────────────────────────────────────
+  Widget _buildLifetimeGoals() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text("Lifetime Goals", style: AppTypography.sectionTitle),
+        const SizedBox(width: 20),
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            SizedBox(
+              width: 80,
+              height: 80,
+              child: CircularProgressIndicator(
+                value: 0.5,
+                strokeWidth: 6,
+                backgroundColor: Colors.white24,
+                valueColor: const AlwaysStoppedAnimation(_orangePrimary),
+              ),
+            ),
+            Text("50%", style: AppTypography.sectionTitle.copyWith(fontSize: 18))
+          ],
+        )
+      ],
+    );
+  }
+
+  // ─────────────────────────────────────────────
+  // 🔶 PROGRESS CARD
+  // ─────────────────────────────────────────────
+  Widget _buildProgressCard({required String title, required int percentage}) {
+    return Column(
+      children: [
+        Text(title,
+            textAlign: TextAlign.center,
+            style: AppTypography.bodySmall.copyWith(
               color: Colors.white,
               fontSize: 14,
-              fontWeight: FontWeight.w500,
+            )),
+        const SizedBox(height: 12),
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            SizedBox(
+              width: 75,
+              height: 75,
+              child: CircularProgressIndicator(
+                value: percentage / 100,
+                strokeWidth: 6,
+                backgroundColor: Colors.white24,
+                valueColor: const AlwaysStoppedAnimation(_orangePrimary),
+              ),
             ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 12),
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              SizedBox(
-                width: 80,
-                height: 80,
-                child: CircularProgressIndicator(
-                  value: percentage / 100,
-                  strokeWidth: 6,
-                  backgroundColor: Colors.white.withOpacity(0.2),
-                  valueColor: AlwaysStoppedAnimation(color),
-                ),
-              ),
-              Text(
-                "$percentage%",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+            Text("$percentage%", style: AppTypography.sectionTitle),
+          ],
+        ),
+      ],
     );
   }
 
-  // 🔹 Daily Productivity Section
+  // ─────────────────────────────────────────────
+  // 🔶 PRODUCTIVITY SECTION
+  // ─────────────────────────────────────────────
   Widget _buildProductivitySection() {
+    final items = [
+      {"label": "Yearly Goals", "percent": 50},
+      {"label": "Quarterly Goals", "percent": 35},
+      {"label": "Monthly Goals", "percent": 65},
+      {"label": "Weekly Goals", "percent": 47},
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("Daily Productivity", style: AppTypography.sectionTitle),
+        const SizedBox(height: 14),
+        ...items.map((e) => _progressRow(
+              e['label'] as String,
+              e['percent'] as int,
+            )),
+      ],
+    );
+  }
+
+  Widget _progressRow(String label, int percent) {
     return Container(
-      padding: const EdgeInsets.all(16),
-      height: 320,
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: _cardColor,
-        borderRadius: BorderRadius.circular(15),
+        color: Colors.white.withOpacity(0.07),
+        borderRadius: BorderRadius.circular(14),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          Text(
-            "Daily Productivity",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 16),
-          ...[
-            {"label": "Yearly Goals", "percent": 50},
-            {"label": "Quarterly Goals", "percent": 35},
-            {"label": "Monthly Goals", "percent": 65},
-            {"label": "Weekly Goals", "percent": 47},
-          ]
-              .map((item) =>
-                  _buildProductivityRow(item["label"] as String, item["percent"] as int))
-              .toList(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildProductivityRow(String label, int percent) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    label,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
-                    child: LinearProgressIndicator(
-                      value: percent / 100,
-                      backgroundColor: Colors.white.withOpacity(0.1),
-                      valueColor: AlwaysStoppedAnimation(_orangePrimary),
-                      minHeight: 8,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 12),
-            Text(
-              "$percent%",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // 🔹 GIVER SECTION
-  Widget _buildGiverSection() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: _cardColor,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "GIVER",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 16),
-          ...[
-            {"label": "Gratitude", "percent": 100},
-            {"label": "Imagination", "percent": 100},
-            {"label": "Visualization", "percent": 60},
-            {"label": "Exercise", "percent": 100},
-            {"label": "Reading", "percent": 100},
-          ]
-              .map((item) => _buildGiverRow(item["label"] as String, item["percent"] as int))
-              .toList(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildGiverRow(String label, int percent) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    label,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
-                    child: LinearProgressIndicator(
-                      value: percent / 100,
-                      backgroundColor: Colors.white.withOpacity(0.1),
-                      valueColor: AlwaysStoppedAnimation(_orangePrimary),
-                      minHeight: 8,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 12),
-            Text(
-              "$percent%",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // 📊 DAILY MOOD SUMMARY SECTION — FULLY CORRECTED
-  Widget _buildMoodSummarySection() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: _cardColor,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Daily Mood Summary",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 16),
-          // Chart Area with Y-axis labels on the LEFT and background
-          SizedBox(
-            height: 180,
-            child: Row(
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Y-axis labels (0 to 100)
-                SizedBox(
-                  width: 40,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: List.generate(6, (i) {
-                      return Text(
-                        "${(5 - i) * 20}",
-                        style: TextStyle(
-                          color: Colors.white.withOpacity(0.6),
-                          fontSize: 12,
-                        ),
-                      );
-                    }),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                // Chart with subtle background
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.05),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Stack(
-                      children: [
-                        // Grid lines
-                        ...List.generate(5, (i) {
-                          double y = (i + 1) * 36; // 36, 72, ..., 180
-                          return Positioned(
-                            left: 0,
-                            right: 0,
-                            top: y,
-                            child: Container(
-                              height: 1,
-                              color: Colors.white.withOpacity(0.1),
-                            ),
-                          );
-                        }),
-                        // Bars
-                        Positioned.fill(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              _buildMoodBar("Happy", 80),
-                              _buildMoodBar("Sad", 90),
-                              _buildMoodBar("Angry", 10),
-                              _buildMoodBar("Anxiety", 95),
-                              _buildMoodBar("Grateful", 45),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                Text(label,
+                    style: AppTypography.bodySmall.copyWith(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500)),
+                const SizedBox(height: 4),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: LinearProgressIndicator(
+                    value: percent / 100,
+                    backgroundColor: Colors.white12,
+                    minHeight: 8,
+                    valueColor: const AlwaysStoppedAnimation(_orangePrimary),
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 12),
-          // Legend: "Emotion Type" on the LEFT
-          Row(
-            children: [
-              Container(
-                width: 12,
-                height: 12,
-                decoration: BoxDecoration(
-                  color: _orangePrimary,
-                  shape: BoxShape.rectangle,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Text(
-                "Emotion Type",
-                style: TextStyle(
-                  color: Colors.white.withOpacity(0.7),
-                  fontSize: 12,
-                ),
-              ),
-            ],
-          ),
+          const SizedBox(width: 12),
+          Text("$percent%", style: AppTypography.sectionTitle.copyWith(fontSize: 14)),
         ],
       ),
     );
   }
 
-  Widget _buildMoodBar(String label, int value) {
-    double barHeight = (value / 100) * 160;
+  // ─────────────────────────────────────────────
+  // 🔶 GIVER SECTION
+  // ─────────────────────────────────────────────
+  Widget _buildGiverSection() {
+    final items = [
+      {"label": "Gratitude", "percent": 100},
+      {"label": "Imagination", "percent": 100},
+      {"label": "Visualization", "percent": 60},
+      {"label": "Exercise", "percent": 100},
+      {"label": "Reading", "percent": 100},
+    ];
+
     return Column(
-      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: Container(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              width: 30,
-              height: barHeight,
-              decoration: BoxDecoration(
-                color: _orangePrimary,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(4)),
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-          ),
-          textAlign: TextAlign.center,
-        ),
+        Text("GIVER", style: AppTypography.sectionTitle),
+        const SizedBox(height: 14),
+        ...items.map((e) => _progressRow(
+              e['label'] as String,
+              e['percent'] as int,
+            )),
       ],
     );
   }
 
-  // 🛌 SLEEP NOTE SECTION — FINAL & CORRECTED
-  Widget _buildSleepNoteSection() {
-  return Container(
-    padding: const EdgeInsets.all(16),
-    decoration: BoxDecoration(
-      color: _cardColor,
-      borderRadius: BorderRadius.circular(15),
-    ),
-    child: Column(
+  // ─────────────────────────────────────────────
+  // 🔶 MOOD SUMMARY
+  // ─────────────────────────────────────────────
+  Widget _buildMoodSummarySection() {
+  final moods = {
+    "Happy": 80,
+    "Sad": 100,
+    "Angry": 15,
+    "Anxiety": 100,
+    "Grateful": 55,
+  };
+
+  const double chartHeight = 220;
+  const double barWidth = 26; // thinner bars
+  const double fullBarOpacity = 0.10; // grey background bar
+
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      Text(
+        "Daily Mood Summary",
+        style: AppTypography.sectionTitle.copyWith(fontSize: 18),
+        textAlign: TextAlign.center,
+      ),
+      const SizedBox(height: 14),
+
+      SizedBox(
+        height: chartHeight + 25,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+             Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: List.generate(6, (i) {
+                  final value = 100 - (i * 20);
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 2),
+                    child: Text(
+                      "$value",
+                      style: AppTypography.bodySmall.copyWith(
+                        color: Colors.white70,
+                        fontSize: 12,
+                      ),
+                    ),
+                  );
+                }),
+              ),
+            
+            const SizedBox(width: 8),
+
+            // CHART AREA
+            Expanded(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  
+                    return Stack(
+                      children: [
+                        // HORIZONTAL LINES (better aligned)
+                        ...List.generate(6, (i) {
+                          return Positioned(
+                            top: (chartHeight / 5) * i,
+                            left: 0,
+                            right: 0,
+                            child: Container(
+                              height: 1,
+                              color: Colors.white.withOpacity(
+                                i == 5 ? 0.40 : 0.12,
+                              ),
+                            ),
+                          );
+                        }),
+
+                        // VERTICAL GRID LINES
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: List.generate(moods.length, (i) {
+                            return Container(
+                              width: 1,
+                              height: chartHeight,
+                              color: Colors.white.withOpacity(0.10),
+                            );
+                          }),
+                        ),
+
+                        // BARS
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: moods.entries.map((e) {
+                            return _barWithBackground(
+                              label: e.key,
+                              value: e.value,
+                              width: barWidth,
+                              height: chartHeight,
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    );
+                  
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+
+      const SizedBox(height: 18),
+
+      // LEGEND
+      Center(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 14,
+              height: 14,
+              decoration: BoxDecoration(
+                color: _orangePrimary,
+                borderRadius: BorderRadius.circular(3),
+                border: Border.all(color: Colors.white, width: 1.4), // white border
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              "Emotion Type",
+              style: AppTypography.bodySmall.copyWith(
+                color: Colors.white,
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      ),
+    ],
+  );
+}
+
+
+Widget _barWithBackground({
+  required String label,
+  required int value,
+  required double width,
+  required double height,
+}) {
+  final barHeight = (value / 100) * height;
+
+  return Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      // STACK: Grey background → Orange foreground
+      Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          // BACKGROUND BAR (grey filler)
+          Container(
+            width: width,
+            height: height,
+            color: Colors.white.withOpacity(0.10),
+          ),
+
+          // ORANGE VALUE BAR
+          Container(
+            width: width,
+            height: barHeight,
+            color: _orangePrimary,
+          ),
+        ],
+      ),
+
+      const SizedBox(height: 6),
+
+      // Label
+      Text(
+        label,
+        style: AppTypography.bodySmall.copyWith(
+          color: Colors.white,
+          fontSize: 12,
+        ),
+      ),
+    ],
+  );
+}
+
+
+  // ─────────────────────────────────────────────
+  // 🔶 SLEEP NOTE SECTION
+  // ─────────────────────────────────────────────
+  Widget _buildSleepNoteSection(BuildContext context) {
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "Sleep Note",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        Text("Sleep Note", style: AppTypography.sectionTitle),
         const SizedBox(height: 16),
         ElevatedButton(
-          onPressed: () {
-            
-          },
+          onPressed: () => context.go('/sleepNote'),
           style: ElevatedButton.styleFrom(
             backgroundColor: _orangePrimary,
-            foregroundColor: Colors.black,
+            minimumSize: const Size(double.infinity, 55),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(14),
             ),
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            minimumSize: const Size(double.infinity, 56), // 👈 Makes it full-width & taller
-            alignment: Alignment.center, // Ensures content is centered
+            padding: const EdgeInsets.symmetric(vertical: 14),
           ),
           child: Text(
             "Write a Sleep Note Now",
-            style: TextStyle(
-              color: Colors.white, // 📌 Orange button → black text for contrast
+            style: AppTypography.sectionTitle.copyWith(
+              color: Colors.white,
               fontSize: 16,
-              fontWeight: FontWeight.w600,
             ),
-            textAlign: TextAlign.center, // Explicit centering
           ),
         ),
       ],
-    ),
-  );
+    );
+  }
 }
+
+// ─────────────────────────────────────────────
+// 🔶 GLASS CARD (INLINE WIDGET)
+// ─────────────────────────────────────────────
+class GlassCard extends StatelessWidget {
+  final Widget child;
+  final EdgeInsets padding;
+
+  const GlassCard({
+    super.key,
+    required this.child,
+    this.padding = const EdgeInsets.all(16),
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: padding,
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.15),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: child,
+    );
+  }
 }

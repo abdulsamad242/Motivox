@@ -1,78 +1,54 @@
 import 'package:flutter/material.dart';
-
+import '../../widgets/app_background.dart';
+import '../../widgets/app_header.dart';
+import '../../theme/app_typography.dart';
+import 'package:go_router/go_router.dart';
 class ThankfulMomentsPage extends StatelessWidget {
   const ThankfulMomentsPage({super.key});
+
+  // 🔵 The gradient for the OUTER big cards
+  LinearGradient get mainGradient => LinearGradient(
+        begin: Alignment.bottomLeft,
+        end: Alignment.topRight,
+        colors: [
+          const Color(0xFF4562FF).withOpacity(0.22),
+          const Color(0xFFFF861F).withOpacity(0.28),
+        ],
+      );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0B1732),
-      body: SafeArea(
+      body: AppBackground(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 12),
-              // Logo/Header
-              Container(
-                height: 90,
-                width: double.infinity,
-                margin: const EdgeInsets.only(bottom: 18),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF374E8C), Color(0xFF223365)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Center(
-                  child: Image.asset(
-                    "assets/images/logo.png", // Your logo asset
-                    height: 60,
-                  ),
-                ),
-              ),
+              const AppHeader(),
+              const SizedBox(height: 14),
 
-              // Page title and subtitle
+              // ============= PAGE TITLE ROW =============
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.10),
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    child: Center(
-                      child: Image.asset(
-                        'assets/icons/moments.png',
-                        width: 27,
-                        height: 27,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
+                  _circleIcon("assets/icons/moments.png"),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          "Moments I'm Thankful For",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 17.5,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        Text("Moments I'm Thankful For",
+                            style: AppTypography.sectionTitle.copyWith(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                            )),
+                        const SizedBox(height: 3),
                         Text(
-                          "Here are the various reasons to live and enjoy your life everyday.",
-                          style: TextStyle(
-                            color: Colors.white.withOpacity(0.66),
-                            fontSize: 13.2,
+                          "Here are the reasons to live and enjoy your life everyday.",
+                          style: AppTypography.caption.copyWith(
+                            fontSize: 13,
+                            color: Colors.white70,
                           ),
                         ),
                       ],
@@ -80,121 +56,61 @@ class ThankfulMomentsPage extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 18),
-
-              // Yesterday's Gratitude Card WITH IMAGE CONTAINER
-              GratitudeCardSection(
-                leading: Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.10),
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  child: Center(
-                    child: Image.asset(
-                      // Use your image path here, e.g.:
-                      'assets/icons/calender.png',
-                      width: 27,
-                      height: 27,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                ),
-                title: "Yesterdays Gratitude",
-                items: const [
-                  "I'm thankful for a productive meeting.",
-                  "I enjoyed my morning coffee peacefully.",
-                  "I learned something new today.",
-                  "I appreciated help from my colleague.",
-                  "I had dinner with my family.",
-                ],
-                buttonLabel: "View All Yesterday's Gratitudes",
-                onButtonTap: () {},
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF483A74), Color(0xFF2E2849)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
 
               const SizedBox(height: 20),
 
-              // Family Gratitude Card WITH DEFAULT ICON
-              GratitudeCardSection(
-                leading:Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.10),
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  child: Center(
-                    child: Image.asset(
-                      // Use your image path here, e.g.:
-                      'assets/icons/family.png',
-                      width: 27,
-                      height: 27,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                ),
-                title: "My Family Gratitude",
-                items: const [
-                  "I'm grateful for my parents' support.",
-                  "Thankful for laughter with my kids.",
-                  "Grateful for my partner's care.",
-                  "My siblings always encourage me.",
-                  "Appreciate my family dinners.",
-                ],
-                buttonLabel: "View All Family Moments",
-                onButtonTap: () {},
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF483A74), Color(0xFF2E2849)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
+              // YESTERDAY CARD
+              _gratitudeSection(
+  icon: "assets/icons/calender.png",
+  title: "Yesterday's Gratitude",
+  items: const [
+    "I'm thankful for a productive meeting.",
+    "I enjoyed my morning coffee peacefully.",
+    "I learned something new today.",
+    "I appreciated help from my colleague.",
+    "I had dinner with my family.",
+  ],
+  buttonText: "View All Yesterday's Gratitudes",
+  route: '/yesterday',
+  context: context,
+),
 
-              const SizedBox(height: 20),
+const SizedBox(height: 18),
 
-              // Life Gratitude Card WITH DEFAULT ICON
-              GratitudeCardSection(
-                leading: Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.10),
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  child: Center(
-                    child: Image.asset(
-                      // Use your image path here, e.g.:
-                      'assets/icons/life_gratitude.png',
-                      width: 27,
-                      height: 27,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                ),
-                title: "My Life Gratitude",
-                items: const [
-                  "I'm grateful for good health.",
-                  "I'm thankful for my job opportunities.",
-                  "I'm proud of my progress.",
-                  "I cherish time with loved ones.",
-                  "I'm grateful for every new day.",
-                ],
-                buttonLabel: "Explore Life Gratitude",
-                onButtonTap: () {},
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF483A74), Color(0xFF2E2849)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
+_gratitudeSection(
+  icon: "assets/icons/family.png",
+  title: "My Family Gratitude",
+  items: const [
+    "I'm grateful for my parents' support.",
+    "Thankful for laughter with my kids.",
+    "Grateful for my partner's care.",
+    "My siblings always encourage me.",
+    "Appreciate my family dinners.",
+  ],
+  buttonText: "View All Family Moments",
+  route: '/family',
+  context: context,
+),
 
-              const SizedBox(height: 120),
+const SizedBox(height: 18),
+
+_gratitudeSection(
+  icon: "assets/icons/life_gratitude.png",
+  title: "My Life Gratitude",
+  items: const [
+    "I'm grateful for good health.",
+    "I'm thankful for my job opportunities.",
+    "I'm proud of my progress.",
+    "I cherish time with loved ones.",
+    "I'm grateful for every new day.",
+  ],
+  buttonText: "Explore Life Gratitude",
+  route: '/life',
+  context: context,
+),
+
+
+              const SizedBox(height: 60),
             ],
           ),
         ),
@@ -202,118 +118,115 @@ class ThankfulMomentsPage extends StatelessWidget {
     );
   }
 
-  // Helper method for consistent icon containers
-  static Widget _iconContainer(IconData icon) => Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.10),
-          shape: BoxShape.circle,
+  // =====================================================
+  // REUSABLE GRATITUDE SECTION
+  // =====================================================
+  Widget _gratitudeSection({
+  required String icon,
+  required String title,
+  required List<String> items,
+  required String buttonText,
+  required String route,
+  required BuildContext context,
+}) {
+  return Container(
+    padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 14),
+    decoration: BoxDecoration(
+      gradient: mainGradient,
+      borderRadius: BorderRadius.circular(22),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            _circleIcon(icon),
+            const SizedBox(width: 12),
+            Text(
+              title,
+              style: AppTypography.sectionTitle.copyWith(
+                fontSize: 16.5,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
         ),
-        child: Icon(icon, color: Colors.white, size: 21),
-      );
-}
 
-class GratitudeCardSection extends StatelessWidget {
-  final Widget leading;
-  final String title;
-  final List<String> items;
-  final String buttonLabel;
-  final VoidCallback onButtonTap;
-  final LinearGradient gradient;
+        const SizedBox(height: 14),
 
-  const GratitudeCardSection({
-    super.key,
-    required this.leading,
-    required this.title,
-    required this.items,
-    required this.buttonLabel,
-    required this.onButtonTap,
-    required this.gradient,
-  });
+        ...items.map((e) => _glassItem(e)).toList(),
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 12),
-      decoration: BoxDecoration(
-        gradient: gradient,
-        borderRadius: BorderRadius.circular(22),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Icon (or Image) and Title
-          Row(
-            children: [
-              leading,
-              const SizedBox(width: 10),
-              Text(
-                title,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 15.5,
-                ),
+        const SizedBox(height: 14),
+
+        SizedBox(
+          width: double.infinity,
+          height: 52,
+          child: ElevatedButton(
+            onPressed: () => context.go(route),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFFF9001),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
               ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          // Gratitude Items
-          ...items.map((item) => GratitudeItem(text: item)).toList(),
-          const SizedBox(height: 13),
-          // Action Button
-          SizedBox(
-            width: double.infinity,
-            height: 44,
-            child: ElevatedButton(
-              onPressed: onButtonTap,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFFF8C42),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(13),
-                ),
-                elevation: 0,
-                padding: EdgeInsets.zero,
-              ),
-              child: Text(
-                buttonLabel,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 15.3,
-                ),
+              elevation: 0,
+            ),
+            child: Text(
+              buttonText,
+              style: AppTypography.button.copyWith(
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ),
-        ],
+        ),
+      ],
+    ),
+  );
+}
+
+
+  // =====================================================
+  // GLASS ITEM CARD (inner list)
+  // =====================================================
+  Widget _glassItem(String text) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.15),
+        borderRadius: BorderRadius.circular(12),
+        
+      ),
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: AppTypography.bodySmall.copyWith(
+          fontSize: 14,
+          height: 1.4,
+        ),
       ),
     );
   }
-}
 
-class GratitudeItem extends StatelessWidget {
-  final String text;
-  const GratitudeItem({super.key, required this.text});
-  @override
-  Widget build(BuildContext context) {
+  // =====================================================
+  // ICON BUBBLE (glass)
+  // =====================================================
+  Widget _circleIcon(String asset) {
     return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.only(bottom: 7),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+      width: 50,
+      height: 50,
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.15),
-        borderRadius: BorderRadius.circular(10),
+        color: Colors.white.withOpacity(0.12),
+        borderRadius: BorderRadius.circular(50),
+        border: Border.all(color: Colors.white.withOpacity(0.18)),
       ),
       child: Center(
-        child: Text(
-          text,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 13.7,
-            fontWeight: FontWeight.w400,
-            height: 1.44,
-          ),
+        child: Image.asset(
+          asset,
+          width: 26,
+          height: 26,
+          fit: BoxFit.contain,
         ),
       ),
     );

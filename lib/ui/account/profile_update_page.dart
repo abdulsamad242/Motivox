@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import '../../widgets/app_background.dart';
+import '../../widgets/app_header.dart';
+import '../../theme/app_typography.dart';
 
 class UpdateProfilePage extends StatefulWidget {
   const UpdateProfilePage({super.key});
@@ -10,311 +14,256 @@ class UpdateProfilePage extends StatefulWidget {
 class _UpdateProfilePageState extends State<UpdateProfilePage> {
   int genderIndex = 0;
   final genders = ['Male', 'Female', 'Other'];
-  final _fields = {
-    "Name": "",
-    "Email": "",
-    "Phone Number": "",
-    "DOB": "",
-    "City": "",
-    "State": "",
-    "Country": "",
-    "Pincode": "",
-    "Address": "",
-  };
 
   @override
   Widget build(BuildContext context) {
-    const outline = OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.white, width: 1.2),
-      borderRadius: BorderRadius.all(Radius.circular(21)),
-    );
-    const labelStyle = TextStyle(
-      color: Colors.white70,
-      fontSize: 13.5,
-    );
-    const iconColor = Colors.white60;
-
+    
     return Scaffold(
-      backgroundColor: const Color(0xFF0B1732),
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-          children: [
-            // Logo/Header
-            Container(
-              height: 90,
-              width: double.infinity,
-              margin: const EdgeInsets.only(bottom: 16),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF374E8C), Color(0xFF223365)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Center(
-                child: Image.asset(
-                  "assets/images/logo.png", // Use your logo asset
-                  height: 60,
-                ),
-              ),
-            ),
-            // Title Row
-            Row(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.13),
-                    shape: BoxShape.circle,
-                  ),
-                  padding: const EdgeInsets.all(8),
-                  child: const Icon(Icons.person, color: Colors.white, size: 22),
-                ),
-                const SizedBox(width: 9),
-                const Text(
-                  "Update Profile",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 18,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            // Profile Card
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.11),
-                borderRadius: BorderRadius.circular(14),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 10),
-              child: Row(
+      body: AppBackground(
+        
+          child: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            children: [
+              const SizedBox(height: 10),
+              const AppHeader(),
+
+              const SizedBox(height: 20),
+
+              // ----- TITLE ROW -----
+              Row(
                 children: [
-                  // Profile image
                   Container(
-                    padding: const EdgeInsets.all(2.5),
+                    
+                    padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white, width: 1),
+                      color: Colors.white.withOpacity(0.13),
                       shape: BoxShape.circle,
                     ),
-                    child: CircleAvatar(
-                      radius: 22,
-                      backgroundColor: Colors.grey[300],
-                      backgroundImage: AssetImage("assets/images/profile.jpg"), // change to user image
-                    ),
+                    child:  Image.asset("assets/icons/pro.png"),
                   ),
-                  const SizedBox(width: 13),
-                  Expanded(
-                    child: Text(
-                      "Hi, Alex",
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15.5,
-                      ),
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
-                      backgroundColor: Colors.white.withOpacity(0.18),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(11),
-                      ),
-                      elevation: 0,
-                    ),
-                    child: const Text(
-                      "Upload new picture",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 13.1,
-                      ),
+                  const SizedBox(width: 10),
+                  Text(
+                    "Update Profile",
+                    style: AppTypography.sectionTitle.copyWith(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
               ),
-            ),
-            const SizedBox(height: 16),
-            // Name
-            _buildLabeledField(
-              label: "Name",
-              hint: "Enter Your Name",
-              icon: Icons.person_outline,
-              outline: outline,
-              labelStyle: labelStyle,
-              iconColor: iconColor,
-            ),
-            // Email
-            _buildLabeledField(
-              label: "Email",
-              hint: "Enter Your Email",
-              icon: Icons.email_outlined,
-              outline: outline,
-              labelStyle: labelStyle,
-              iconColor: iconColor,
-            ),
-            // Phone
-            _buildLabeledField(
-              label: "Phone Number",
-              hint: "Enter Your phone number",
-              icon: Icons.phone_outlined,
-              outline: outline,
-              labelStyle: labelStyle,
-              iconColor: iconColor,
-            ),
-            // Gender
-            Padding(
-              padding: const EdgeInsets.only(top: 15, bottom: 2, left: 2),
-              child: Text(
-                "Gender",
-                style: labelStyle.copyWith(fontWeight: FontWeight.w600, color: Colors.white),
+
+              const SizedBox(height: 18),
+
+              // ===== PROFILE CARD =====
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.12),
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                child: Row(
+                  children: [
+                    // Profile Pic
+                    Container(
+                      padding: const EdgeInsets.all(2),
+                      
+                      child: CircleAvatar(
+                        radius: 24,
+                        backgroundImage: const AssetImage("assets/images/profile_pic.png"),
+                      ),
+                    ),
+
+                    const SizedBox(width: 14),
+
+                    Expanded(
+                      child: Text(
+                        "Hi, Alex",
+                        style: AppTypography.sectionTitle.copyWith(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+
+                    ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white.withOpacity(0.15),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: Text(
+                        "Upload new picture",
+                        style: AppTypography.sectionTitle.copyWith(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-            _GenderRadioSelector(
-              genderIndex: genderIndex,
-              genders: genders,
-              onSelected: (i) => setState(() => genderIndex = i),
-            ),
-            // DOB
-            _buildLabeledField(
-              label: "DOB",
-              hint: "DD/MM/YYYY",
-              icon: Icons.calendar_today_outlined,
-              outline: outline,
-              labelStyle: labelStyle,
-              iconColor: iconColor,
-            ),
-            // City & State
-            Row(
-              children: [
-                Expanded(
-                  child: _buildLabeledField(
-                    label: "City",
-                    hint: "city",
-                    icon: Icons.location_city_outlined,
-                    outline: outline,
-                    labelStyle: labelStyle,
-                    iconColor: iconColor,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: _buildLabeledField(
-                    label: "State",
-                    hint: "state",
-                    icon: Icons.map_outlined,
-                    outline: outline,
-                    labelStyle: labelStyle,
-                    iconColor: iconColor,
-                  ),
-                ),
-              ],
-            ),
-            // Country & Pincode
-            Row(
-              children: [
-                Expanded(
-                  child: _buildLabeledField(
-                    label: "Country",
-                    hint: "country",
-                    icon: Icons.flag_outlined,
-                    outline: outline,
-                    labelStyle: labelStyle,
-                    iconColor: iconColor,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: _buildLabeledField(
-                    label: "Pincode",
-                    hint: "pincode",
-                    icon: Icons.pin_outlined,
-                    outline: outline,
-                    labelStyle: labelStyle,
-                    iconColor: iconColor,
-                  ),
-                ),
-              ],
-            ),
-            // Address
-            _buildLabeledField(
-              label: "Address",
-              hint: "address",
-              icon: Icons.location_on_outlined,
-              outline: outline,
-              labelStyle: labelStyle,
-              iconColor: iconColor,
-            ),
-            // Update Profile button
-            const SizedBox(height: 14),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFFF9001),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(11),
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                ),
-                child: const Text(
-                  "Update Profile",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
+
+              const SizedBox(height: 18),
+
+              // ==== FIELDS ====
+              _glassField(label: "Name", hint: "Enter your name", icon: Icons.person_outline),
+              _glassField(label: "Email", hint: "Enter your email", icon: Icons.email_outlined),
+              _glassField(label: "Phone Number", hint: "Enter your phone number", icon: Icons.phone_outlined),
+
+              // ==== GENDER ====
+              Padding(
+                padding: const EdgeInsets.only(left: 4, bottom: 6, top: 10),
+                child: Text(
+                  "Gender",
+                  style: AppTypography.sectionTitle.copyWith(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 50),
-          ],
+
+              _GenderSelector(
+                genders: genders,
+                selectedIndex: genderIndex,
+                onSelected: (i) => setState(() => genderIndex = i),
+              ),
+
+              const SizedBox(height: 10,),
+
+              _glassField(label: "DOB", hint: "DD/MM/YYYY", icon: Icons.calendar_today_outlined),
+
+              Row(
+                children: [
+                  Expanded(
+                    child: _glassField(
+                        label: "City",
+                        hint: "City",
+                        icon: Icons.location_city_outlined),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _glassField(
+                        label: "State",
+                        hint: "State",
+                        icon: Icons.map_outlined),
+                  ),
+                ],
+              ),
+
+              Row(
+                children: [
+                  Expanded(
+                    child: _glassField(
+                        label: "Country",
+                        hint: "Country",
+                        icon: Icons.flag_outlined),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _glassField(
+                        label: "Pincode",
+                        hint: "Pincode",
+                        icon: Icons.pin_outlined),
+                  ),
+                ],
+              ),
+
+              _glassField(label: "Address", hint: "Address", icon: Icons.location_on_outlined),
+
+              const SizedBox(height: 20),
+
+              // UPDATE BUTTON
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () => context.go('/todoList'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFFF9001),
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: Text(
+                    "Update Profile",
+                    style: AppTypography.sectionTitle.copyWith(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 40),
+            ],
+          ),
         ),
-      ),
       
     );
-    
   }
 
- Widget _buildLabeledField({
+  // ===== GLASS FIELD =====
+Widget _glassField({
   required String label,
   required String hint,
   required IconData icon,
-  required OutlineInputBorder outline,
-  required TextStyle labelStyle,
-  required Color iconColor,
 }) {
   return Padding(
-    padding: const EdgeInsets.only(bottom: 15), // Increase gap between fields
+    padding: const EdgeInsets.only(bottom: 16),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 3, bottom: 5),
+          padding: const EdgeInsets.only(left: 4, bottom: 6),
           child: Text(
             label,
-            style: labelStyle.copyWith(fontWeight: FontWeight.w500, color: Colors.white),
+            style: AppTypography.sectionTitle.copyWith(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
-        SizedBox(
-          height: 54, // <--- Increased field height
+
+        // OUTER GLASS CARD
+        Container(
+          height: 54,
+          padding: const EdgeInsets.only(left: 4),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.09),   // GLASS CARD
+            borderRadius: BorderRadius.circular(25),
+            border: BoxBorder.all(
+              color: Colors.white.withOpacity(0.5)
+            )
+          ),
+
           child: TextField(
-            style: const TextStyle(color: Colors.white, fontSize: 16.3),
+            style: AppTypography.sectionTitle.copyWith(
+              fontSize: 16,
+              color: Colors.white,
+              fontWeight: FontWeight.w400,
+            ),
+
             decoration: InputDecoration(
-              prefixIcon: Icon(icon, color: iconColor, size: 22),
+              prefixIcon: Icon(icon, color: Colors.white70, size: 22),
               hintText: hint,
-              hintStyle: labelStyle.copyWith(color: Colors.white60, fontSize: 15),
-              enabledBorder: outline,
-              focusedBorder: outline,
-              border: outline,
-              filled: true,
-              fillColor: Colors.white.withOpacity(0.07),
-              contentPadding: const EdgeInsets.symmetric(vertical: 17, horizontal: 10),
+              hintStyle: AppTypography.hint1,
+
+              // 🔥 REQUIRED BY YOU
+              filled: false,
+              fillColor: Colors.transparent,
+
+              // 🔥 NO BORDER FOR TEXTFIELD (GLASS FORMAT)
+              border: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+
+              contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 0, vertical: 17),
             ),
           ),
         ),
@@ -325,15 +274,15 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
 
 }
 
-/// Gender radio selector with radio icon on right side of label, matching the mockup
-class _GenderRadioSelector extends StatelessWidget {
-  final int genderIndex;
+/// ===== GENDER SELECTOR =====
+class _GenderSelector extends StatelessWidget {
+  final int selectedIndex;
   final List<String> genders;
   final ValueChanged<int> onSelected;
 
-  const _GenderRadioSelector({
+  const _GenderSelector({
     super.key,
-    required this.genderIndex,
+    required this.selectedIndex,
     required this.genders,
     required this.onSelected,
   });
@@ -342,70 +291,61 @@ class _GenderRadioSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: List.generate(genders.length, (i) {
-        final isSelected = genderIndex == i;
+        final isSelected = selectedIndex == i;
+
         return Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(right: 9, top: 4, bottom: 8),
-            child: GestureDetector(
-              onTap: () => onSelected(i),
-              child: SizedBox(
-                height: 54, // Match the field height!
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 120),
-                  padding: const EdgeInsets.symmetric(horizontal: 8), // No vertical, height is fixed
-                  decoration: BoxDecoration(
-                    color: isSelected ? Colors.white.withOpacity(0.12) : Colors.transparent,
-                    border: Border.all(
-                      color: Colors.white,
-                      width: 1.25,
+          child: GestureDetector(
+            onTap: () => onSelected(i),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 120),
+              height: 54,
+              margin: EdgeInsets.only(right: i == genders.length - 1 ? 0 : 10),
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? Colors.white.withOpacity(0.15)
+                    : Colors.white.withOpacity(0.10),
+                borderRadius: BorderRadius.circular(25),
+                border: BoxBorder.all(
+                  color: Colors.white.withOpacity(0.5)
+                )
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    genders[i],
+                    style: AppTypography.sectionTitle.copyWith(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
                     ),
-                    borderRadius: BorderRadius.circular(19),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        genders[i],
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 15,
-                          letterSpacing: 0.2,
-                        ),
-                      ),
-                      Container(
-                        width: 22,
-                        height: 22,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.white,
-                            width: 1.25,
-                          ),
-                        ),
-                        child: isSelected
-                            ? Center(
-                                child: Container(
-                                  width: 12,
-                                  height: 12,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    shape: BoxShape.circle,
-                                  ),
-                                ),
-                              )
-                            : null,
-                      ),
-                    ],
+                  Container(
+                    width: 22,
+                    height: 22,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: BoxBorder.all(color: Colors.white.withOpacity(0.5), width: 1.2),
+                    ),
+                    child: isSelected
+                        ? Center(
+                            child: Container(
+                              width: 12,
+                              height: 12,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white,
+                              ),
+                            ),
+                          )
+                        : null,
                   ),
-                ),
+                ],
               ),
             ),
           ),
         );
       }),
     );
-    
   }
 }
-

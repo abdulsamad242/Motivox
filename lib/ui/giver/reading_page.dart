@@ -1,6 +1,11 @@
-import 'package:flutter/material.dart';
+import 'dart:async';
 import 'package:dotted_border/dotted_border.dart';
-import 'dart:async'; 
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../theme/app_typography.dart';
+import '../../widgets/app_background.dart';
+import '../../widgets/app_header.dart';
 
 class ReadingScreen extends StatefulWidget {
   const ReadingScreen({super.key});
@@ -10,21 +15,21 @@ class ReadingScreen extends StatefulWidget {
 }
 
 class _ReadingScreenState extends State<ReadingScreen> {
-  final TextEditingController exerciseDescriptionController = TextEditingController();
+  final TextEditingController exerciseDescriptionController =
+      TextEditingController();
 
-  // --- Timer State Variables ---
+  // --- TIMER VARIABLES ---
   Timer? _timer;
-  int _totalSeconds = 00; // Initial duration (16 minutes)
-  int _secondsRemaining = 00; // Starts at total, counts down
+  int _totalSeconds = 0;
+  int _secondsRemaining = 0;
   bool _isRunning = false;
-  
-  // Placeholder values for dropdowns
+
+  // Dropdown values
   String _selectedMinutes = '0 Min';
   String _selectedSeconds = '0 Sec';
   String _selectedHours = '0 Hr';
 
-  // --- Color Constants ---
-  static const mainBg = Color(0xFF0B1732);
+  // Colors (matched to ExerciseScreen)
   static const cardColor = Color(0xFF212A49);
   static const blueButtonColor = Color(0xFF2C51FC);
   static const orangeButtonColor = Color(0xFFFF9001);
@@ -32,7 +37,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
   @override
   void initState() {
     super.initState();
-    _updateTotalSeconds(); // Set initial total time
+    _updateTotalSeconds();
   }
 
   @override
@@ -42,47 +47,39 @@ class _ReadingScreenState extends State<ReadingScreen> {
     super.dispose();
   }
 
-  // --- Timer Methods ---
-
-  // Utility to convert remaining seconds to 'MM:SS' format
+  // ---------------- TIMER LOGIC ----------------
   String get _timeDisplay {
-    // Ensure we don't display negative time
-    int displaySeconds = _secondsRemaining.clamp(0, _totalSeconds); 
-    int minutes = displaySeconds ~/ 60;
-    int seconds = displaySeconds % 60;
+    final displaySeconds = _secondsRemaining.clamp(0, _totalSeconds);
+    final minutes = displaySeconds ~/ 60;
+    final seconds = displaySeconds % 60;
     return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
   }
 
-  // Calculate the total time based on the selected dropdown values
   void _updateTotalSeconds() {
-    int minutes = int.tryParse(_selectedMinutes.split(' ')[0]) ?? 0;
-    int seconds = int.tryParse(_selectedSeconds.split(' ')[0]) ?? 0;
-    int hours = int.tryParse(_selectedHours.split(' ')[0]) ?? 0;
+    final minutes = int.tryParse(_selectedMinutes.split(' ')[0]) ?? 0;
+    final seconds = int.tryParse(_selectedSeconds.split(' ')[0]) ?? 0;
+    final hours = int.tryParse(_selectedHours.split(' ')[0]) ?? 0;
 
-    int newTotalSeconds = (hours * 3600) + (minutes * 60) + seconds;
+    final newTotalSeconds = (hours * 3600) + (minutes * 60) + seconds;
 
-    // Update both total time and reset remaining time
     setState(() {
       _totalSeconds = newTotalSeconds;
-      // Only reset remaining time if the timer is not running
       if (!_isRunning) {
-        _secondsRemaining = newTotalSeconds; 
+        _secondsRemaining = newTotalSeconds;
       }
     });
   }
 
-
   void _startTimer() {
-    // If the total duration is 0, or timer is already finished, reset first
     if (_totalSeconds <= 0) return;
+
     if (_secondsRemaining <= 0) {
       _stopAndResetTimer();
-      // Continue starting after reset
     }
 
     if (_isRunning) {
-        _pauseTimer();
-        return;
+      _pauseTimer();
+      return;
     }
 
     setState(() {
@@ -92,437 +89,415 @@ class _ReadingScreenState extends State<ReadingScreen> {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_secondsRemaining > 0) {
         setState(() {
-          _secondsRemaining--; // COUNT DOWN
+          _secondsRemaining--;
         });
       } else {
-        // Timer completed (reached 0)
         _timer?.cancel();
         setState(() {
           _isRunning = false;
         });
-        // Optional: Show completion alert/notification
       }
     });
   }
 
   void _pauseTimer() {
     if (!_isRunning) return;
-
     _timer?.cancel();
-    setState(() {
-      _isRunning = false;
-    });
+    setState(() => _isRunning = false);
   }
 
   void _stopAndResetTimer() {
     _timer?.cancel();
     setState(() {
       _isRunning = false;
-      _secondsRemaining = _totalSeconds; // Reset to the configured duration
+      _secondsRemaining = _totalSeconds;
     });
   }
 
-  // --- Build Method ---
-
   @override
   Widget build(BuildContext context) {
-    // Calculate progress: 1.0 (full) when time starts, down to 0.0 (empty)
-    double progress = _totalSeconds > 0 ? _secondsRemaining / _totalSeconds : 1.0;
-    
-    // The icon should show PLAY when paused/stopped, and PAUSE when running.
+    final progress = _totalSeconds > 0
+        ? 1.0 - (_secondsRemaining / _totalSeconds)
+        : 1.0;
+
     IconData timerIcon = _isRunning ? Icons.pause : Icons.play_arrow;
 
-    // If time is up, show a checkmark (or a play icon to suggest restarting)
-    if (_secondsRemaining <= 0 && !_isRunning) {
-      timerIcon = Icons.check; 
+    if (_secondsRemaining <= 0 && !_isRunning && _totalSeconds > 0) {
+      timerIcon = Icons.check;
     }
 
     return Scaffold(
-      backgroundColor: mainBg,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 14),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 12),
-              // ... (HEADER, Exercise Info, Motivational Quote, Exercise Description, Uploads Button sections remain the same)
-              Container(
-                height: 90,
-                margin: const EdgeInsets.only(bottom: 14),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF374E8C), Color(0xFF223365)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+      body: AppBackground(
+        child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          children: [
+            const AppHeader(),
+            const SizedBox(height: 10),
+
+            // ---------------- SCREEN TITLE ----------------
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.12),
+                    borderRadius: BorderRadius.circular(50),
                   ),
-                  borderRadius: BorderRadius.circular(20),
+                  child: Center(
+                    child: Image.asset(
+                      'assets/icons/giver_reading.png',
+                      width: 30,
+                      height: 30,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
                 ),
-                child: Center(
-                  child: Image.asset(
-                    "assets/images/logo.png",
-                    height: 60,
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Reading",
+                        style: AppTypography.sectionTitle.copyWith(
+                          fontSize: 22,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        "Reading keeps your mind growing and your spirit inspired.",
+                        style: AppTypography.caption.copyWith(
+                          fontSize: 13,
+                          height: 1.35,
+                        ),
+                      ),
+                    ],
                   ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 16),
+
+            // ---------------- TOP QUOTE CARD ----------------
+            Container(
+              width: double.infinity,
+              height: 130,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: Colors.white.withOpacity(0.45),
+                  width: 1.2,
+                ),
+                image: const DecorationImage(
+                  image: AssetImage('assets/images/sparkling.png'),
+                  fit: BoxFit.cover,
                 ),
               ),
-              Row(
-                children: [
-                  Container(
-                    width: 42,
-                    height: 42,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.10),
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    child: Center(
-                      child: Image.asset(
-                        'assets/icons/giver_reading.png',
-                        width: 25,
-                        height: 25,
-                        fit: BoxFit.contain,
+              alignment: Alignment.center,
+              padding: const EdgeInsets.symmetric(horizontal: 18),
+              child: Text(
+                '"FEED YOUR MIND THE WAY YOU FEED YOUR SOUL — WITH STORIES."',
+                textAlign: TextAlign.center,
+                style: AppTypography.sectionTitle.copyWith(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.3,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 14),
+
+            // ---------------- IMAGINATION TEXT CARD ----------------
+            const _ImaginationCard(
+              text:
+                  "‎The last factor of the GIVER formula is READING – and this is truly a life-changer. Every successful person you admire invests time in reading daily because it expands your perspective, sharpens your mind, strengthens decision-making, and helps you grow mentally and emotionally.",
+            ),
+
+            const SizedBox(height: 16),
+
+            // ---------------- UPLOAD IMAGE GLASS CARD ----------------
+            Container(
+              width: double.infinity,
+              height: 150,
+              padding:
+                  const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                color: Colors.white.withOpacity(0.15),
+                border: Border.all(
+                  color: Colors.white.withOpacity(0.18),
+                  width: 1.1,
+                ),
+              ),
+              child: Center(
+                child: GestureDetector(
+                  onTap: () {},
+                  child: DottedBorder(
+                    borderType: BorderType.RRect,
+                    radius: const Radius.circular(12),
+                    dashPattern: const [4, 2],
+                    color: Colors.white.withOpacity(0.55),
+                    strokeWidth: 1.4,
+                    child: Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.11),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            "assets/icons/cam.png",
+                            width: 30,
+                            height: 30,
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            "Upload his/her Image",
+                            textAlign: TextAlign.center,
+                            style: AppTypography.bodyMedium.copyWith(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "Reading",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 17.5,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          "Reading keeps your mind growing and your spirit inspired",
-                          style: TextStyle(
-                            color: Colors.white.withOpacity(0.7),
-                            fontSize: 13.2,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                ),
               ),
-              const SizedBox(height: 14),
+            ),
 
-              Container(
-                width: double.infinity,
-                height: 130,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.white.withOpacity(0.5)),
-                  image: const DecorationImage(
-                    image: AssetImage('assets/images/sparkling.png'),
-                    fit: BoxFit.cover,
+            const SizedBox(height: 16),
+
+            // ---------------- TIMER GLASS CARD ----------------
+            _buildTimerCard(progress, timerIcon),
+
+            const SizedBox(height: 40),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // FULL TIMER CARD
+  Widget _buildTimerCard(double progress, IconData timerIcon) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.10),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.16),
+          width: 1.1,
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // ---------------- LEFT SIDE ----------------
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Timer",
+                  style: AppTypography.bodySmall.copyWith(
+                    fontSize: 14,
+                    color: Colors.white70,
                   ),
                 ),
-                alignment: Alignment.center,
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: const Text(
-                  '"FEED YOUR MIND THE WAY YOU FEED YOUR SOUL — WITH STORIES."',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
+                const SizedBox(height: 8),
+
+                Text(
+                  _timeDisplay,
+                  style: AppTypography.sectionTitle.copyWith(
+                    fontSize: 30,
                     fontWeight: FontWeight.w700,
-                    fontSize: 20.5,
-                    letterSpacing: 0.3,
                   ),
                 ),
-              ),
-              const SizedBox(height: 12),
 
+                const SizedBox(height: 18),
 
-              const _ImaginationCard(
-                text:
-                    "‎The last factor of the GIVER formula is READING - and this is truly a game changer. Success is not only about working hard but also about working smart, and reading gives you that edge. Every successful person you know—whether it’s Bill Gates, Elon Musk, or Mark Zuckerberg—has one thing in common: they dedicate at least 30 minutes every single day to reading. Why? Because reading opens your mind to new perspectives, new knowledge, and new ways of solving problems.",
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              Container(
-                width: double.infinity,
-                height: 150,
-                padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: cardColor.withOpacity(0.93),
-                ),
-                child: Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      // Handle image upload
-                    },
-                    child: DottedBorder(
-                      borderType: BorderType.RRect,
-                      radius: const Radius.circular(10),
-                      padding: const EdgeInsets.all(0),
-                      dashPattern: const [8, 4],
-                      color: Colors.white.withOpacity(0.5),
-                      strokeWidth: 1.5,
-                      
-                      child: Container(
-                        width: double.infinity,
-                        height: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.15),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        
-                        child: const Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.camera_alt_rounded,
-                              color: Colors.white,
-                              size: 30,
-                            ),
-                            SizedBox(height: 8),
-                            Text(
-                              "Upload his/her Image",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 15,
-                              ),
-                            ),
-                          ],
-                        ),
+                // STOP BUTTON
+                SizedBox(
+                  height: 42,
+                  width: 120,
+                  child: ElevatedButton(
+                    onPressed: _stopAndResetTimer,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white.withOpacity(0.16),
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
+                    ),
+                    child: Text(
+                      "Stop",
+                      style: AppTypography.button.copyWith(fontSize: 15),
                     ),
                   ),
                 ),
-              ),
 
-              const SizedBox(height: 15),
+                const SizedBox(height: 18),
 
-              // --- FUNCTIONAL COUNTDOWN TIMER CARD ---
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: cardColor.withOpacity(0.93),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                padding: const EdgeInsets.all(16),
-                child: Column(
+                // ---------- DROPDOWNS + SAVE ----------
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // 1. Timer Label & Circular Indicator (First Row)
+                    // ---------- THREE DROPDOWNS ----------
                     Row(
                       children: [
-                        const Text(
-                          "Timer",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14,
-                          ),
-                        ),
-                        const Spacer(),
-
-                        // Functional Circular Indicator & Play/Pause/Check Icon
-                        GestureDetector(
-                          onTap: _startTimer, // Single action to start/pause
+                        Expanded(
                           child: SizedBox(
-                            width: 60,
-                            height: 60,
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                // Circular Progress Indicator (Orange/Transparent Ring)
-                                CircularProgressIndicator(
-                                  // Progress now reflects remaining time / total duration (countdown)
-                                  value: progress, 
-                                  strokeWidth: 5,
-                                  valueColor: const AlwaysStoppedAnimation<Color>(orangeButtonColor),
-                                  backgroundColor: blueButtonColor.withOpacity(0.2),
-                                ),
-                                // Inner Blue Circle (The button)
-                                Container(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    color: blueButtonColor,
-                                    borderRadius: BorderRadius.circular(25),
-                                  ),
-                                  child: Center(
-                                    child: Icon(
-                                      timerIcon, // Dynamic icon: play/pause/check
-                                      color: Colors.white,
-                                      size: 28,
-                                    ),
-                                  ),
-                                ),
+                            height: 54,
+                            child: _TimerDropdown(
+                              currentValue: _selectedMinutes,
+                              options: const [
+                                "0 Min",
+                                "5 Min",
+                                "10 Min",
+                                "15 Min",
+                                "30 Min",
+                                "60 Min"
                               ],
+                              onChanged: (v) {
+                                setState(() {
+                                  _selectedMinutes = v;
+                                  _updateTotalSeconds();
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+
+                        Expanded(
+                          child: SizedBox(
+                            height: 54,
+                            child: _TimerDropdown(
+                              currentValue: _selectedSeconds,
+                              options: const [
+                                "0 Sec",
+                                "10 Sec",
+                                "20 Sec",
+                                "30 Sec",
+                                "50 Sec"
+                              ],
+                              onChanged: (v) {
+                                setState(() {
+                                  _selectedSeconds = v;
+                                  _updateTotalSeconds();
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+
+                        Expanded(
+                          child: SizedBox(
+                            height: 54,
+                            child: _TimerDropdown(
+                              currentValue: _selectedHours,
+                              options: const ["0 Hr", "1 Hr", "5 Hr", "16 Hr"],
+                              onChanged: (v) {
+                                setState(() {
+                                  _selectedHours = v;
+                                  _updateTotalSeconds();
+                                });
+                              },
                             ),
                           ),
                         ),
                       ],
                     ),
 
-                    const SizedBox(height: 5),
+                    const SizedBox(height: 12),
 
-                    // 2. Large Time Display (Dynamic - Shows remaining time)
-                    Text(
-                      _timeDisplay,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 30,
-                      ),
-                    ),
-
-                    const SizedBox(height: 10),
-
-                    // 3. Stop Button (Resets timer)
-                    ElevatedButton(
-                      onPressed: _stopAndResetTimer, // Linked to reset function
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white.withOpacity(0.15),
-                        elevation: 0,
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                      ),
-                      child: const Text(
-                        "Stop",
-                        style: TextStyle(fontSize: 15, color: Colors.white),
-                      ),
-                    ),
-
-                    const SizedBox(height: 10),
-
-                    // 4. Timer Options (Dropdowns and Save Button in one Row)
-                    Row(
-                      children: [
-                        
-                        // Dropdown 1: Minutes
-           SizedBox(height: 48.0,             // Dropdown 1: Minutes
-child: _TimerDropdown(
-  currentValue: _selectedMinutes,
-  // ADD '0 Min' to the options list
-  options: const ['0 Min', '5 Min', '10 Min', '15 Min', '30 Min', '60 Min'], // <-- FIXED
-  onChanged: (newValue) {
-    setState(() {
-      _selectedMinutes = newValue;
-      _updateTotalSeconds();
-    });
-  },
-),
-           ),
-                        const SizedBox(width: 10),
-
-                        // Dropdown 2: Seconds
-                        SizedBox(height: 48.0,
-                        child: _TimerDropdown(
-                          
-                          currentValue: _selectedSeconds,
-                          options: const ['0 Sec', '10 Sec', '20 Sec', '30 Sec', '50 Sec'],
-                          onChanged: (newValue) {
-                            setState(() {
-                              _selectedSeconds = newValue;
-                              _updateTotalSeconds();
-                            });
-                          },
-                        ),
-                        ),
-                        const SizedBox(width: 10),
-
-                        // Dropdown 3: Hours
-                        SizedBox(height: 48.0,
-                        child: _TimerDropdown(
-                          currentValue: _selectedHours,
-                          options: const ['0 Hr', '1 Hr', '5 Hr', '16 Hr'],
-                          onChanged: (newValue) {
-                            setState(() {
-                              _selectedHours = newValue;
-                              _updateTotalSeconds();
-                            });
-                          },
-                        ),
-                        ),
-                        const Spacer(),
-
-                        // 5. Save Button
-                        ElevatedButton(
-                          onPressed: () {
-                            // Implement save logic (e.g., save exercise duration to database)
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: orangeButtonColor,
-                            elevation: 0,
-                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    // ---------- SAVE BUTTON ----------
+                    SizedBox(
+                      width: double.infinity,
+                      height: 54,
+                      child: ElevatedButton(
+                        onPressed: () => context.go('/giverMain'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: orangeButtonColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          child: const Text(
-                            "Save",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16.5,
-                            ),
+                          padding:
+                              const EdgeInsets.symmetric(horizontal: 22),
+                        ),
+                        child: Text(
+                          "Save",
+                          style: AppTypography.button.copyWith(
+                            color: Colors.white,
+                            fontSize: 16.5,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
-                      ],
+                      ),
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(height: 40),
-            ],
+              ],
+            ),
           ),
+
+          const SizedBox(width: 16),
+
+          // ---------------- RIGHT SIDE TIMER BUTTON ----------------
+          ExerciseTimerButton(
+            progress: progress,
+            isRunning: _isRunning,
+            onTap: _startTimer,
+            icon: timerIcon,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ---------------- IMAGINATION CARD ----------------
+class _ImaginationCard extends StatelessWidget {
+  final String text;
+  const _ImaginationCard({required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(15, 15, 15, 13),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.15),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.15),
+          width: 1.1,
+        ),
+      ),
+      child: Text(
+        text,
+        style: AppTypography.bodyMedium.copyWith(
+          fontSize: 14.6,
+          height: 1.42,
         ),
       ),
     );
   }
 }
 
-// --- Helper Widgets ---
-
-class _ImaginationCard extends StatelessWidget {
-    final String text;
-    const _ImaginationCard({required this.text});
-
-    @override
-    Widget build(BuildContext context) {
-      return Container(
-        width: double.infinity,
-        padding: const EdgeInsets.fromLTRB(15, 15, 15, 13),
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.09),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.white.withOpacity(0.15), width: 1.1),
-        ),
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 5),
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width - 40,
-                child: Text(
-                  text,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14.6,
-                    height: 1.42,
-                  ),
-                  overflow: TextOverflow.clip,
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-}
-
-// Functional Timer Dropdown Widget
+// ---------------- TIMER DROPDOWN ----------------
 class _TimerDropdown extends StatelessWidget {
   final String currentValue;
   final List<String> options;
@@ -537,8 +512,7 @@ class _TimerDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 80,
-      padding: const EdgeInsets.symmetric(horizontal: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.15),
         borderRadius: BorderRadius.circular(8),
@@ -547,21 +521,85 @@ class _TimerDropdown extends StatelessWidget {
         child: DropdownButton<String>(
           value: currentValue,
           isExpanded: true,
-          isDense: true,
           icon: const Icon(Icons.arrow_drop_down, color: Colors.white, size: 20),
           dropdownColor: _ReadingScreenState.cardColor,
-          style: const TextStyle(color: Colors.white, fontSize: 14),
-          items: options.map((String item) {
+          style: AppTypography.bodySmall.copyWith(
+            color: Colors.white,
+            fontSize: 15,
+          ),
+          items: options.map((item) {
             return DropdownMenuItem<String>(
               value: item,
               child: Text(item),
             );
           }).toList(),
-          onChanged: (String? newValue) {
-            if (newValue != null) {
-              onChanged(newValue);
-            }
+          onChanged: (newValue) {
+            if (newValue != null) onChanged(newValue);
           },
+        ),
+      ),
+    );
+  }
+}
+
+// ---------------- BIG CIRCULAR TIMER BUTTON ----------------
+class ExerciseTimerButton extends StatelessWidget {
+  final double progress;
+  final bool isRunning;
+  final VoidCallback onTap;
+  final IconData icon;
+
+  const ExerciseTimerButton({
+    super.key,
+    required this.progress,
+    required this.isRunning,
+    required this.onTap,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 120,
+        height: 120,
+        decoration: BoxDecoration(
+          color: const Color(0xFF0047BB),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Center(
+          child: SizedBox(
+            width: 95,
+            height: 95,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                CircularProgressIndicator(
+                  value: progress,
+                  strokeWidth: 10,
+                  valueColor:
+                      const AlwaysStoppedAnimation(Color(0xFFFF8C42)),
+                  backgroundColor: const Color(0xFF1A4EBE),
+                ),
+                Container(
+                  width: 70,
+                  height: 70,
+                  decoration: const BoxDecoration(
+                    color: Color(0xFF0D47A1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Icon(
+                      icon,
+                      size: 32,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

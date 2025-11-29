@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'welcome_page.dart';
-import '../../theme/app_gradients.dart';
-
-
+import '../../widgets/app_background.dart';
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
 
@@ -21,16 +19,17 @@ class _SplashPageState extends State<SplashPage>
 
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 2),
+      duration: const Duration(milliseconds: 1600),
     );
 
-    _fade = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
+    _fade = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeIn,
     );
 
     _controller.forward();
 
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 10), () {
       if (!mounted) return;
       Navigator.pushReplacement(
         context,
@@ -48,28 +47,18 @@ class _SplashPageState extends State<SplashPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppGradients.mainBackground,
-        ),
-        child: Center(
-          child: FadeTransition(
-            opacity: _fade,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Image.asset(
-                  "assets/images/logo.png",
-                  height: 200,
-                ),
-                
-              ],
-            ),
-          ),
+  body: AppBackground(
+    child: Center(
+      child: FadeTransition(
+        opacity: _fade,
+        child: Image.asset(
+          "assets/images/logo.png",
+          height: 200,
         ),
       ),
-      
-    );
+    ),
+  ),
+);
+
   }
 }

@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import '../../theme/app_colors.dart';
-import '../../theme/app_text_style.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SocialButton extends StatelessWidget {
   final String icon;
   final String label;
   final VoidCallback onTap;
+  final TextStyle? textStyle;
 
   const SocialButton({
     super.key,
     required this.icon,
     required this.label,
     required this.onTap,
+    this.textStyle,
   });
 
   @override
@@ -19,24 +20,23 @@ class SocialButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 52,
+        height: 50.h,
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.08),
-          borderRadius: BorderRadius.circular(14),
+          color: Colors.white.withOpacity(0.06),
+          borderRadius: BorderRadius.circular(23.r),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 18),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,  // ← CENTER CONTENT
           children: [
-            Image.asset(icon, height: 22),
-            const SizedBox(width: 20),
-            Expanded(
-              child: Text(
-                label,
-                style: AppTextStyles.body.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
+            Image.asset(
+              icon,
+              height: 20.h,
+              width: 20.h,
+            ),
+            SizedBox(width: 12.w), // perfect spacing
+            Text(
+              label,
+              style: textStyle,
             ),
           ],
         ),

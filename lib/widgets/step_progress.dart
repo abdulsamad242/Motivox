@@ -17,7 +17,7 @@ class StepProgress extends StatelessWidget {
         return AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           height: 4,
-          width: (MediaQuery.of(context).size.width - 100) / 4,
+          width: (MediaQuery.of(context).size.width - 45) / 4,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             color: active

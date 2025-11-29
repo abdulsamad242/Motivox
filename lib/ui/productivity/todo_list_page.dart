@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+
+import '../../widgets/app_header.dart';
+import '../../widgets/app_background.dart';
+import '../../theme/app_typography.dart';
+
+const Color _accentOrange = Color(0xFFFF9001);
 
 class TaskReminderPage extends StatefulWidget {
   const TaskReminderPage({super.key});
@@ -20,6 +27,9 @@ class _TaskReminderPageState extends State<TaskReminderPage> {
   DateTime selectedMonth = DateTime.now();
   int selectedDay = DateTime.now().day;
 
+  // ─────────────────────────────────────────────
+  // MONTH PICKER
+  // ─────────────────────────────────────────────
   void _showMonthPicker() async {
     final now = DateTime.now();
     final months = List.generate(13, (i) {
@@ -29,19 +39,24 @@ class _TaskReminderPageState extends State<TaskReminderPage> {
 
     showModalBottomSheet(
       context: context,
+      backgroundColor: Colors.transparent,
       builder: (ctx) => Container(
-        color: const Color(0xff17203a),
+        decoration: BoxDecoration(
+          color: const Color(0xFF0B1732).withOpacity(0.95),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(22)),
+        ),
         child: ListView(
           shrinkWrap: true,
           children: months.map((m) {
+            final isSelected =
+                m.month == selectedMonth.month && m.year == selectedMonth.year;
             return ListTile(
               title: Center(
                 child: Text(
                   DateFormat('MMMM yyyy').format(m),
-                  style: TextStyle(
-                    color: m.month == selectedMonth.month && m.year == selectedMonth.year
-                        ? Colors.orange
-                        : Colors.white,
+                  style: AppTypography.sectionTitle.copyWith(
+                    fontSize: 16,
+                    color: isSelected ? _accentOrange : Colors.white,
                   ),
                 ),
               ),
@@ -59,25 +74,27 @@ class _TaskReminderPageState extends State<TaskReminderPage> {
     );
   }
 
+  // ─────────────────────────────────────────────
+  // ADD TASK DIALOG
+  // ─────────────────────────────────────────────
   void _showAddTaskDialog() {
     String newTask = '';
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (ctx) => Dialog(
-        backgroundColor: const Color(0xFF29345B),
+        backgroundColor: Colors.white.withOpacity(0.08),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
         child: Container(
           padding: const EdgeInsets.all(24),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
+              Text(
                 "Add New Task",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
+                style: AppTypography.sectionTitle.copyWith(
                   fontSize: 19,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 14),
@@ -85,21 +102,26 @@ class _TaskReminderPageState extends State<TaskReminderPage> {
                 autofocus: true,
                 maxLength: 60,
                 cursorColor: Colors.white,
-                style: const TextStyle(color: Colors.white),
+                style: AppTypography.bodySmall.copyWith(color: Colors.white),
                 decoration: InputDecoration(
                   hintText: "Enter your task...",
                   counterText: "",
-                  hintStyle: TextStyle(color: Colors.white.withOpacity(0.47)),
+                  hintStyle:
+                      AppTypography.hint.copyWith(color: Colors.white54),
                   filled: true,
                   fillColor: Colors.white.withOpacity(0.10),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
+                    borderSide:
+                        BorderSide(color: Colors.white.withOpacity(0.25)),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Colors.white38),
+                    borderSide:
+                        const BorderSide(color: Colors.white38, width: 1.4),
                   ),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 13, vertical: 11),
+                  contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 13, vertical: 11),
                 ),
                 onChanged: (v) => newTask = v,
                 onSubmitted: (v) {
@@ -126,7 +148,11 @@ class _TaskReminderPageState extends State<TaskReminderPage> {
                         padding: const EdgeInsets.symmetric(vertical: 14),
                       ),
                       onPressed: () => Navigator.of(ctx).pop(),
-                      child: const Text("Cancel", style: TextStyle(fontSize: 15.5)),
+                      child: Text(
+                        "Cancel",
+                        style: AppTypography.bodySmall
+                            .copyWith(fontSize: 15.5, color: Colors.white),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -149,7 +175,13 @@ class _TaskReminderPageState extends State<TaskReminderPage> {
                           Navigator.of(ctx).pop();
                         }
                       },
-                      child: const Text("Add", style: TextStyle(fontSize: 15.5, fontWeight: FontWeight.bold)),
+                      child: Text(
+                        "Add",
+                        style: AppTypography.sectionTitle.copyWith(
+                          fontSize: 15.5,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -161,29 +193,34 @@ class _TaskReminderPageState extends State<TaskReminderPage> {
     );
   }
 
+  // ─────────────────────────────────────────────
+  // DELETE DIALOG
+  // ─────────────────────────────────────────────
   void _showDeleteDialog(int index) {
     showDialog(
       context: context,
       builder: (ctx) => Dialog(
-        backgroundColor: const Color(0xFF29345B),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
+        backgroundColor: Color.fromRGBO(31, 35, 62, 1),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 22),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
+              Text(
                 "Delete Record",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
+                style: AppTypography.sectionTitle.copyWith(
                   fontSize: 18.5,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 11),
-              const Text(
+              Text(
                 'You\'re going to delete your "Record"',
-                style: TextStyle(color: Colors.white70, fontSize: 15.2),
+                style: AppTypography.bodySmall.copyWith(
+                  color: Colors.white70,
+                  fontSize: 15.2,
+                ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 22),
@@ -200,7 +237,11 @@ class _TaskReminderPageState extends State<TaskReminderPage> {
                         padding: const EdgeInsets.symmetric(vertical: 14),
                       ),
                       onPressed: () => Navigator.of(ctx).pop(),
-                      child: const Text("No", style: TextStyle(fontSize: 15.5)),
+                      child: Text(
+                        "No",
+                        style: AppTypography.bodySmall
+                            .copyWith(fontSize: 15.5, color: Colors.white),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -221,7 +262,13 @@ class _TaskReminderPageState extends State<TaskReminderPage> {
                         });
                         Navigator.of(ctx).pop();
                       },
-                      child: const Text("Yes", style: TextStyle(fontSize: 15.5, fontWeight: FontWeight.bold)),
+                      child: Text(
+                        "Yes",
+                        style: AppTypography.sectionTitle.copyWith(
+                          fontSize: 15.5,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -233,6 +280,9 @@ class _TaskReminderPageState extends State<TaskReminderPage> {
     );
   }
 
+  // ─────────────────────────────────────────────
+  // DAYS IN MONTH
+  // ─────────────────────────────────────────────
   List<DateTime> get daysInMonth {
     final firstDay = DateTime(selectedMonth.year, selectedMonth.month, 1);
     return List<DateTime>.generate(
@@ -241,131 +291,113 @@ class _TaskReminderPageState extends State<TaskReminderPage> {
     );
   }
 
+  // ─────────────────────────────────────────────
+  // BUILD
+  // ─────────────────────────────────────────────
   @override
   Widget build(BuildContext context) {
     final days = daysInMonth;
+
     return Scaffold(
-      backgroundColor: const Color(0xFF0B1732),
-      body: SafeArea(
+      body: AppBackground(
         child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
           children: [
-            const SizedBox(height: 8),
-            Container(
-              height: 90,
-              width: double.infinity,
-              margin: const EdgeInsets.only(bottom: 14),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF374E8C), Color(0xFF223365)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Center(
-                child: Image.asset(
-                  "assets/images/logo.png",
-                  height: 60,
-                ),
-              ),
-            ),
-            // The ADD + title row with matching gradient
-            Container(
-              margin: const EdgeInsets.only(bottom: 12),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF3A4276), Color(0xFF29345B)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(16),
-              ),
+            const AppHeader(),
+            const SizedBox(height: 16),
+
+            // HEADER: Today To Do List
+            GlassCard(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+              borderRadius: 16,
               child: Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     child: Text(
                       "Today To Do Task List",
-                      style: TextStyle(
-                        color: Colors.white,
+                      style: AppTypography.sectionTitle.copyWith(
+                        fontSize: 16,
                         fontWeight: FontWeight.w500,
-                        fontSize: 15.7,
                       ),
                     ),
                   ),
                   SizedBox(
                     height: 38,
                     child: ElevatedButton.icon(
+                      onPressed: () => context.go('/todoAdd'),
                       icon: const Icon(Icons.add, size: 20, color: Colors.white),
-                      label: const Text(
+                      label: Text(
                         "Add More",
-                        style: TextStyle(
+                        style: AppTypography.bodySmall.copyWith(
                           color: Colors.white,
                           fontSize: 14.3,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      onPressed: _showAddTaskDialog,
+                      
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF3A67F2),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(11),
                         ),
                         elevation: 0,
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        padding:
+                            const EdgeInsets.symmetric(horizontal: 15),
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-            // Reminders Card
-            Container(
+
+            const SizedBox(height: 12),
+
+            // REMINDERS CARD (GLASS)
+            GlassCard(
               padding: const EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF3A4276), Color(0xFF29345B)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(22),
-              ),
+              borderRadius: 22,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Title & Month Picker
                   Row(
                     children: [
-                      const Expanded(
+                      Expanded(
                         child: Text(
                           "Your Today's Reminders",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
+                          style: AppTypography.sectionTitle.copyWith(
                             fontSize: 16.5,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
+                      
                       GestureDetector(
                         onTap: _showMonthPicker,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 14, vertical: 10),
                           decoration: BoxDecoration(
                             color: const Color(0xFF3A67F2),
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(14),
                           ),
                           child: Row(
                             children: [
                               Text(
                                 DateFormat('MMMM').format(selectedMonth),
-                                style: const TextStyle(
+                                style: AppTypography.bodySmall.copyWith(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                               const SizedBox(width: 6),
-                              const Icon(Icons.calendar_today_outlined, color: Colors.white, size: 15),
+                               Image.asset(
+              'assets/icons/calendar-2.png',
+              width: 15,
+              height: 15,
+              color: Colors.white,
+            ),
                             ],
                           ),
                         ),
@@ -375,13 +407,23 @@ class _TaskReminderPageState extends State<TaskReminderPage> {
                   const SizedBox(height: 7),
                   Text(
                     DateFormat('MMM d, yyyy').format(
-                      DateTime(selectedMonth.year, selectedMonth.month, selectedDay),
+                      DateTime(
+                        selectedMonth.year,
+                        selectedMonth.month,
+                        selectedDay,
+                      ),
                     ),
-                    style: const TextStyle(color: Colors.white70, fontWeight: FontWeight.w500, fontSize: 13.7),
+                    style: AppTypography.bodySmall.copyWith(
+                      color: Colors.white70,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 13.7,
+                    ),
                   ),
-                  const SizedBox(height: 7),
+                  const SizedBox(height: 2),
+
+                  // DAYS SCROLLER
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 0),
+                    padding: const EdgeInsets.symmetric(vertical: 4),
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.07),
                       borderRadius: BorderRadius.circular(15),
@@ -399,7 +441,9 @@ class _TaskReminderPageState extends State<TaskReminderPage> {
                           child: Container(
                             width: 47,
                             decoration: BoxDecoration(
-                              color: isSelected ? const Color(0xFF3A67F2) : Colors.transparent,
+                              color: isSelected
+                                  ? const Color(0xFF3A67F2)
+                                  : Colors.transparent,
                               borderRadius: BorderRadius.circular(13),
                             ),
                             child: Column(
@@ -407,15 +451,13 @@ class _TaskReminderPageState extends State<TaskReminderPage> {
                               children: [
                                 Text(
                                   "${d.day}",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
+                                  style: AppTypography.sectionTitle.copyWith(
                                     fontSize: 17,
                                   ),
                                 ),
                                 Text(
                                   DateFormat('E').format(d),
-                                  style: TextStyle(
+                                  style: AppTypography.bodySmall.copyWith(
                                     color: Colors.white.withOpacity(0.78),
                                     fontSize: 12,
                                   ),
@@ -427,8 +469,8 @@ class _TaskReminderPageState extends State<TaskReminderPage> {
                       },
                     ),
                   ),
-                  const SizedBox(height: 12),
-                  // Timeline + Tasks
+
+                  // TIMELINE + TASKS
                   TaskTimeline(
                     completedList: completed,
                     tasks: tasks,
@@ -443,7 +485,7 @@ class _TaskReminderPageState extends State<TaskReminderPage> {
                 ],
               ),
             ),
-            const SizedBox(height: 24),
+
           ],
         ),
       ),
@@ -451,6 +493,9 @@ class _TaskReminderPageState extends State<TaskReminderPage> {
   }
 }
 
+// ─────────────────────────────────────────────
+// TIMELINE
+// ─────────────────────────────────────────────
 class TaskTimeline extends StatelessWidget {
   final List<bool> completedList;
   final List<String> tasks;
@@ -469,7 +514,6 @@ class TaskTimeline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Appearance constants
     const double boxSize = 24;
     const double verticalGap = 26;
     const double lineThickness = 2.0;
@@ -487,23 +531,22 @@ class TaskTimeline extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Timeline and Checkbox
+              // Timeline + Checkbox
               SizedBox(
                 width: 38,
                 child: Stack(
                   children: [
-                    // Top line (not for first)
                     if (i != 0)
                       Positioned(
-                        left: timelineLeft + boxSize / 2 - lineThickness / 2,
+                        left:
+                            timelineLeft + boxSize / 2 - lineThickness / 2,
                         top: 0,
                         child: Container(
                           width: lineThickness,
                           height: verticalGap / 2 + 1,
-                          color: Colors.orange,
+                          color: _accentOrange,
                         ),
                       ),
-                    // Checkbox
                     Positioned(
                       left: timelineLeft,
                       top: verticalGap / 2,
@@ -513,33 +556,37 @@ class TaskTimeline extends StatelessWidget {
                           width: boxSize,
                           height: boxSize,
                           decoration: BoxDecoration(
-                            color: isChecked ? Colors.orange : Colors.transparent,
+                            color:
+                                isChecked ? _accentOrange : Colors.transparent,
                             border: isChecked
                                 ? null
-                                : Border.all(color: Colors.white, width: 2),
+                                : Border.all(
+                                    color: Colors.white, width: 2),
                             borderRadius: BorderRadius.circular(7),
                           ),
                           child: isChecked
-                              ? Icon(Icons.check, color: Colors.white, size: 17)
+                              ? const Icon(Icons.check,
+                                  color: Colors.black, size: 17)
                               : null,
                         ),
                       ),
                     ),
-                    // Bottom line (not for last)
                     if (i != tasks.length - 1)
                       Positioned(
-                        left: timelineLeft + boxSize / 2 - lineThickness / 2,
+                        left:
+                            timelineLeft + boxSize / 2 - lineThickness / 2,
                         top: verticalGap / 2 + boxSize,
                         child: Container(
                           width: lineThickness,
                           height: verticalGap / 2 + 1,
-                          color: Colors.orange,
+                          color: _accentOrange,
                         ),
                       ),
                   ],
                 ),
               ),
               const SizedBox(width: 10),
+
               // Task card
               Expanded(
                 child: TaskCard(
@@ -557,6 +604,9 @@ class TaskTimeline extends StatelessWidget {
   }
 }
 
+// ─────────────────────────────────────────────
+// TASK CARD (glass style)
+// ─────────────────────────────────────────────
 class TaskCard extends StatelessWidget {
   final String text;
   final bool completed;
@@ -582,7 +632,7 @@ class TaskCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
       decoration: BoxDecoration(
-        color: const Color(0xFF26345B).withOpacity(0.82),
+        color: Colors.white.withOpacity(0.10),
         borderRadius: BorderRadius.circular(13),
       ),
       child: Row(
@@ -590,31 +640,77 @@ class TaskCard extends StatelessWidget {
           Expanded(
             child: Text(
               _getTruncatedText(text),
-              style: TextStyle(
+              maxLines: 2,
+              style: AppTypography.bodySmall.copyWith(
                 color: Colors.white,
-                fontSize: MediaQuery.of(context).size.width * 0.030,
+                fontSize:
+                    MediaQuery.of(context).size.width * 0.030,
                 fontWeight: FontWeight.w500,
-                decoration: completed ? TextDecoration.lineThrough : null,
-                decorationColor: Colors.orange,
+                decoration:
+                    completed ? TextDecoration.lineThrough : null,
+                decorationColor: _accentOrange,
                 decorationThickness: 2,
               ),
-              maxLines: 2,
             ),
           ),
-          IconButton(
-            icon: const Icon(Icons.edit, color: Colors.white70, size: 21),
-            onPressed: onEdit,
-            padding: EdgeInsets.zero,
-            constraints: const BoxConstraints(),
-          ),
-          IconButton(
-            icon: const Icon(Icons.delete_outline, color: Colors.white54, size: 21),
-            onPressed: onDelete,
-            padding: EdgeInsets.zero,
-            constraints: const BoxConstraints(),
-          ),
+          GestureDetector(
+  onTap: onEdit,
+  child: Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 6),
+    child: Image.asset(
+      "assets/icons/wr.png",
+      width: 20,
+      height: 20,
+      color: Colors.white.withOpacity(0.85), // optional tint
+    ),
+  ),
+),
+
+GestureDetector(
+  onTap: onDelete,
+  child: Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 6),
+    child: Image.asset(
+      "assets/icons/de.png",
+      width: 20,
+      height: 20,
+      color: Colors.white.withOpacity(0.75), // optional tint
+    ),
+  ),
+),
+
         ],
       ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────
+// GLASS CARD
+// ─────────────────────────────────────────────
+class GlassCard extends StatelessWidget {
+  final Widget child;
+  final EdgeInsetsGeometry padding;
+  final double borderRadius;
+  final double opacity;
+
+  const GlassCard({
+    super.key,
+    required this.child,
+    this.padding = const EdgeInsets.all(16),
+    this.borderRadius = 20,
+    this.opacity = 0.15, // 👈 as you requested
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: padding,
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(opacity),
+        borderRadius: BorderRadius.circular(borderRadius),
+      ),
+      child: child,
     );
   }
 }

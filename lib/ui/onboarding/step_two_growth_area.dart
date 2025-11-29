@@ -1,12 +1,14 @@
-// growth_step_two.dart
-
 import 'package:flutter/material.dart';
-import '../../theme/app_gradients.dart';
-import '../../theme/app_text_style.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+
 import '../../widgets/app_header.dart';
 import '../../widgets/step_progress.dart';
 import '../../widgets/buttons/primary_button.dart';
+import '../../widgets/app_background.dart';
+import '../../theme/app_typography.dart';
 import '../onboarding/purpose_step_three.dart';
+
 class GrowthAreaStepTwo extends StatefulWidget {
   const GrowthAreaStepTwo({super.key});
 
@@ -16,7 +18,7 @@ class GrowthAreaStepTwo extends StatefulWidget {
 
 class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
   final _formKey = GlobalKey<FormState>();
-  final _microNicheController = TextEditingController();
+  final TextEditingController _microNicheController = TextEditingController();
 
   String? _selectedNiche;
   final List<String> _nicheOptions = [
@@ -37,268 +39,269 @@ class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
 
   void _onNextPressed() {
     if (_formKey.currentState?.validate() ?? false) {
-      // Optional: access values
-      // String niche = _selectedNiche!;
-      // String microNiche = _microNicheController.text.trim();
-
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const PurposeStepThree()),
+        MaterialPageRoute(builder: (_) => const PurposeStepThree()),
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: Theme.of(context).copyWith(
-        textSelectionTheme: const TextSelectionThemeData(
-          cursorColor: Color(0xFFFF8C42),
-          selectionColor: Color(0x4DFF8C42),
-          selectionHandleColor: Color(0xFFFF8C42),
-        ),
-        inputDecorationTheme: const InputDecorationTheme(
-          border: InputBorder.none,
-          enabledBorder: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          errorBorder: InputBorder.none,
-          disabledBorder: InputBorder.none,
-        ),
-      ),
-      child: Scaffold(
-        body: Container(
-          decoration: const BoxDecoration(
-            gradient: AppGradients.mainBackground,
-          ),
-          child: SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 18),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const AppHeader(),
-                    const SizedBox(height: 20),
+    return Scaffold(
+      body: AppBackground(
+        
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 14.h),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
 
-                    Row(
-                      children: [
-                        const Expanded(child: StepProgress(currentStep: 2)),
-                        const SizedBox(width: 14),
-                        Text(
-                          "2/4",
-                          style: AppTextStyles.body.copyWith(
-                            fontSize: 14,
-                            color: Colors.white.withOpacity(0.70),
-                          ),
+                  /// HEADER
+                  const AppHeader(),
+                  SizedBox(height: 20.h),
+
+                  /// STEP INDICATOR + PROGRESS
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        "2/4",
+                        style: AppTypography.formLabel.copyWith(
+                          fontSize: 14.sp,
+                          color: Colors.white.withOpacity(0.85),
                         ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(height: 4.h),
+                      const StepProgress(currentStep: 2),
+                    ],
+                  ),
 
-                    const SizedBox(height: 30),
+                  SizedBox(height: 30.h),
 
-                    Text(
+                  /// MAIN TITLE
+                  Center(
+                    child: Text(
                       "Choose your growth area",
                       textAlign: TextAlign.center,
-                      style: AppTextStyles.heading1.copyWith(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w700,
+                      style: AppTypography.title.copyWith(
+                        fontSize: 24.sp,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    Text(
+                  ),
+
+                  SizedBox(height: 8.h),
+
+                  /// SUBTITLE
+                  Center(
+                    child: Text(
                       "Pick a field you want to focus on. This helps us suggest relevant content.",
                       textAlign: TextAlign.center,
-                      style: AppTextStyles.body.copyWith(
-                        fontSize: 14,
-                        height: 1.45,
+                      style: AppTypography.subtitle.copyWith(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 18.sp,
+                        height: 1.4,
                         color: Colors.white.withOpacity(0.65),
                       ),
                     ),
-                    const SizedBox(height: 30),
+                  ),
 
-                    // NICHE SECTION
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.08),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(Icons.explore, color: Colors.white, size: 18),
+                  SizedBox(height: 32.h),
+
+                  // ----------------------------------------------------
+                  //                     NICHE SECTION
+                  // ----------------------------------------------------
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(14.w),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.1),
+                          shape: BoxShape.circle,
                         ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Text(
-                            "Niche (Expertise / Focus Area)",
-                            style: AppTextStyles.heading2.copyWith(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
+                        child: Image.asset(
+                          "assets/icons/niche.png",
+                          width: 22.w,
+                          height: 22.h,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(width: 12.w),
+
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Niche (Expertise / Focus Area)",
+                              style: AppTypography.sectionTitle.copyWith(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      "Your niche is where your skills, passion, and purpose come together",
-                      style: AppTextStyles.label.copyWith(
-                        fontSize: 13,
-                        color: Colors.white.withOpacity(0.60),
-                        height: 1.4,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-
-                    // NICHE DROPDOWN
-                    DropdownButtonFormField<String>(
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white.withOpacity(0.06),
-                        hintStyle: AppTextStyles.label.copyWith(
-                          color: Colors.white.withOpacity(0.55),
-                          fontSize: 14,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.white.withOpacity(0.3)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: Colors.white, width: 2),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: Colors.red, width: 2),
-                        ),
-                      ),
-                      hint: Text(
-                        "Ex : Fitness & Health",
-                        style: AppTextStyles.body.copyWith(
-                          color: Colors.white.withOpacity(0.55),
-                        ),
-                      ),
-                      items: _nicheOptions.map((niche) {
-                        return DropdownMenuItem(
-                          value: niche,
-                          child: Text(
-                            niche,
-                            style: AppTextStyles.body.copyWith(color: Colors.white),
-                          ),
-                        );
-                      }).toList(),
-                      value: _selectedNiche,
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedNiche = value;
-                        });
-                      },
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please select a niche';
-                        }
-                        return null;
-                      },
-                    ),
-
-                    const SizedBox(height: 14),
-                    Text(
-                      "If user did not find their expertise area then enter in a new text field by selecting other from the drop down list",
-                      style: AppTextStyles.label.copyWith(
-                        fontSize: 12.5,
-                        color: Colors.white.withOpacity(0.55),
-                        height: 1.35,
-                      ),
-                    ),
-
-                    const SizedBox(height: 32),
-
-                    // MICRO NICHE SECTION
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.08),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(Icons.filter_alt, color: Colors.white, size: 18),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Text(
-                            "Micro Niche (Narrow Down Your Focus Area)",
-                            style: AppTextStyles.heading2.copyWith(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
+                            SizedBox(height: 4.h),
+                            Text(
+                              "Your niche is where your skills, passion, and purpose come together",
+                              style: AppTypography.formLabel.copyWith(
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white.withOpacity(0.65),
+                              ),
                             ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(height: 22.h),
+
+                  /// NICHE DROPDOWN
+                  DropdownButtonFormField<String>(
+                    dropdownColor: const Color(0xFF0F1A3D),
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white.withOpacity(0.06),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25.r),
+                        borderSide:
+                            BorderSide(color: Colors.white.withOpacity(0.25)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25.r),
+                        borderSide: const BorderSide(
+                            color: Colors.white, width: 2),
+                      ),
+                    ),
+                    hint: Text("Ex: Fitness & Health", style: AppTypography.hint),
+                    items: _nicheOptions.map((niche) {
+                      return DropdownMenuItem(
+                        value: niche,
+                        child: Text(
+                          niche,
+                          style: AppTypography.subtitle.copyWith(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white,
                           ),
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      "Helping Working Moms Stay Fit with Yoga",
-                      style: AppTextStyles.body.copyWith(
-                        color: Colors.white.withOpacity(0.75),
-                        fontSize: 14,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
+                      );
+                    }).toList(),
+                    value: _selectedNiche,
+                    onChanged: (value) => setState(() {
+                      _selectedNiche = value;
+                    }),
+                    validator: (value) =>
+                        value == null ? 'Please select a niche' : null,
+                  ),
 
-                    // MICRO NICHE INPUT
-                    TextFormField(
-                      controller: _microNicheController,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white.withOpacity(0.06),
-                        hintText: "Ex : Helping Working Moms Stay Fit with Yoga",
-                        hintStyle: AppTextStyles.label.copyWith(
-                          color: Colors.white.withOpacity(0.55),
-                          fontSize: 14,
+                  SizedBox(height: 32.h),
+
+                  // ----------------------------------------------------
+                  //                 MICRO NICHE SECTION
+                  // ----------------------------------------------------
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(14.w),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.1),
+                          shape: BoxShape.circle,
                         ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.white.withOpacity(0.3)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: Colors.white, width: 2),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: Colors.red, width: 2),
+                        child: Image.asset(
+                          "assets/icons/microniche.png",
+                          width: 22.w,
+                          height: 22.h,
+                          color: Colors.white,
                         ),
                       ),
-                      style: AppTextStyles.body.copyWith(color: Colors.white, fontSize: 15),
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Micro niche is required';
-                        }
-                        if (value.trim().length < 3) {
-                          return 'Micro niche must be at least 3 characters';
-                        }
-                        return null;
-                      },
+                      SizedBox(width: 12.w),
+
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Micro Niche (Narrow Down Your Focus)",
+                              style: AppTypography.sectionTitle.copyWith(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            SizedBox(height: 4.h),
+                            Text(
+                              "Helping Working Moms Stay Fit with Yoga",
+                              style: AppTypography.formLabel.copyWith(
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.white.withOpacity(0.75),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(height: 20.h),
+
+                  /// MICRO NICHE INPUT
+                  TextFormField(
+                    controller: _microNicheController,
+                    style: AppTypography.subtitle.copyWith(
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.white,
                     ),
-
-                    const SizedBox(height: 35),
-
-                    PrimaryButton(
-                      label: "Next",
-                      onTap: _onNextPressed,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white.withOpacity(0.06),
+                      hintText: "Ex: Helping Working Moms Stay Fit with Yoga",
+                      hintStyle: AppTypography.hint,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25.r),
+                        borderSide:
+                            BorderSide(color: Colors.white.withOpacity(0.25)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25.r),
+                        borderSide:
+                            const BorderSide(color: Colors.white, width: 2),
+                      ),
                     ),
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Micro niche is required';
+                      }
+                      if (value.trim().length < 3) {
+                        return 'Must be at least 3 characters';
+                      }
+                      return null;
+                    },
+                  ),
 
-                    const SizedBox(height: 30),
-                  ],
-                ),
+                  SizedBox(height: 35.h),
+
+                  /// NEXT BUTTON
+                  PrimaryButton(
+                    label: "Next",
+                   onTap: () {
+  context.go('/stepthree');
+}
+                  ),
+
+                  SizedBox(height: 30.h),
+                ],
               ),
             ),
           ),
         ),
-      ),
+      
     );
   }
 }

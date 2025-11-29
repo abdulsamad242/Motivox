@@ -1,12 +1,15 @@
 // identity_step_four.dart
 
 import 'package:flutter/material.dart';
-import '../../theme/app_gradients.dart';
-import '../../theme/app_text_style.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+
 import '../../widgets/app_header.dart';
 import '../../widgets/step_progress.dart';
 import '../../widgets/buttons/primary_button.dart';
-import '../onboarding/why_summary_page.dart'; // ✅ Adjust path if needed
+import '../../widgets/app_background.dart';
+import '../../theme/app_typography.dart';
+import '../onboarding/why_summary_page.dart';
 
 class IdentityStepFour extends StatefulWidget {
   const IdentityStepFour({super.key});
@@ -19,7 +22,7 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
   final TextEditingController _positioningController = TextEditingController();
   final TextEditingController _brandingController = TextEditingController();
 
-  bool _formSubmitted = false;
+  bool _submitted = false;
 
   @override
   void dispose() {
@@ -29,150 +32,159 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
   }
 
   String? _validatePositioning() {
-    if (!_formSubmitted) return null;
+    if (!_submitted) return null;
     final text = _positioningController.text.trim();
-    if (text.isEmpty) return 'Positioning is required';
-    if (text.length < 10) return 'Positioning should be at least 10 characters';
+    if (text.isEmpty) return "Positioning is required";
+    if (text.length < 10) return "Positioning must be at least 10 characters";
     return null;
   }
 
   String? _validateBranding() {
-    if (!_formSubmitted) return null;
+    if (!_submitted) return null;
     final text = _brandingController.text.trim();
-    if (text.isEmpty) return 'Branding is required';
-    if (text.length < 10) return 'Branding should be at least 10 characters';
+    if (text.isEmpty) return "Branding is required";
+    if (text.length < 10) return "Branding must be at least 10 characters";
     return null;
   }
 
-  void _onSubmitPressed() {
-    setState(() {
-      _formSubmitted = true;
-    });
+  void _onSubmit() {
+    setState(() => _submitted = true);
 
-    final positioningError = _validatePositioning();
-    final brandingError = _validateBranding();
-
-    if (positioningError != null || brandingError != null) {
-      // Errors will appear inline — no snackbar needed if you show below fields
+    if (_validatePositioning() != null || _validateBranding() != null) {
       return;
     }
 
-    // All valid → go to summary
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const WhySummaryPage()),
+      MaterialPageRoute(builder: (_) => const WhySummaryPage()),
     );
   }
 
-  Widget _buildTextAreaSection({
+  // -------------------------------
+  // REUSABLE TEXT AREA SECTION
+  // -------------------------------
+  Widget _buildTextArea({
     required String title,
-    required IconData icon,
-    required String exampleText,
-    required String hintText,
+    required String example,
+    required String hint,
+    required String iconPath,
     required TextEditingController controller,
     required String? Function() validator,
   }) {
-    String? error = validator();
+    final error = validator();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        /// TITLE ROW (Perfect Alignment)
         Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              padding: const EdgeInsets.all(8),
+              height: 50.w,
+              width: 50.w,
               decoration: BoxDecoration(
                 color: Colors.white.withOpacity(0.12),
                 shape: BoxShape.circle,
               ),
-              child: Icon(icon, color: Colors.white, size: 18),
+              child: Center(
+                child: Image.asset(
+                  iconPath,
+                  width: 18.w,
+                  height: 18.h,
+                  color: Colors.white,
+                ),
+              ),
             ),
-            const SizedBox(width: 10),
+
+            SizedBox(width: 12.w),
+
             Expanded(
               child: Text(
                 title,
-                style: AppTextStyles.heading2.copyWith(
-                  fontSize: 15.5,
-                  fontWeight: FontWeight.w600,
+                style: AppTypography.sectionTitle.copyWith(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),
           ],
         ),
 
-        const SizedBox(height: 14),
+        SizedBox(height: 14.h),
 
+        /// OUTER CONTAINER
         Container(
           width: double.infinity,
           decoration: BoxDecoration(
-            color: const Color(0xFF2A3A5C).withOpacity(0.40),
-            borderRadius: BorderRadius.circular(20),
+            color: Colors.white.withOpacity(0.10),
+            borderRadius: BorderRadius.circular(20.r),
             border: Border.all(
-              color: error != null
-                  ? Colors.red
-                  : const Color(0xFF4A5D8A).withOpacity(0.50),
-              width: 2, // Slightly thicker on error
+              color: error != null ? Colors.red : Colors.white.withOpacity(0.35),
+              width: 2,
             ),
           ),
-          padding: const EdgeInsets.all(14),
+          padding: EdgeInsets.all(14.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              /// EXAMPLE
               Text(
-                exampleText,
-                style: AppTextStyles.label.copyWith(
-                  color: Colors.white.withOpacity(0.60),
-                  fontSize: 13.5,
-                  height: 1.4,
+                example,
+                style: AppTypography.formLabel.copyWith(
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white.withOpacity(0.65),
+                  height: 1.35,
                 ),
               ),
-              const SizedBox(height: 12),
+
+              SizedBox(height: 12.h),
+
+              /// INPUT BOX
               Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xFF2D3A57).withOpacity(0.70),
-                  borderRadius: BorderRadius.circular(16),
+                  color: Colors.white.withOpacity(0.05),
+                  borderRadius: BorderRadius.circular(16.r),
                   border: Border.all(
                     color: error != null
                         ? Colors.red
                         : Colors.white.withOpacity(0.35),
-                    width: 1,
                   ),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
                 child: TextField(
                   controller: controller,
                   minLines: 3,
                   maxLines: null,
                   keyboardType: TextInputType.multiline,
-                  textInputAction: TextInputAction.newline,
                   cursorColor: const Color(0xFFFF8C42),
-                  cursorWidth: 2,
-                  style: AppTextStyles.body.copyWith(
-                    color: Colors.white.withOpacity(0.95),
-                    fontSize: 14.5,
+                  style: AppTypography.subtitle.copyWith(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white,
                     height: 1.45,
                   ),
                   decoration: InputDecoration(
-                    hintText: hintText,
-                    hintStyle: AppTextStyles.label.copyWith(
-                      color: Colors.white.withOpacity(0.40),
-                      fontSize: 14,
-                    ),
+                    hintText: hint,
+                    hintStyle: AppTypography.hint,
+                    filled: false,
                     border: InputBorder.none,
+                    contentPadding: EdgeInsets.zero,
                     isCollapsed: true,
-                    counterText: "",
                   ),
                 ),
               ),
+
+              /// ERROR TEXT
               if (error != null)
                 Padding(
-                  padding: const EdgeInsets.only(top: 6),
+                  padding: EdgeInsets.only(top: 6.h),
                   child: Text(
                     error,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.red,
-                      fontSize: 12,
-                      height: 1.2,
+                      fontSize: 12.sp,
                     ),
                   ),
                 ),
@@ -183,116 +195,110 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
     );
   }
 
+  // --------------------------
+  // BUILD SCREEN
+  // --------------------------
   @override
   Widget build(BuildContext context) {
-    return Theme(
-  data: ThemeData.from(
-    colorScheme: Theme.of(context).colorScheme,
-  ).copyWith(
-    textSelectionTheme: const TextSelectionThemeData(
-      cursorColor: Color(0xFFFF8C42),
-      selectionColor: Color(0x4DFF8C42),
-      selectionHandleColor: Color(0xFFFF8C42),
-    ),
-    inputDecorationTheme: const InputDecorationTheme(
-      border: InputBorder.none,
-    ),
-  ),
-  
-      child: Scaffold(
-        body: Container(
-          decoration: const BoxDecoration(
-            gradient: AppGradients.mainBackground,
-          ),
-          child: SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 18),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const AppHeader(),
-                  const SizedBox(height: 20),
+    return Scaffold(
+      body: AppBackground(
+        
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 16.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                /// HEADER
+                const AppHeader(),
+                SizedBox(height: 20.h),
 
-                  Row(
-                    children: [
-                      const Expanded(child: StepProgress(currentStep: 4)),
-                      const SizedBox(width: 10),
-                      Text(
-                        "4/4",
-                        style: AppTextStyles.body.copyWith(
-                          fontSize: 14,
-                          color: Colors.white.withOpacity(0.85),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 30),
-
-                  Center(
-                    child: Text(
-                      "Build Your Unique Identity",
-                      textAlign: TextAlign.center,
-                      style: AppTextStyles.heading1.copyWith(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w700,
-                        height: 1.3,
+                /// STEP INDICATOR
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      "4/4",
+                      style: AppTypography.formLabel.copyWith(
+                        fontSize: 14.sp,
+                        color: Colors.white.withOpacity(0.85),
                       ),
                     ),
-                  ),
+                    SizedBox(height: 4.h),
+                    const StepProgress(currentStep: 4),
+                  ],
+                ),
 
-                  const SizedBox(height: 8),
+                SizedBox(height: 30.h),
 
-                  Center(
-                    child: Text(
-                      "Define how the world sees you — your values, voice, and vision.",
-                      textAlign: TextAlign.center,
-                      style: AppTextStyles.label.copyWith(
-                        fontSize: 14, // 🔸 Fixed: was 17 (too big)
-                        height: 1.4,
-                        color: Colors.white.withOpacity(0.70),
-                      ),
+                /// MAIN TITLE
+                Center(
+                  child: Text(
+                    "Build Your Unique Identity",
+                    textAlign: TextAlign.center,
+                    style: AppTypography.title.copyWith(
+                      fontSize: 24.sp,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
+                ),
+                SizedBox(height: 8.h),
 
-                  const SizedBox(height: 32),
-
-                  _buildTextAreaSection(
-                    title: "Positioning (How you want to be seen)",
-                    icon: Icons.shield_outlined,
-                    exampleText:
-                        'Ex : A friendly, inspiring fitness coach who helps working women stay healthy.',
-                    hintText: "The trusted fitness coach for busy professionals etc.",
-                    controller: _positioningController,
-                    validator: _validatePositioning,
+                /// SUBTITLE
+                Center(
+                  child: Text(
+                    "Define how the world sees you — your values, voice, and vision.",
+                    textAlign: TextAlign.center,
+                    style: AppTypography.subtitle.copyWith(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 18.sp,
+                      color: Colors.white.withOpacity(0.70),
+                      height: 1.4,
+                    ),
                   ),
+                ),
 
-                  const SizedBox(height: 35),
+                SizedBox(height: 32.h),
 
-                  _buildTextAreaSection(
-                    title: "Branding (Your identity & style)",
-                    icon: Icons.person_outline,
-                    exampleText:
-                        "Ex : Positive, calm, and empowering energy in everything I do.",
-                    hintText: "Describe your personal style and tone.",
-                    controller: _brandingController,
-                    validator: _validateBranding,
-                  ),
+                /// POSITIONING
+                _buildTextArea(
+                  title: "Positioning (How you want to be seen)",
+                  iconPath: "assets/icons/pos.png",
+                  example:
+                      "Ex: A friendly, inspiring fitness coach who helps working women stay healthy.",
+                  hint: "The trusted fitness coach for busy professionals...",
+                  controller: _positioningController,
+                  validator: _validatePositioning,
+                ),
 
-                  const SizedBox(height: 35),
+                SizedBox(height: 35.h),
 
-                  PrimaryButton(
-                    label: "Submit",
-                    onTap: _onSubmitPressed,
-                  ),
+                /// BRANDING
+                _buildTextArea(
+                  title: "Branding (Your identity & style)",
+                  iconPath: "assets/icons/brand.png",
+                  example:
+                      "Ex: Calm, positive, empowering tone in everything I create.",
+                  hint: "Describe your personal style and tone...",
+                  controller: _brandingController,
+                  validator: _validateBranding,
+                ),
 
-                  const SizedBox(height: 28),
-                ],
-              ),
+                SizedBox(height: 35.h),
+
+                /// BUTTON
+                PrimaryButton(
+                  label: "Submit",
+                  onTap: () {
+  context.go('/why');
+}
+                ),
+
+                SizedBox(height: 30.h),
+              ],
             ),
           ),
         ),
-      ),
+      
     );
   }
 }
