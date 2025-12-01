@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:motivix/routes/app_routes.dart';
-
-import 'package:motivix/ui/home/main_page.dart';
-
-import 'theme/app_theme.dart';
+import 'package:motivix/theme/app_theme.dart';
+import 'package:motivix/widgets/app_background.dart';
+import 'router/app_router.dart';
 
 void main() {
   runApp(const MotivoxApp());
@@ -23,9 +21,12 @@ class MotivoxApp extends StatelessWidget {
         return MaterialApp.router(
           debugShowCheckedModeBanner: false,
           theme: AppTheme.darkTheme,
-          routerDelegate: AppRoutes.router.routerDelegate,
-          routeInformationParser: AppRoutes.router.routeInformationParser,
-          routeInformationProvider: AppRoutes.router.routeInformationProvider,
+          routerConfig: appRouter,
+          builder: (context, child) {
+            return AppBackground(
+              child: SafeArea(top: true, bottom: false, child: child!),
+            );
+          },
         );
       },
     );

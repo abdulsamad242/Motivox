@@ -1,41 +1,31 @@
+// app_colors.dart
 import 'package:flutter/material.dart';
 
 class AppColors {
-  // Brand Colors - Matched to mockup
-  static const Color primary = Color(0xFFFF8C42); // Orange
-  static const Color secondary = Color(0xFF2B7FFF); // Bright Blue
-  static const Color mainBackground = Color(0xFF0B1732);
+  // Brand Colors (logo colors)
+  static const Color primary = Color.fromRGBO(255, 134, 31, 1); // Orange
+  static const Color secondary = Color(0xFF2B7FFF); // Blue
 
-  static const Color buttonBackground = Color(0xFF2196F3);
+  // Splash Background (EXACT MOCKUP COLORS)
+  static const Color splashBackground = Color(0xFF01011A); // Solid color from mockup
 
-  // Backgrounds - MUCH DARKER Navy Blues from mockup
-  static const Color bgDark = Color(0xFF070B1F); // Very very dark navy
-  static const Color bgGradientTop = Color(0xFF0F1936); // Dark navy blue
-  static const Color bgGradientBottom = Color(
-    0xFF070B1F,
-  ); // Deep navy (almost black)
+  // White glow effects for splash screen
+  static const Color whiteGlowTop = Color(0x0AFFFFFF); // Top glow - 4% opacity
+  static const Color whiteGlowCenter = Color(0x08FFFFFF); // Center glow - 3% opacity
+  static const Color whiteGlowBottom = Color(0x05FFFFFF); // Bottom glow - 2% opacity
 
-  // Cards & Surfaces - Darker versions
-  static const Color cardDark = Color(0xFF1A2441); // Darker card background
-  static const Color cardDarkBlue = Color(0xFF16213D); // Even darker logo card
-  static const Color glassLight = Color(0x0FFFFFFF); // Very subtle glass effect
+  // Text colors
+  static const Color textWhite = Color(0xFFFFFFFF);
+  static const Color textLight = Color(0xFFE5E9F5);
+  static const Color textGrey = Color(0xFF7B8599);
+  static const Color textSubtle = Color(0xFF4A5268);
 
-  // Text Colors - Adjusted for darker background
-  static const Color textWhite = Color(0xFFFFFFFF); // Pure white
-  static const Color textLight = Color(0xFFE5E9F5); // Very light for body text
-  static const Color textGrey = Color(0xFF7B8599); // More muted grey for labels
-  static const Color textSubtle = Color(0xFF5A6277); // Even more subtle
-
-  // Border Colors - More subtle for dark background
-  static const Color borderLight = Color(0xFF2A3548); // Very subtle borders
-  static const Color borderSubtle = Color(
-    0x12FFFFFF,
-  ); // Almost invisible borders
-
-  // Icons
+  // Other colors (keep your existing ones)
+  static const Color cardDark = Color(0xFF0C122B);
+  static const Color cardDarkBlue = Color(0xFF0A1024);
+  static const Color borderLight = Color(0xFF1C2336);
+  static const Color borderSubtle = Color(0x12FFFFFF);
   static const Color iconLight = Color(0xFFA0A8BB);
-
-  // Progress Indicator
-  static const Color progressActive = Color(0xFFFF8C42); // Orange
-  static const Color progressInactive = Color(0xFF2A3548); // Dark grey
+  static const Color progressActive = Color(0xFFFF8C42);
+  static const Color progressInactive = Color(0xFF1C2336);
 }

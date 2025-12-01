@@ -1,219 +1,89 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import '../../widgets/app_background.dart';
+import '../../theme/app_typography.dart';
 
 class GiverScreen extends StatelessWidget {
   const GiverScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    const mainBg = Color(0xFF0B1732);
-    const cardColor = Color(0xFF212A49);
+    final double statusBar = MediaQuery.of(context).padding.top;
 
     return Scaffold(
-      backgroundColor: mainBg,
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 14),
-          children: [
-            const SizedBox(height: 12),
-
-            // Header Section
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(21),
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF3E5398), Color(0xFF223366)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
-              padding: const EdgeInsets.symmetric(vertical: 19, horizontal: 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Top row: Logo, stats, icons
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        'assets/images/logo.png',
-                        width: 48,
-                        height: 48,
-                        fit: BoxFit.contain,
-                      ),
-                      const Spacer(),
-                      // Circular percent indicator
-                      Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          SizedBox(
-                            width: 44,
-                            height: 44,
-                            child: CircularProgressIndicator(
-                              value: 0.6,
-                              strokeWidth: 4,
-                              backgroundColor: Colors.white24,
-                              valueColor: AlwaysStoppedAnimation(Color(0xFFFF9001)),
-                            ),
-                          ),
-                          const Text(
-                            "60%",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(width: 15),
-                      _iconContainer(Icons.notifications),
-                      const SizedBox(width: 8),
-                      _iconContainer(Icons.settings),
-                    ],
-                  ),
-                  const SizedBox(height: 13),
-                  // GIVER label
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.11),
-                      borderRadius: BorderRadius.circular(13),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 14),
-                    child: const Text(
-                      "GIVER",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 30,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 19),
-
-            // G - Gratitude
-            _giverCard(
-              image: 'assets/icons/giver_gratitude.png', // <-- Use your custom image!
-              title: "G – Gratitude",
-              description: "Start your day with thankfulness and focus on what’s good. It lifts your mood, calms your mind, and fills your heart with positive energy.",
-              onTap: () {},
-            ),
-
-            // I - Imagination
-            _giverCard(
-              image: 'assets/icons/giver_imagination.png',
-              title: "I – Imagination",
-              description: "Dream beyond limits — imagination fuels creativity, unlocks new ideas, and helps you see endless possibilities ahead.",
-              onTap: () {},
-            ),
-
-            // V - Visualization
-            _giverCard(
-              image: 'assets/icons/giver_visualization.png',
-              title: "V – Visualization",
-              description: "See your goals as already achieved in your mind. Believe it, your actions start creating it.",
-              onTap: () {},
-            ),
-
-            // E - Exercise
-            _giverCard(
-              image: 'assets/icons/giver_exercise.png',
-              title: "E – Exercise",
-              description: "Move your body to power your mind — a few minutes of activity can renew your energy, boost, and motivation.",
-              onTap: () {},
-            ),
-
-            // R - Reading
-            _giverCard(
-              image: 'assets/icons/giver_reading.png',
-              title: "R – Reading",
-              description: "Feed your mind with ideas and inspiration — every new page expands your thoughts and fuels your growth.",
-              onTap: () {},
-            ),
-
-            // Sleep Note
-            _giverCard(
-              image: 'assets/icons/giver_sleep.png',
-              title: "Sleep Note",
-              description: "The best way to close your day is gratitude in your mind and peace in your heart. Write your Sleep Note to reflect, release, and rest peacefully.",
-              onTap: () {},
-            ),
-
-            const SizedBox(height: 30),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // Card Builder
-  Widget _giverCard({
-    required String image,
-    required String title,
-    required String description,
-    required VoidCallback onTap,
-  }) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 14),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.19),
-        borderRadius: BorderRadius.circular(17),
-      ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(17),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 14),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+      body: AppBackground(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: Column(
             children: [
-              // Custom image
-              Container(
-                padding: const EdgeInsets.all(7),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.13),
-                  shape: BoxShape.circle,
-                ),
-                child: Image.asset(
-                  image,
-                  width: 40,
-                  height: 40,
-                  fit: BoxFit.contain,
-                ),
-              ),
-              const SizedBox(width: 13),
-              // Text
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 15.5,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      description,
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.85),
-                        fontSize: 13.2,
-                        fontWeight: FontWeight.w400,
-                        height: 1.45,
-                      ),
-                    ),
-                  ],
+              const SizedBox(height: 10),
+
+              // ==========================
+              //      MOTIVOX HEADER
+              // ==========================
+              _buildMotivoxHeader(statusBar),
+
+              const SizedBox(height: 30),
+
+              // ==========================
+              //        GIVER CARDS
+              // ==========================
+              InkWell(
+                onTap: () => context.push('/gratitudeJournal'),
+                child: _giverCard(
+                  image: 'assets/icons/giver_gratitude.png',
+                  title: "G – Gratitude",
+                  description:
+                      "Start your day with thankfulness and focus on what’s good. It lifts your mood, calms your mind, and fills your heart with positive energy.",
                 ),
               ),
-              const SizedBox(width: 10),
-              Icon(Icons.chevron_right, color: Colors.white54, size: 27),
+              InkWell(
+                onTap: () => context.push('/imagination'),
+                child: _giverCard(
+                  image: 'assets/icons/giver_imagination.png',
+                  title: "I – Imagination",
+                  description:
+                      "Dream beyond limits — imagination fuels creativity, unlocks new ideas, and helps you see endless possibilities ahead.",
+                ),
+              ),
+              InkWell(
+                onTap: () => context.push('/visualization'),
+                child: _giverCard(
+                  image: 'assets/icons/giver_visualization.png',
+                  title: "V – Visualization",
+                  description:
+                      "See your goals as already achieved in your mind. Believe it, your actions start creating it.",
+                ),
+              ),
+              InkWell(
+                onTap: () => context.push('/exercise'),
+                child: _giverCard(
+                  image: 'assets/icons/giver_exercise.png',
+                  title: "E – Exercise",
+                  description:
+                      "Move your body to power your mind — a few minutes of activity can renew your energy, boost, and motivation.",
+                ),
+              ),
+              InkWell(
+                onTap: () => context.push('/reading'),
+                child: _giverCard(
+                  image: 'assets/icons/giver_reading.png',
+                  title: "R – Reading",
+                  description:
+                      "Feed your mind with ideas and inspiration — every new page expands your thoughts and fuels your growth.",
+                ),
+              ),
+              InkWell(
+                onTap: () => context.push('/sleepNote'),
+                child: _giverCard(
+                  image: 'assets/icons/giver_sleep.png',
+                  title: "Sleep Note",
+                  description:
+                      "The best way to close your day is gratitude in your mind and peace in your heart. Write your Sleep Note to reflect, release, and rest peacefully.",
+                ),
+              ),
+              const SizedBox(height: 30),
             ],
           ),
         ),
@@ -221,16 +91,199 @@ class GiverScreen extends StatelessWidget {
     );
   }
 
-  // Header icons with background
-  Widget _iconContainer(IconData icon) {
+  // ======================================================
+  //                      HEADER
+  // ======================================================
+  Widget _buildMotivoxHeader(double statusBar) {
     return Container(
-      width: 50,
-      height: 50,
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.13),
-        shape: BoxShape.circle,
+      padding: EdgeInsets.only(
+        top: (statusBar - 20).clamp(0.0, double.infinity),
+        left: 10,
+        right: 10,
+        bottom: 12,
       ),
-      child: Icon(icon, color: Colors.white, size: 23),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Color.fromARGB(255, 37, 49, 71),
+            Color.fromARGB(255, 45, 91, 176),
+            Color.fromARGB(255, 37, 49, 71),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.all(Radius.circular(22)),
+      ),
+      child: Column(
+        children: [
+          // Frosted row
+          SizedBox(height: 10),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 16,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.08),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(
+                  children: [
+                    Image.asset("assets/images/logo.png", height: 50),
+
+                    const Spacer(),
+
+                    // Progress circle
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        SizedBox(
+                          width: 45,
+                          height: 45,
+                          child: CircularProgressIndicator(
+                            value: 0.6,
+                            strokeWidth: 5,
+                            backgroundColor: Colors.white24,
+                            valueColor: const AlwaysStoppedAnimation(
+                              Color(0xFFFF9001),
+                            ),
+                          ),
+                        ),
+                        Text(
+                          "60%",
+                          style: AppTypography.sectionTitle.copyWith(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(width: 12),
+                    _circleIcon(Icons.notifications_none),
+                    const SizedBox(width: 10),
+                    _circleIcon(Icons.settings_outlined),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 14),
+
+          // Title container
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.12),
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Text(
+              "GIVER",
+              style: AppTypography.title.copyWith(
+                fontSize: 28,
+                fontWeight: FontWeight.w500,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _circleIcon(IconData icon) {
+    return Container(
+      width: 48,
+      height: 48,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.white.withOpacity(0.15),
+      ),
+      child: Icon(icon, size: 24, color: Colors.white),
+    );
+  }
+
+  // ======================================================
+  //                     GIVER CARD
+  // ======================================================
+  Widget _giverCard({
+    required String image,
+    required String title,
+    required String description,
+  }) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.15),
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // LEFT ICON
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.14),
+              shape: BoxShape.circle,
+            ),
+            child: Image.asset(
+              image,
+              width: 40,
+              height: 40,
+              fit: BoxFit.contain,
+            ),
+          ),
+
+          const SizedBox(width: 14),
+
+          // TEXT + CENTERED ARROW
+          Expanded(
+            child: Stack(
+              alignment: Alignment.centerRight,
+              children: [
+                // TEXT ON THE LEFT
+                Padding(
+                  padding: const EdgeInsets.only(right: 40), // space for arrow
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: AppTypography.sectionTitle.copyWith(
+                          color: Colors.white,
+                          fontSize: 17,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        description,
+                        style: AppTypography.sectionTitle.copyWith(
+                          color: Colors.white.withOpacity(0.85),
+                          fontSize: 13.8,
+                          height: 1.45,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // PERFECTLY CENTER-RIGHT ARROW
+                Icon(Icons.chevron_right, color: Colors.white54, size: 34),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

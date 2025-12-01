@@ -1,61 +1,66 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:motivix/routes/app_routes.dart';
-import '../../theme/app_gradients.dart';
-import '../../theme/app_text_style.dart';
+
 import '../../widgets/app_header.dart';
 import '../../widgets/buttons/primary_button.dart';
+import '../../widgets/app_background.dart';
+import '../../theme/app_typography.dart';
 
 class WhySummaryPage extends StatelessWidget {
   const WhySummaryPage({super.key});
 
   // ---------------------------------------------------------------------------
-  // CARD BUILDER (updated brightness + spacing exactly like mockup)
+  // GLASS CARD BUILDER (same style as onboarding screens)
   // ---------------------------------------------------------------------------
+
   Widget _buildInfoCard({
-    required IconData icon,
+    required String iconPath,
     required String title,
     required String value,
   }) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 18),
+      padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 18.w),
       decoration: BoxDecoration(
-        color: const Color(0xFF314365).withOpacity(0.55), // brighter glass
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.22), // brighter border
-          width: 1.2,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.20),
-            blurRadius: 8,
-            offset: const Offset(0, 3),
-          ),
-        ],
+        color: Colors.white.withOpacity(0.18),
+        borderRadius: BorderRadius.circular(10.r),
+        
+       
+        
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Title Row
+          //--------------------------------------------------------------------
+          // ICON + TITLE
+          //--------------------------------------------------------------------
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                padding: const EdgeInsets.all(8),
+                height: 40.w,
+                width: 40.w,
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.15),
                   shape: BoxShape.circle,
+                  color: Colors.white.withOpacity(0.15),
                 ),
-                child: Icon(icon, color: Colors.white, size: 18),
+                child: Center(
+                  child: Image.asset(
+                    iconPath,
+                    width: 18.w,
+                    height: 18.h,
+                    color: Colors.white,
+                  ),
+                ),
               ),
-              const SizedBox(width: 10),
+              SizedBox(width: 12.w),
               Expanded(
                 child: Text(
                   title,
-                  style: AppTextStyles.heading2.copyWith(
-                    fontSize: 15.5,
-                    fontWeight: FontWeight.w600,
+                  style: AppTypography.sectionTitle.copyWith(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w400, // ← required
                     color: Colors.white,
                   ),
                 ),
@@ -63,15 +68,18 @@ class WhySummaryPage extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
 
-          // Value text
+          //--------------------------------------------------------------------
+          // VALUE TEXT
+          //--------------------------------------------------------------------
           Text(
             value,
-            style: AppTextStyles.body.copyWith(
-              color: Colors.white.withOpacity(0.90),
-              fontSize: 14.5,
+            style: AppTypography.subtitle.copyWith(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w400,
               height: 1.45,
+              color: Colors.white.withOpacity(0.60),
             ),
           ),
         ],
@@ -84,58 +92,61 @@ class WhySummaryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(gradient: AppGradients.mainBackground),
-        child: SafeArea(
+      body: AppBackground(
+        
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 16),
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 16.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 //------------------------------------------------------------------
-                // TOP HEADER CARD (logo)
+                // HEADER
                 //------------------------------------------------------------------
                 const AppHeader(),
-                const SizedBox(height: 28),
+                SizedBox(height: 26.h),
 
                 //------------------------------------------------------------------
-                // MAIN TITLE + ICON (mockup-accurate)
+                // MAIN TITLE + SUBTITLE (custom icon: power)
                 //------------------------------------------------------------------
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(8),
+                      height: 50.w,
+                      width: 50.w,
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.12),
                         shape: BoxShape.circle,
+                        color: Colors.white.withOpacity(0.12),
                       ),
-                      child: const Icon(
-                        Icons.favorite,
-                        color: Colors.white,
-                        size: 19,
+                      child: Center(
+                        child: Image.asset(
+                          "assets/icons/power.png",
+                          width: 30.w,
+                          height: 30.h,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12.w),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             "The Power Behind My Why",
-                            style: AppTextStyles.heading1.copyWith(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
+                            style: AppTypography.title.copyWith(
+                              fontSize: 22.sp,
+                              fontWeight: FontWeight.w500, // required
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          SizedBox(height: 6.h),
                           Text(
                             "A reminder of why I started and where I'm heading.",
-                            style: AppTextStyles.label.copyWith(
-                              fontSize: 14,
-                              color: Colors.white.withOpacity(0.70),
+                            style: AppTypography.formLabel.copyWith(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w400,
                               height: 1.4,
+                              color: Colors.white.withOpacity(0.70),
                             ),
                           ),
                         ],
@@ -144,56 +155,57 @@ class WhySummaryPage extends StatelessWidget {
                   ],
                 ),
 
-                const SizedBox(height: 28),
+                SizedBox(height: 28.h),
 
                 //------------------------------------------------------------------
-                // INFO CARDS
+                // CARDS (with correct icons)
                 //------------------------------------------------------------------
+
                 _buildInfoCard(
-                  icon: Icons.explore,
+                  iconPath: "assets/icons/niche.png",
                   title: "Your niche",
                   value: "Entrepreneurship",
                 ),
-                const SizedBox(height: 18),
+                SizedBox(height: 18.h),
 
                 _buildInfoCard(
-                  icon: Icons.brightness_low,
-                  title: "Your Micro Niche",
+                  iconPath: "assets/icons/microniche.png",
+                  title: "Your micro niche",
                   value: "Providing Item to People",
                 ),
-                const SizedBox(height: 18),
+                SizedBox(height: 18.h),
 
                 _buildInfoCard(
-                  icon: Icons.lightbulb_outline,
+                  iconPath: "assets/icons/vis.png",
                   title: "Your vision",
                   value:
                       "Helping people to fulfill their dreams to live a happy and fulfilled life.",
                 ),
-                const SizedBox(height: 18),
+                SizedBox(height: 18.h),
 
                 _buildInfoCard(
-                  icon: Icons.flag,
+                  iconPath: "assets/icons/mis.png",
                   title: "Your mission",
                   value:
-                      "Helping 1 million people to build second source of income using their skills and knowledge to live a happy and freedom life.",
+                      "Helping 1 million people build a second source of income using their skills and knowledge.",
                 ),
-                const SizedBox(height: 18),
+                SizedBox(height: 18.h),
 
                 _buildInfoCard(
-                  icon: Icons.person_outline,
+                  iconPath: "assets/icons/pos.png",
                   title: "Your positioning",
                   value:
-                      "As a freedom coach Helping 1 million people to build second source of income using their skills and knowledge to live a happy and freedom life.",
+                      "A freedom coach supporting people to create financial stability and fulfillment.",
                 ),
-                const SizedBox(height: 18),
+                SizedBox(height: 18.h),
 
                 _buildInfoCard(
-                  icon: Icons.workspace_premium_outlined,
+                  iconPath: "assets/icons/brand.png",
                   title: "Your brand",
                   value:
-                      "Yet to be decided. It’s all right. Take your time and figure it out.",
+                      "Yet to be decided — take your time and let your identity evolve naturally.",
                 ),
-                const SizedBox(height: 35),
+                SizedBox(height: 35.h),
 
                 //------------------------------------------------------------------
                 // BUTTON
@@ -201,15 +213,15 @@ class WhySummaryPage extends StatelessWidget {
                 PrimaryButton(
                   label: "View Your Vision Board",
                   onTap: () {
-                    context.go(AppRoutes.visionBoard);
-                  },
+  context.go('/vision');
+},
                 ),
-                const SizedBox(height: 26),
+                SizedBox(height: 30.h),
               ],
             ),
           ),
         ),
-      ),
+      
     );
   }
 }

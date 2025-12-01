@@ -1,16 +1,14 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
-
-// Defined colors for reusability
-const Color _mainBg = Color(0xFF0B1732);
-const Color _cardColor = Color(0xFF212A49);
-const Color _orangePrimary = Color(0xFFFF9001);
+import '../../widgets/app_background.dart';
+import '../../theme/app_typography.dart';
 
 class Suggestion {
   final String title;
   final String description;
-  final IconData icon;
+  final String iconPath;
 
-  Suggestion(this.title, this.description, this.icon);
+  Suggestion(this.title, this.description, this.iconPath);
 }
 
 class AiBuddyPage extends StatefulWidget {
@@ -21,196 +19,215 @@ class AiBuddyPage extends StatefulWidget {
 }
 
 class _AiBuddyPageState extends State<AiBuddyPage> {
-  // Mock data for the AI Buddy intro card
   final String _buddyIconPath = 'assets/icons/aiBuddy.png';
-  final String _buddyDescription = 'Your daily companion for reflection, clarity, and growth.';
 
-  // Placeholder for chat messages (will be used later)
-  final List<String> _messages = [];
+  final String _buddyDescription =
+      'Your daily companion for reflection, clarity, and growth.';
 
+  // Replaced with your PNG icons
   final List<Suggestion> _calmDownSuggestions = [
     Suggestion(
       'Take Pause',
-      'Step away from what triggered your anger, even for just 2-5 minutes.',
-      Icons.pause_circle_outline,
+      'Step away from what triggered your anger, even for just 2–5 minutes.',
+      'assets/icons/pause.png',
     ),
     Suggestion(
       'Deep Breathing',
-      'Inhale deeply through your nose for 4 seconds, hold for 4 seconds, exhale through your mouth for 6 seconds. Repeat 3-5 times.',
-      Icons.sync_alt,
+      'Inhale for 4 sec, hold for 4, exhale for 6. Repeat 3–5 times.',
+      'assets/icons/deep.png',
     ),
     Suggestion(
       'Move Your Body',
-      'A short walk, stretching, or even shaking your arms helps release tension.',
-      Icons.directions_run,
+      'A walk or quick stretch releases physical tension.',
+      'assets/icons/move.png',
     ),
     Suggestion(
       'Write It Out',
-      'Put your thoughts on paper (or in the app) instead of holding them in your head.',
-      Icons.menu_book,
+      'Put your thoughts on paper instead of holding them in your head.',
+      'assets/icons/write.png',
     ),
     Suggestion(
       'Listen to Music',
-      'Choose calming or instrumental tracks to shift your mood.',
-      Icons.headset,
+      'Choose calming tracks or soft instrumentals.',
+      'assets/icons/music.png',
     ),
     Suggestion(
       'Talk to Someone',
-      'Share how you feel with a trusted friend or colleague instead of bottling it up.',
-      Icons.forum,
+      'Share with a trusted friend instead of bottling emotions.',
+      'assets/icons/talk.png',
     ),
     Suggestion(
       'Reframe the Thought',
-      'Ask: "Will this matter in 1 day, 1 month, or 1 year?"',
-      Icons.psychology_alt,
+      'Ask: “Will this matter in 1 day, 1 month, or 1 year?”',
+      'assets/icons/refra.png',
     ),
     Suggestion(
       'Drink Water',
-      'A simple reset—hydration helps the body relax.',
-      Icons.local_drink,
+      'Hydration creates a quick mental reset.',
+      'assets/icons/wat.png',
     ),
   ];
 
-  // Placeholder for progress
   double _aiUsageProgress = 0.85;
 
   @override
   Widget build(BuildContext context) {
+    final double statusBar = MediaQuery.of(context).padding.top;
+
     return Scaffold(
-      backgroundColor: _mainBg,
-      body: SafeArea(
+      body: AppBackground(
         child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 0),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           children: [
-            const SizedBox(height: 12),
-            // Custom Account Header
-            _buildCustomHeader(),
+            const SizedBox(height: 10),
+
+            _buildMotivoxHeader(statusBar),
+
             const SizedBox(height: 24),
-            // AI Buddy Introduction Card
-            _buildAiBuddyIntroCard(),
-            const SizedBox(height: 19),
-            _suggestionsCard(),
-            const SizedBox(height: 19),
-            ..._calmDownSuggestions.map((suggestion) => _buildSuggestionItem(suggestion)).toList(),
-            const SizedBox(height: 8),
-            // ➕ FIRST DESIGN NOTE CONTAINER
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Color(0xFF1E2A45),
-                borderRadius: BorderRadius.circular(12),
-              ),
+
+            _aiBuddyIntroCard(),
+
+            const SizedBox(height: 20),
+
+            _suggestionHeaderCard(),
+
+            const SizedBox(height: 20),
+
+            ..._calmDownSuggestions
+                .map((item) => _suggestionGlassCard(item))
+                .toList(),
+
+            const SizedBox(height: 20),
+
+            _designNote(
+              'Optional in the app: Add a “Start 2-minute calming exercise” button with breathing visuals.',
+            ),
+            const SizedBox(height: 14),
+            _designNote(
+              'Do you want me to design a UI card for these suggestions with icons?',
+            ),
+
+            const SizedBox(height: 20),
+
+            _aiChatSection(),
+            const SizedBox(height: 20),
+            Center(
               child: Text(
-                'Optional in the app: After showing these tips, you could add a “Would you like to do a 2-minute calming exercise now?” button that plays breathing visuals or soothing sounds.',
+                "What’s on your mind today? Ask me anything to grow your career or business.",
+                textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.9),
+                  color: Colors.white70,
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
                   height: 1.4,
                 ),
               ),
             ),
-            const SizedBox(height: 13),
-            // ➕ SECOND DESIGN NOTE CONTAINER
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Color(0xFF1E2A45),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Text(
-                'Do you want me to design a mockup card with these calming suggestions (with icons) so you can plug it directly after someone selects “Angry”?',
-                style: TextStyle(
-                  color: Colors.white.withOpacity(0.9),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  height: 1.4,
-                ),
-              ),
-            ),
-            const SizedBox(height: 19),
-            // ➕ NEW AI CHAT SECTION
-            _buildAiChatSection(),
+
+            const SizedBox(height: 30),
           ],
         ),
       ),
     );
   }
 
-  // Helper function to build the header
-  Widget _buildCustomHeader() {
+  // ======================================================
+  //                MOTIVOX PERFECT HEADER
+  // ======================================================
+  Widget _buildMotivoxHeader(double statusBar) {
     return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(21),
-        gradient: const LinearGradient(
-          colors: [Color(0xFF3E5398), Color(0xFF223366)],
+      padding: EdgeInsets.only(
+        top: (statusBar - 40).clamp(0.0, double.infinity),
+
+        left: 10,
+        right: 10,
+        bottom: 12,
+      ),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Color.fromARGB(255, 37, 49, 71),
+            Color.fromARGB(255, 45, 91, 176),
+            Color.fromARGB(255, 37, 49, 71),
+          ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
+        borderRadius: BorderRadius.all(Radius.circular(22)),
       ),
-      padding: const EdgeInsets.symmetric(vertical: 19, horizontal: 8),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Top row: Logo, progress, icons
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/images/logo.png',
-                width: 48,
-                height: 48,
-                fit: BoxFit.contain,
-              ),
-              const Spacer(),
-              // Circular percent indicator
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  SizedBox(
-                    width: 45,
-                    height: 45,
-                    child: CircularProgressIndicator(
-                      value: _aiUsageProgress,
-                      strokeWidth: 4,
-                      backgroundColor: Colors.white24,
-                      valueColor: const AlwaysStoppedAnimation(_orangePrimary),
+          SizedBox(height: 10),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(22),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 18,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.07),
+                  borderRadius: BorderRadius.circular(22),
+                ),
+                child: Row(
+                  children: [
+                    Image.asset("assets/images/logo.png", height: 56),
+
+                    const Spacer(),
+
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        SizedBox(
+                          width: 48,
+                          height: 48,
+                          child: CircularProgressIndicator(
+                            value: _aiUsageProgress,
+                            strokeWidth: 6,
+                            backgroundColor: Colors.white24,
+                            valueColor: const AlwaysStoppedAnimation(
+                              Color(0xFFFF9001),
+                            ),
+                          ),
+                        ),
+                        Text(
+                          "${(_aiUsageProgress * 100).toInt()}%",
+                          style: AppTypography.sectionTitle.copyWith(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  Text(
-                    "${(_aiUsageProgress * 100).toInt()}%",
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 15,
-                    ),
-                  ),
-                ],
+
+                    const SizedBox(width: 12),
+                    _headerIcon("assets/icons/rem.png"),
+                    const SizedBox(width: 12),
+                    _headerIcon("assets/icons/set.png"),
+                  ],
+                ),
               ),
-              const SizedBox(width: 15),
-              // Notif icon
-              _buildCircularIconButton(Icons.notifications, () {}),
-              const SizedBox(width: 10),
-              // Settings icon
-              _buildCircularIconButton(Icons.settings, () {}),
-            ],
+            ),
           ),
-          const SizedBox(height: 12),
-          // Account label
+
+          const SizedBox(height: 14),
+
           Container(
             width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.11),
-              borderRadius: BorderRadius.circular(13),
+              color: Colors.white.withOpacity(0.12),
+              borderRadius: BorderRadius.circular(14),
             ),
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 9),
-            child: const Text(
+            child: Text(
               "My AI Buddy",
-              style: TextStyle(
+              style: AppTypography.title.copyWith(
+                fontSize: 32,
+                fontWeight: FontWeight.w500,
                 color: Colors.white,
-                fontWeight: FontWeight.w600,
-                fontSize: 30,
-                letterSpacing: 0.5,
               ),
             ),
           ),
@@ -219,27 +236,25 @@ class _AiBuddyPageState extends State<AiBuddyPage> {
     );
   }
 
-  // Helper for circular icon buttons
-  Widget _buildCircularIconButton(IconData icon, VoidCallback onPressed) {
+  Widget _headerIcon(String asset) {
     return Container(
-      width: 50,
-      height: 50,
+      width: 48,
+      height: 48,
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.13),
         shape: BoxShape.circle,
       ),
-      child: IconButton(
-        onPressed: onPressed,
-        icon: Icon(icon, color: Colors.white, size: 23),
-        splashRadius: 21,
+      child: Center(
+        child: Image.asset(asset, width: 24, height: 24, color: Colors.white),
       ),
     );
   }
 
-  // AI Buddy Introduction Card
-  Widget _buildAiBuddyIntroCard() {
+  // ======================================================
+  //                  AI BUDDY INTRO
+  // ======================================================
+  Widget _aiBuddyIntroCard() {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           width: 52,
@@ -249,37 +264,30 @@ class _AiBuddyPageState extends State<AiBuddyPage> {
             color: Colors.white.withOpacity(0.15),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Image.asset(
-              _buddyIconPath,
-              fit: BoxFit.contain,
-            ),
+            padding: const EdgeInsets.all(8),
+            child: Image.asset(_buddyIconPath),
           ),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 14),
         Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 4),
-              Text(
-                _buddyDescription,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                ),
-              ),
-            ],
+          child: Text(
+            _buddyDescription,
+            style: AppTypography.sectionTitle.copyWith(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: Colors.white,
+            ),
           ),
         ),
       ],
     );
   }
 
-  // Suggestions header card
-  Widget _suggestionsCard() {
+  // ======================================================
+  //              SUGGESTION HEADER TEXT
+  // ======================================================
+  Widget _suggestionHeaderCard() {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           width: 52,
@@ -288,193 +296,69 @@ class _AiBuddyPageState extends State<AiBuddyPage> {
             shape: BoxShape.circle,
             color: Colors.white.withOpacity(0.15),
           ),
-          child: const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Icon(Icons.lightbulb_outline, color: Colors.white),
-          ),
+          child: const Icon(Icons.lightbulb_outline, color: Colors.white),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 14),
         Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 4),
-              Text(
-                "Suggestions to Stay Calm When Feeling Angry",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                ),
-              ),
-            ],
+          child: Text(
+            "Suggestions to Stay Calm When Feeling Angry",
+            style: AppTypography.sectionTitle.copyWith(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: Colors.white,
+            ),
           ),
         ),
       ],
     );
   }
 
-  // Individual suggestion item
-  Widget _buildSuggestionItem(Suggestion suggestion) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        decoration: BoxDecoration(
-          color: _cardColor,
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white.withOpacity(0.1),
-              ),
-              child: Icon(
-                suggestion.icon,
-                color: Colors.white,
-                size: 24,
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    suggestion.title,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    suggestion.description,
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(0.7),
-                      fontSize: 13,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // 🔹 NEW: AI Chat Section
-  Widget _buildAiChatSection() {
+  // ======================================================
+  //               EACH GLASSCARD SUGGESTION
+  // ======================================================
+  Widget _suggestionGlassCard(Suggestion s) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
-        color: _cardColor,
-        borderRadius: BorderRadius.circular(15),
+        color: Colors.white.withOpacity(0.12),
+        borderRadius: BorderRadius.circular(18),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          // Header Row: Text + Avatar
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "What's on your mind today?",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      "Ask me anything to grow your career or business",
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.7),
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 12),
-              // AI Avatar
-              Container(
-                width: 72,
-                height: 72,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white.withOpacity(0.2), width: 2),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Image.asset(
-                    'assets/images/ai.png',
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
-          // Suggested Questions Header
-          Text(
-            "Need some ideas? Try asking questions like:",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(height: 12),
-          // Suggested Question Buttons
-          ...[
-            "How can I attract more clients in my niche?",
-            "What skills should I learn to grow my career?",
-            "How can I build my personal brand online?",
-          ].map((question) => _buildSuggestionButton(question)).toList(),
-          const SizedBox(height: 24),
-          // Input Field
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            width: 46,
+            height: 46,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.08),
-              borderRadius: BorderRadius.circular(18),
+              color: Colors.white.withOpacity(0.17),
+              shape: BoxShape.circle,
             ),
-            child: Row(
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Image.asset(s.iconPath),
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: "Type your question and press enter",
-                      hintStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
-                       filled: false,
-                    fillColor: Colors.transparent,
-                      border: InputBorder.none,
-                      contentPadding: const EdgeInsets.symmetric(vertical: 14),
-                    ),
-                    style: const TextStyle(color: Colors.white),
-                    cursorColor: Colors.white,
+                Text(
+                  s.title,
+                  style: AppTypography.sectionTitle.copyWith(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white,
                   ),
                 ),
-                IconButton(
-                  onPressed: () {
-                    // TODO: Handle message send
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Message sent!")),
-                    );
-                  },
-                  icon: Icon(Icons.send, color: Colors.white.withOpacity(0.8)),
-                  splashRadius: 20,
+                const SizedBox(height: 4),
+                Text(
+                  s.description,
+                  style: AppTypography.sectionTitle.copyWith(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white.withOpacity(0.80),
+                  ),
                 ),
               ],
             ),
@@ -484,35 +368,192 @@ class _AiBuddyPageState extends State<AiBuddyPage> {
     );
   }
 
-  // 🔹 Helper: Suggestion Button
-  Widget _buildSuggestionButton(String text) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.08),
-          borderRadius: BorderRadius.circular(20),
+  // ======================================================
+  //                  DESIGN NOTE CARDS
+  // ======================================================
+  Widget _designNote(String text) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.12),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Text(
+        text,
+        style: AppTypography.sectionTitle.copyWith(
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          color: Colors.white.withOpacity(0.85),
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.lightbulb_outline, size: 18, color: Colors.white.withOpacity(0.7)),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                text,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
+      ),
+    );
+  }
+
+  // ======================================================
+  //                 AI CHAT SECTION
+  // ======================================================
+  Widget _aiChatSection() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.12),
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header Row
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "What's on your mind today?",
+                      style: AppTypography.sectionTitle.copyWith(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      "Ask me anything to grow your career or business",
+                      style: AppTypography.sectionTitle.copyWith(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white.withOpacity(0.75),
+                      ),
+                    ),
+                  ],
                 ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(width: 12),
+              Container(
+                width: 125,
+                height: 125,
+
+                child: Padding(
+                  padding: const EdgeInsets.all(6),
+                  child: Image.asset(
+                    'assets/images/ai.png',
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 20),
+
+          Text(
+            "Need some ideas? Try asking:",
+            style: AppTypography.sectionTitle.copyWith(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: Colors.white,
+            ),
+          ),
+
+          const SizedBox(height: 12),
+
+          _questionChip("How can I attract more clients in my niche?"),
+          _questionChip("What skills should I learn to grow my career?"),
+          _questionChip("How can I build my personal brand online?"),
+
+          const SizedBox(height: 22),
+
+          _chatInputField(),
+        ],
+      ),
+    );
+  }
+
+  // bulb.png suggestions
+  Widget _questionChip(String text) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.10),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        children: [
+          Image.asset(
+            'assets/icons/bulb.png',
+            width: 20,
+            height: 20,
+            color: Colors.white.withOpacity(0.85),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              text,
+              style: AppTypography.sectionTitle.copyWith(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: Colors.white,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _chatInputField() {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.10),
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              style: AppTypography.sectionTitle.copyWith(
+                color: Colors.white,
+                fontSize: 15,
+              ),
+              cursorColor: Colors.white,
+              decoration: InputDecoration(
+                hintText: "Type your question and press enter",
+                hintStyle: AppTypography.sectionTitle.copyWith(
+                  color: Colors.white.withOpacity(0.65),
+                  fontSize: 14,
+                ),
+                filled: false,
+                border: InputBorder.none,
+              ),
+            ),
+          ),
+
+          /// 🔵 Circular icon like our usual style
+          GestureDetector(
+            onTap: () {
+              print("Send clicked");
+            },
+            child: Container(
+              width: 46,
+              height: 46,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withOpacity(0.13), // same as other icons
+              ),
+              child: Center(
+                child: Image.asset(
+                  "assets/icons/send.png",
+                  width: 22,
+                  height: 22,
+                  color: Colors.white.withOpacity(0.85), // tint for consistency
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

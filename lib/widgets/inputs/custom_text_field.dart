@@ -1,16 +1,15 @@
-// lib/widgets/inputs/custom_text_field.dart
-
 import 'package:flutter/material.dart';
-import '../../theme/app_text_style.dart';
 import 'package:flutter/services.dart';
+import '../../theme/app_typography.dart';
 
 class PrimaryTextField extends StatelessWidget {
   final String hint;
   final IconData icon;
   final TextInputType? keyboardType;
   final TextEditingController? controller;
-  final String? Function(String?)? validator; // 👈 Add validator
-  final List<TextInputFormatter>? inputFormatters; // Optional but useful
+  final String? Function(String?)? validator;
+  final List<TextInputFormatter>? inputFormatters;
+  final TextStyle? hintStyle;
 
   const PrimaryTextField({
     super.key,
@@ -18,71 +17,97 @@ class PrimaryTextField extends StatelessWidget {
     required this.icon,
     this.keyboardType,
     this.controller,
-    this.validator, // 👈 Accept validator
+    this.validator,
     this.inputFormatters,
+    this.hintStyle,
   });
 
   @override
   Widget build(BuildContext context) {
     return FormField<String>(
       validator: validator,
-      onSaved: (value) {
-        // Optional: handle saving if needed
-      },
-      builder: (FormFieldState<String> field) {
-        return Container(
-          height: 52,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.06),
-            borderRadius: BorderRadius.circular(30),
-            border: Border.all(
-              color: field.errorText == null
-                  ? Colors.white.withOpacity(0.20)
-                  : Colors.red, // Show red border on error
-              width: field.errorText == null ? 1 : 2,
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              children: [
-                Icon(
-                  icon,
+      builder: (field) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 52,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(30),
+                border: Border.all(
                   color: field.errorText == null
-                      ? Colors.white.withOpacity(0.85)
+                      ? Colors.white.withOpacity(0.20)
                       : Colors.red,
-                  size: 18,
+                  width: field.errorText == null ? 1 : 2,
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: TextField(
-                    controller: controller,
-                    keyboardType: keyboardType,
-                    inputFormatters: inputFormatters,
-                    onChanged: (value) {
-                      field.didChange(value); // Critical: notify form of change
-                    },
-                    style: AppTextStyles.body.copyWith(
-                      color: Colors.white,
-                      fontSize: 15,
+              ),
+
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: [
+                    /// ICON
+                    Icon(
+                      icon,
+                      color: field.errorText == null
+                          ? Colors.white.withOpacity(0.85)
+                          : Colors.red,
+                      size: 18,
                     ),
-                    decoration: InputDecoration(
-                      hintText: hint,
-                      hintStyle: AppTextStyles.label.copyWith(
-                        color: Colors.white.withOpacity(0.55),
-                        fontSize: 14,
+
+                    const SizedBox(width: 12),
+
+                    /// TEXT INPUT FIELD
+                    Expanded(
+                      child: TextField(
+                        controller: controller,
+                        keyboardType: keyboardType,
+                        inputFormatters: inputFormatters,
+                        onChanged: field.didChange,
+
+                        style: AppTypography.hint.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14,
+                          height: 1.2,
+                        ),
+
+                        decoration: InputDecoration(
+                          hintText: hint,
+                          filled: false,
+                          fillColor: Colors.transparent,
+                          /// CUSTOM HINT STYLE
+                          hintStyle: AppTypography.hint.copyWith(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white.withOpacity(0.55),
+                          ),
+
+                          border: InputBorder.none,
+                          isCollapsed: true,
+                        ),
                       ),
-                      errorText: field.errorText, // Show error below (optional)
-                      errorStyle: const TextStyle(height: 0), // Hide default error spacing
-                      border: InputBorder.none,
-                      isCollapsed: true,
                     ),
+                  ],
+                ),
+              ),
+            ),
+
+            /// ERROR MESSAGE (We show it cleanly BELOW the field)
+            if (field.errorText != null)
+              Padding(
+                padding: const EdgeInsets.only(left: 4, top: 6),
+                child: Text(
+                  field.errorText!,
+                  style: const TextStyle(
+                    color: Colors.red,
+                    fontSize: 12,
                   ),
                 ),
-              ],
-            ),
-          ),
+              ),
+          ],
         );
       },
     );

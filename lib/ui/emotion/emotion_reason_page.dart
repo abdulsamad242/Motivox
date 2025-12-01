@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import '../../widgets/app_background.dart';
+import '../../widgets/app_header.dart';
+import '../../theme/app_typography.dart';
 
 class FeelingsScreen extends StatefulWidget {
   const FeelingsScreen({super.key});
+
   @override
   State<FeelingsScreen> createState() => _FeelingsScreenState();
 }
@@ -17,103 +21,101 @@ class _FeelingsScreenState extends State<FeelingsScreen> {
     "Had a good day",
     "Other",
   ];
+
   String? selectedReason;
 
   @override
   Widget build(BuildContext context) {
-    // Main dark gradient background
     return Scaffold(
-      backgroundColor: const Color(0xFF0B1732),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Color(0xFF19254C),
-              Color(0xFF09163B),
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        child: SafeArea(
-          child: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 18),
-            children: [
-              const SizedBox(height: 18),
-              // Logo header
-              Container(
-                height: 90,
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF374E8C), Color(0xFF223365)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Center(
-                  child: Image.asset(
-                    "assets/images/logo.png", // replace with your logo path
-                    height: 60,
-                  ),
-                ),
+      body: AppBackground(
+        child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          children: [
+            const SizedBox(height: 12),
+
+            // App Header
+            const AppHeader(),
+            const SizedBox(height: 20),
+
+            // -----------------------------
+            // GLASS TITLE CARD
+            // -----------------------------
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.12),
+                borderRadius: BorderRadius.circular(22),
               ),
-              const SizedBox(height: 25),
-              // Card with title and dropdown
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.08),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Please select the reason of your emotion",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15.5,
-                        fontWeight: FontWeight.w500,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Please select the reason of your emotion",
+                    style: AppTypography.sectionTitle.copyWith(
+                      fontSize: 16.5,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // -----------------------------
+                  // GLASS DROPDOWN FIELD
+                  // -----------------------------
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.10),
+                      borderRadius: BorderRadius.circular(17),
+                      border: Border.all(
+                        color: Colors.white.withOpacity(0.30),
+                        width: 1.1,
                       ),
                     ),
-                    const SizedBox(height: 13),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.11),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        isExpanded: true,
+                        value: selectedReason,
+                        dropdownColor: const Color(0xFF182345),
                         borderRadius: BorderRadius.circular(17),
-                        border: Border.all(color: Colors.white.withOpacity(0.38), width: 1.1),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 17),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          isExpanded: true,
-                          value: selectedReason,
-                          hint: const Text(
-                            "Select a reason",
-                            style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w400, fontSize: 16.5),
-                          ),
-                          icon: const Icon(Icons.keyboard_arrow_down_rounded, color: Colors.white70),
-                          dropdownColor: const Color(0xFF232949),
-                          style: const TextStyle(color: Colors.white, fontSize: 16.5),
-                          borderRadius: BorderRadius.circular(17),
-                          items: reasons
-                              .map((e) => DropdownMenuItem<String>(
-                                    value: e,
-                                    child: Text(e, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
-                                  ))
-                              .toList(),
-                          onChanged: (v) => setState(() => selectedReason = v),
+                        icon: const Icon(
+                          Icons.keyboard_arrow_down_rounded,
+                          color: Colors.white70,
                         ),
+                        style: AppTypography.bodySmall.copyWith(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                        hint: Text(
+  "Select a reason",
+  style: AppTypography.bodySmall.copyWith(
+    color: Colors.white70,
+    fontSize: 16,
+  ),
+),
+
+                        items: reasons.map((e) {
+                          return DropdownMenuItem(
+                            value: e,
+                            child: Text(
+                              e,
+                              style: AppTypography.bodySmall.copyWith(
+                                color: Colors.white,
+                                fontSize: 16,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (v) => setState(() => selectedReason = v),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              // Spacer below
-              const SizedBox(height: 35),
-            ],
-          ),
+            ),
+
+            const SizedBox(height: 40),
+          ],
         ),
       ),
     );

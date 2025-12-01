@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import '../home/bottom_nav.dart'; 
+import 'package:motivix/widgets/app_background.dart';
+import '../../widgets/motivox_home_header.dart';
+import '../home/bottom_nav.dart';
 
-const Color _mainBg = Color(0xFF0B1732);
 const Color _cardColor = Color(0xFF212A49);
 const Color _orangePrimary = Color(0xFFFF9001);
 
@@ -18,19 +19,36 @@ class _V1PageState extends State<V1Page> {
   // Mock screens for each tab — replace with real screens later
   final List<Widget> _screens = [
     const _HomePageContent(), // Home
-    const Center(child: Text("AI Assistant", style: TextStyle(color: Colors.white, fontSize: 24))),
-    const Center(child: Text("Favorites", style: TextStyle(color: Colors.white, fontSize: 24))),
-    const Center(child: Text("Stats", style: TextStyle(color: Colors.white, fontSize: 24))),
-    const Center(child: Text("Profile", style: TextStyle(color: Colors.white, fontSize: 24))),
+    const Center(
+      child: Text(
+        "AI Assistant",
+        style: TextStyle(color: Colors.white, fontSize: 24),
+      ),
+    ),
+    const Center(
+      child: Text(
+        "Favorites",
+        style: TextStyle(color: Colors.white, fontSize: 24),
+      ),
+    ),
+    const Center(
+      child: Text("Stats", style: TextStyle(color: Colors.white, fontSize: 24)),
+    ),
+    const Center(
+      child: Text(
+        "Profile",
+        style: TextStyle(color: Colors.white, fontSize: 24),
+      ),
+    ),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _mainBg,
-      body: SafeArea(
-        child: _screens[_currentIndex], // Show current screen
-      ),
+      body: AppBackground(
+        child: _screens[_currentIndex],
+      ), // Show current screen
+
       bottomNavigationBar: BottomNav(
         currentIndex: _currentIndex,
         onTap: (index) {
@@ -50,190 +68,14 @@ class _HomePageContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       children: [
         const SizedBox(height: 12),
-        // 🔷 MAIN CONTAINER — Gradient Background
-        Container(
-          margin: const EdgeInsets.only(bottom: 8),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [Color(0xFF374E8C), Color(0xFF223365)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // 📱 TOP ROW: Logo + Progress + Icons
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Image.asset(
-                        "assets/images/logo.png",
-                        height: 50,
-                      ),
-                      const SizedBox(width: 8),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      // PROGRESS CIRCLE
-                      Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          SizedBox(
-                            width: 45,
-                            height: 45,
-                            child: CircularProgressIndicator(
-                              value: 0.0,
-                              strokeWidth: 4,
-                              backgroundColor: Colors.white.withOpacity(0.15),
-                              valueColor: AlwaysStoppedAnimation(_orangePrimary),
-                            ),
-                          ),
-                          const Text(
-                            "0%",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(width: 15),
-                      // BELL ICON
-                      Container(
-                        width: 48,
-                        height: 48,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.15),
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.notifications_none,
-                          color: Colors.white,
-                          size: 24,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      // SETTINGS ICON
-                      Container(
-                        width: 52,
-                        height: 48,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.15),
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.settings_outlined,
-                          color: Colors.white,
-                          size: 24,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              // 👋 GREETING CARD
-              Container(
-                padding: const EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.15),
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                          image: AssetImage("assets/images/avatar.png"),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Hi, Alex",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            "Let’s achieve goals together!",
-                            style: TextStyle(
-                              color: Colors.white.withOpacity(0.9),
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-              // 📣 QUOTE CARD
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                child: Row(
-                  children: [
-                    Text(
-                      "“",
-                      style: TextStyle(
-                        color: _orangePrimary,
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: const Text(
-                        "The only way to achieve the impossible is to believe it is possible",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          height: 1.4,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      "”",
-                      style: TextStyle(
-                        color: _orangePrimary,
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+        MotivoxHomeHeader(
+          progress: 0.0,
+          username: "Alex",
+          quote:
+              "The only way to achieve the impossible is to believe it is possible",
         ),
         const SizedBox(height: 24),
         // 📍 MY POSITIONING SECTION
@@ -253,9 +95,16 @@ class _HomePageContent extends StatelessWidget {
               const SizedBox(height: 12),
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.04),
+                  gradient: LinearGradient(
+                    colors: [
+                      Color.fromRGBO(130, 150, 255, 0.09),
+                      Color.fromRGBO(18, 25, 61, 1),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
                   border: Border.all(
                     color: Colors.white.withOpacity(0.29),
                     width: 1.5,
@@ -270,7 +119,10 @@ class _HomePageContent extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: _orangePrimary, width: 3),
+                        border: Border.all(
+                          color: const Color(0xFFFF9001),
+                          width: 3,
+                        ),
                       ),
                       child: Center(
                         child: Image.asset(
@@ -295,7 +147,7 @@ class _HomePageContent extends StatelessWidget {
                           ),
                         ),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: _orangePrimary,
+                          backgroundColor: const Color(0xFFFF9001),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -312,7 +164,7 @@ class _HomePageContent extends StatelessWidget {
         const SizedBox(height: 24),
         // 🌍 MY VISION FOR THE WORLD SECTION
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -337,7 +189,19 @@ class _HomePageContent extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.04),
+                  gradient: LinearGradient(
+                    colors: [
+                      Color.fromRGBO(
+                        130,
+                        150,
+                        255,
+                        0.09,
+                      ), // rgba(130,150,255,0.09)
+                      Color.fromRGBO(18, 25, 61, 1), // rgba(18, 25, 61,1)
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
                   border: Border.all(
                     color: Colors.white.withOpacity(0.29),
                     width: 1.5,
@@ -352,7 +216,10 @@ class _HomePageContent extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: _orangePrimary, width: 3),
+                        border: Border.all(
+                          color: const Color(0xFFFF9001),
+                          width: 3,
+                        ),
                       ),
                       child: Center(
                         child: Image.asset(
@@ -377,7 +244,7 @@ class _HomePageContent extends StatelessWidget {
                           ),
                         ),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: _orangePrimary,
+                          backgroundColor: const Color(0xFFFF9001),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -394,7 +261,7 @@ class _HomePageContent extends StatelessWidget {
         const SizedBox(height: 24),
         // 🚀 WHAT DRIVES ME SECTION
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -419,7 +286,19 @@ class _HomePageContent extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.04),
+                  gradient: LinearGradient(
+                    colors: [
+                      Color.fromRGBO(
+                        130,
+                        150,
+                        255,
+                        0.09,
+                      ), // rgba(130,150,255,0.09)
+                      Color.fromRGBO(18, 25, 61, 1), // rgba(18, 25, 61,1)
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
                   border: Border.all(
                     color: Colors.white.withOpacity(0.29),
                     width: 1.5,
@@ -434,7 +313,10 @@ class _HomePageContent extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: _orangePrimary, width: 3),
+                        border: Border.all(
+                          color: const Color(0xFFFF9001),
+                          width: 3,
+                        ),
                       ),
                       child: Center(
                         child: Image.asset(
@@ -459,7 +341,7 @@ class _HomePageContent extends StatelessWidget {
                           ),
                         ),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: _orangePrimary,
+                          backgroundColor: const Color(0xFFFF9001),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -480,164 +362,16 @@ class _HomePageContent extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF12193D), Color(0xFF0B1732)],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
-                  border: Border.all(
-                    color: Colors.white.withOpacity(0.15),
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          "Today’s Goals",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            "0/0, 0% Completed",
-                            style: TextStyle(
-                              color: _orangePrimary,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Container(
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: const Text(
-                          "Add Goals",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: _orangePrimary,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              _goalsRemCard(
+                title: "Today’s Goals",
+                buttonText: "Add Goals",
+                onTap: () {},
               ),
               const SizedBox(height: 16),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF12193D), Color(0xFF0B1732)],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
-                  border: Border.all(
-                    color: Colors.white.withOpacity(0.15),
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          "Reminders",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            "0/0, 0% Completed",
-                            style: TextStyle(
-                              color: _orangePrimary,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Container(
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: const Text(
-                          "Add To-Do Tasks",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: _orangePrimary,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              _goalsRemCard(
+                title: "Reminders",
+                buttonText: "Add To-Do Tasks",
+                onTap: () {},
               ),
             ],
           ),
@@ -649,144 +383,9 @@ class _HomePageContent extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF12193D), Color(0xFF0B1732)],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
-                  border: Border.all(
-                    color: Colors.white.withOpacity(0.15),
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          "Daily Productivity",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const Text(
-                          "0%",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Container(
-                      height: 6,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(3),
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 0,
-                            height: double.infinity,
-                            decoration: BoxDecoration(
-                              color: _orangePrimary,
-                              borderRadius: BorderRadius.circular(3),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              _prodCard(title: "Daily Productivity", percent: "0%"),
               const SizedBox(height: 16),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF12193D), Color(0xFF0B1732)],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
-                  border: Border.all(
-                    color: Colors.white.withOpacity(0.15),
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "My Vision Board",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            child: const Text(
-                              "Add Identity",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: _orangePrimary,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              padding: const EdgeInsets.symmetric(vertical: 14),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            child: const Text(
-                              "Add Dreams",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xFF2196F3), // fallback blue
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              padding: const EdgeInsets.symmetric(vertical: 14),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+              _visionCard(),
             ],
           ),
         ),
@@ -801,11 +400,25 @@ class _HomePageContent extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF12193D), Color(0xFF0B1732)],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
+                  gradient: LinearGradient(
+                    colors: [
+                      Color.fromRGBO(
+                        255,
+                        134,
+                        31,
+                        0.29,
+                      ), // rgba(255, 134, 31, 0.09)
+                      Color.fromRGBO(
+                        69,
+                        98,
+                        255,
+                        0.19,
+                      ), // rgba(69, 98, 255, 0.09)
+                    ],
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft,
                   ),
+
                   border: Border.all(
                     color: Colors.white.withOpacity(0.15),
                     width: 1.0,
@@ -834,16 +447,25 @@ class _HomePageContent extends StatelessWidget {
                         decoration: InputDecoration(
                           hintText: "Search emotion...",
                           hintStyle: TextStyle(
-                            color: Colors.white.withOpacity(0.6), 
+                            color: Colors.white.withOpacity(0.6),
                             fontSize: 14,
                           ),
                           filled: false,
                           fillColor: Colors.transparent,
-                          prefixIcon: Icon(Icons.search, color: Colors.white.withOpacity(0.6), size: 20),
+                          prefixIcon: Icon(
+                            Icons.search,
+                            color: Colors.white.withOpacity(0.6),
+                            size: 20,
+                          ),
                           border: InputBorder.none,
-                          contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 12,
+                          ),
                         ),
-                        style: const TextStyle(color: Colors.white, fontSize: 14),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                        ),
                         cursorColor: _orangePrimary,
                       ),
                     ),
@@ -859,11 +481,27 @@ class _HomePageContent extends StatelessWidget {
                             ),
                             child: Column(
                               children: [
-                                const Text("🙂", style: TextStyle(fontSize: 24)),
+                                const Text(
+                                  "🙂",
+                                  style: TextStyle(fontSize: 24),
+                                ),
                                 const SizedBox(height: 4),
-                                const Text("0", style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold)),
+                                const Text(
+                                  "0",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                                 const SizedBox(height: 4),
-                                const Text("Happy", style: TextStyle(color: Colors.black, fontSize: 12)),
+                                const Text(
+                                  "Happy",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 12,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -878,11 +516,27 @@ class _HomePageContent extends StatelessWidget {
                             ),
                             child: Column(
                               children: [
-                                const Text("😐", style: TextStyle(fontSize: 24)),
+                                const Text(
+                                  "😐",
+                                  style: TextStyle(fontSize: 24),
+                                ),
                                 const SizedBox(height: 4),
-                                Text("0", style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
+                                Text(
+                                  "0",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                                 const SizedBox(height: 4),
-                                Text("Neutral", style: TextStyle(color: Colors.white, fontSize: 12)),
+                                Text(
+                                  "Neutral",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -897,11 +551,27 @@ class _HomePageContent extends StatelessWidget {
                             ),
                             child: Column(
                               children: [
-                                const Text("😢", style: TextStyle(fontSize: 24)),
+                                const Text(
+                                  "😢",
+                                  style: TextStyle(fontSize: 24),
+                                ),
                                 const SizedBox(height: 4),
-                                Text("0", style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
+                                Text(
+                                  "0",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                                 const SizedBox(height: 4),
-                                Text("Sad", style: TextStyle(color: Colors.white, fontSize: 12)),
+                                Text(
+                                  "Sad",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -916,11 +586,27 @@ class _HomePageContent extends StatelessWidget {
                             ),
                             child: Column(
                               children: [
-                                const Text("😠", style: TextStyle(fontSize: 24)),
+                                const Text(
+                                  "😠",
+                                  style: TextStyle(fontSize: 24),
+                                ),
                                 const SizedBox(height: 4),
-                                Text("0", style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
+                                Text(
+                                  "0",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                                 const SizedBox(height: 4),
-                                Text("Anxious", style: TextStyle(color: Colors.white, fontSize: 12)),
+                                Text(
+                                  "Anxious",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -935,15 +621,26 @@ class _HomePageContent extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text("See More", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                            const Text(
+                              "See More",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                             const SizedBox(width: 8),
-                            Icon(Icons.arrow_drop_down, color: Colors.white, size: 20),
+                            Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.white,
+                              size: 20,
+                            ),
                           ],
                         ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFF2196F3),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(20),
                           ),
                           padding: const EdgeInsets.symmetric(vertical: 14),
                         ),
@@ -955,21 +652,39 @@ class _HomePageContent extends StatelessWidget {
                       height: 50,
                       decoration: BoxDecoration(
                         color: _orangePrimary,
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(20),
                       ),
                       child: Row(
                         children: [
-                          Text("“", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+                          Text(
+                            "“",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                           const SizedBox(width: 5),
                           Expanded(
                             child: Text(
                               "Keep shining, your positivity is contagious!",
-                              style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
                               textAlign: TextAlign.center,
                             ),
                           ),
                           const SizedBox(width: 5),
-                          Text("”", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
+                          Text(
+                            "”",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -983,4 +698,239 @@ class _HomePageContent extends StatelessWidget {
       ],
     );
   }
+}
+
+/* ----------  shared card builder  ---------- */
+Widget _goalsRemCard({
+  required String title,
+  required String buttonText,
+  required VoidCallback onTap,
+}) {
+  const orange = Color(0xFFFF9001);
+  return Container(
+    width: double.infinity,
+    padding: const EdgeInsets.all(16),
+    decoration: BoxDecoration(
+      gradient: LinearGradient(
+        colors: [
+          Color.fromRGBO(255, 134, 31, 0.29), // rgba(255, 134, 31, 0.09)
+          Color.fromRGBO(69, 98, 255, 0.19), // rgba(69, 98, 255, 0.09)
+        ],
+        begin: Alignment.topRight,
+        end: Alignment.bottomLeft,
+      ),
+      border: Border.all(color: Colors.white.withOpacity(0.15), width: 1),
+      borderRadius: BorderRadius.circular(15),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                "0/0, 0%",
+                style: TextStyle(
+                  color: orange,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Container(
+          height: 4,
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(2),
+          ),
+        ),
+        const SizedBox(height: 16),
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: onTap,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: orange,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              padding: const EdgeInsets.symmetric(vertical: 14),
+            ),
+            child: Text(
+              buttonText,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+/* ----------  shared builders  ---------- */
+Widget _prodCard({required String title, required String percent}) {
+  const orange = Color(0xFFFF9001);
+  return Container(
+    width: double.infinity,
+    padding: const EdgeInsets.all(16),
+    decoration: BoxDecoration(
+      gradient: LinearGradient(
+        colors: [
+          Color.fromRGBO(255, 134, 31, 0.29), // rgba(255, 134, 31, 0.09)
+          Color.fromRGBO(69, 98, 255, 0.19), // rgba(69, 98, 255, 0.09)
+        ],
+        begin: Alignment.topRight,
+        end: Alignment.bottomLeft,
+      ),
+      border: Border.all(color: Colors.white.withOpacity(0.15), width: 1),
+      borderRadius: BorderRadius.circular(15),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            Text(
+              percent,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Container(
+          height: 6,
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(3),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _visionCard() {
+  const orange = Color(0xFFFF9001);
+  const blue = Color(0xFF2196F3);
+  return Container(
+    width: double.infinity,
+    padding: const EdgeInsets.all(16),
+    decoration: BoxDecoration(
+      gradient: LinearGradient(
+        colors: [
+          Color.fromRGBO(255, 134, 31, 0.29), // rgba(255, 134, 31, 0.09)
+          Color.fromRGBO(69, 98, 255, 0.19), // rgba(69, 98, 255, 0.09)
+        ],
+        begin: Alignment.topRight,
+        end: Alignment.bottomLeft,
+      ),
+      border: Border.all(color: Colors.white.withOpacity(0.15), width: 1),
+      borderRadius: BorderRadius.circular(15),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          "My Vision Board",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: _glossyButton(
+                text: "Add Identity",
+                gradient: const [orange, Color(0xFFFFB366)],
+                onTap: () {},
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: _glossyButton(
+                text: "Add Dreams",
+                gradient: const [blue, Color(0xFF64B5F6)],
+                onTap: () {},
+              ),
+            ),
+          ],
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _glossyButton({
+  required String text,
+  required List<Color> gradient,
+  required VoidCallback onTap,
+}) {
+  return InkWell(
+    onTap: onTap,
+    borderRadius: BorderRadius.circular(10),
+    child: Container(
+      alignment: Alignment.center,
+      padding: const EdgeInsets.symmetric(vertical: 14),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        gradient: LinearGradient(
+          colors: gradient,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: gradient.last.withOpacity(0.3),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Text(
+        text,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    ),
+  );
 }

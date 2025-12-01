@@ -1,65 +1,37 @@
+// app_gradients.dart
 import 'package:flutter/material.dart';
 import 'app_colors.dart';
 
 class AppGradients {
-  // Main Background - MUCH DARKER navy from mockup
-  static const LinearGradient mainBackground = LinearGradient(
-    begin: Alignment.topCenter,
-    end: Alignment.bottomCenter,
-    colors: [
-      Color(0xFF0F1936), // Dark navy at top
-      Color(0xFF070B1F), // Almost black navy at bottom
-    ],
+  // For splash screen - using solid color with glow overlays instead of gradient
+  static const BoxDecoration mainBackground = BoxDecoration(
+    color: AppColors.splashBackground,
   );
 
-  // Button Orange - Vibrant orange gradient
+
+  // Keep your other gradients for different parts of the app
   static const LinearGradient buttonOrange = LinearGradient(
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
     colors: [
-      Color(0xFFFF9D5C), // Lighter orange
-      Color(0xFFFF8C42), // Main orange
-    ],
-  );
-  static const LinearGradient dailygiver = LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-    colors: [
-      Color(0xFF0F1936), // deep navy base
-      Color(0xFF1B274B), // smooth mid tone (important)
-      Color(0xFFFF9D5C), // orange corner
-    ],
-    stops: [
-      0.0, // full navy start
-      0.55, // soft mid-blend (not too harsh)
-      1.0, // orange only at the far edge
+      Color(0xFFFF9D5C),
+      Color(0xFFFF8C42),
     ],
   );
 
-  static const LinearGradient dailygiver2 = LinearGradient(
-    begin: Alignment.topRight, // 🔥 Start from top-right (orange)
-    end: Alignment.bottomLeft, // 🔵 End at bottom-left (navy)
-    colors: [
-      Color(0xFFFF9D5C), // ORANGE (top-right)
-      Color(0xFF1B274B), // SOFT BLEND
-      Color(0xFF0F1936), // NAVY (bottom)
-    ],
-    stops: [
-      0.0, // Orange start
-      0.45, // Smooth transition
-      1.0, // Navy bottom
-    ],
-  );
-
-  // Glass Card Effect - Very subtle
   static const LinearGradient glassCard = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     colors: [
-      Color(0x12FFFFFF), // 7% white
-      Color(0x08FFFFFF), // 3% white
+      Color(0x12FFFFFF),
+      Color(0x08FFFFFF),
     ],
   );
 
-  // Logo Card Background - Darker version
+  static const LinearGradient logoCard = LinearGradient(
+    colors: [
+      Color(0xFF1A2745),
+      Color(0xFF131F3A),
+    ],
+  );
 }
