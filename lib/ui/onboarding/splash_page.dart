@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'welcome_page.dart';
+import 'package:motivix/cubits/splash/splash_cubit.dart';
 import '../../widgets/app_background.dart';
 
 class SplashPage extends StatefulWidget {
@@ -19,6 +20,9 @@ class _SplashPageState extends State<SplashPage>
   void initState() {
     super.initState();
 
+    final cubit = context.read<SplashCubit>();
+    cubit.loadInitialScreens();
+
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1600),
@@ -26,11 +30,11 @@ class _SplashPageState extends State<SplashPage>
 
     _fade = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
 
+    cubit.startAnimation();
     _controller.forward();
 
     Future.delayed(const Duration(seconds: 3), () {
-      if (!mounted) return;
-      context.go('/welcome');
+      cubit.triggerNavigation();
     });
   }
 
@@ -42,12 +46,19 @@ class _SplashPageState extends State<SplashPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: AppBackground(
-        child: Center(
-          child: FadeTransition(
-            opacity: _fade,
-            child: Image.asset("assets/images/logo.png", height: 200),
+    return BlocListener<SplashCubit, SplashState>(
+      listener: (context, state) {
+        if (state.navigateNext) {
+          context.go('/welcome');
+        }
+      },
+      child: Scaffold(
+        body: AppBackground(
+          child: Center(
+            child: FadeTransition(
+              opacity: _fade,
+              child: Image.asset("assets/images/logo.png", height: 200),
+            ),
           ),
         ),
       ),

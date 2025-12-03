@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:motivix/blocs/register/register_bloc.dart';
+import 'package:motivix/cubits/splash/splash_cubit.dart';
 import 'package:motivix/theme/app_theme.dart';
 import 'package:motivix/widgets/app_background.dart';
 import 'router/app_router.dart';
@@ -13,22 +16,28 @@ class MotivoxApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: const Size(390, 844),
-      minTextAdapt: true,
-      splitScreenMode: true,
-      builder: (_, _) {
-        return MaterialApp.router(
-          debugShowCheckedModeBanner: false,
-          theme: AppTheme.darkTheme,
-          routerConfig: appRouter,
-          builder: (context, child) {
-            return AppBackground(
-              child: SafeArea(top: true, bottom: false, child: child!),
-            );
-          },
-        );
-      },
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<RegisterBloc>(create: (context) => RegisterBloc()),
+        BlocProvider<SplashCubit>(create: (context) => SplashCubit()),
+      ],
+      child: ScreenUtilInit(
+        designSize: const Size(390, 844),
+        minTextAdapt: true,
+        splitScreenMode: true,
+        builder: (_, _) {
+          return MaterialApp.router(
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.darkTheme,
+            routerConfig: appRouter,
+            builder: (context, child) {
+              return AppBackground(
+                child: SafeArea(top: true, bottom: false, child: child!),
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }
