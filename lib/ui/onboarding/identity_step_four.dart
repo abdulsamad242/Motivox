@@ -119,10 +119,6 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
           decoration: BoxDecoration(
             color: Colors.white.withOpacity(0.10),
             borderRadius: BorderRadius.circular(20.r),
-            border: Border.all(
-              color: error != null ? Colors.red : Colors.white.withOpacity(0.35),
-              width: 2,
-            ),
           ),
           padding: EdgeInsets.all(14.w),
           child: Column(
@@ -182,10 +178,7 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
                   padding: EdgeInsets.only(top: 6.h),
                   child: Text(
                     error,
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontSize: 12.sp,
-                    ),
+                    style: TextStyle(color: Colors.red, fontSize: 12.sp),
                   ),
                 ),
             ],
@@ -202,103 +195,101 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: AppBackground(
-        
-          child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 16.h),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                /// HEADER
-                const AppHeader(),
-                SizedBox(height: 20.h),
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 16.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              /// HEADER
+              const AppHeader(),
+              SizedBox(height: 20.h),
 
-                /// STEP INDICATOR
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      "4/4",
-                      style: AppTypography.formLabel.copyWith(
-                        fontSize: 14.sp,
-                        color: Colors.white.withOpacity(0.85),
-                      ),
-                    ),
-                    SizedBox(height: 4.h),
-                    const StepProgress(currentStep: 4),
-                  ],
-                ),
-
-                SizedBox(height: 30.h),
-
-                /// MAIN TITLE
-                Center(
-                  child: Text(
-                    "Build Your Unique Identity",
-                    textAlign: TextAlign.center,
-                    style: AppTypography.title.copyWith(
-                      fontSize: 24.sp,
-                      fontWeight: FontWeight.w500,
+              /// STEP INDICATOR
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    "4/4",
+                    style: AppTypography.formLabel.copyWith(
+                      fontSize: 14.sp,
+                      color: Colors.white.withOpacity(0.85),
                     ),
                   ),
-                ),
-                SizedBox(height: 8.h),
+                  SizedBox(height: 4.h),
+                  const StepProgress(currentStep: 4),
+                ],
+              ),
 
-                /// SUBTITLE
-                Center(
-                  child: Text(
-                    "Define how the world sees you — your values, voice, and vision.",
-                    textAlign: TextAlign.center,
-                    style: AppTypography.subtitle.copyWith(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 18.sp,
-                      color: Colors.white.withOpacity(0.70),
-                      height: 1.4,
-                    ),
+              SizedBox(height: 30.h),
+
+              /// MAIN TITLE
+              Center(
+                child: Text(
+                  "Build Your Unique Identity",
+                  textAlign: TextAlign.center,
+                  style: AppTypography.title.copyWith(
+                    fontSize: 24.sp,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
+              ),
+              SizedBox(height: 8.h),
 
-                SizedBox(height: 32.h),
-
-                /// POSITIONING
-                _buildTextArea(
-                  title: "Positioning (How you want to be seen)",
-                  iconPath: "assets/icons/pos.png",
-                  example:
-                      "Ex: A friendly, inspiring fitness coach who helps working women stay healthy.",
-                  hint: "The trusted fitness coach for busy professionals...",
-                  controller: _positioningController,
-                  validator: _validatePositioning,
+              /// SUBTITLE
+              Center(
+                child: Text(
+                  "Define how the world sees you — your values, voice, and vision.",
+                  textAlign: TextAlign.center,
+                  style: AppTypography.subtitle.copyWith(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 18.sp,
+                    color: Colors.white.withOpacity(0.70),
+                    height: 1.4,
+                  ),
                 ),
+              ),
 
-                SizedBox(height: 35.h),
+              SizedBox(height: 32.h),
 
-                /// BRANDING
-                _buildTextArea(
-                  title: "Branding (Your identity & style)",
-                  iconPath: "assets/icons/brand.png",
-                  example:
-                      "Ex: Calm, positive, empowering tone in everything I create.",
-                  hint: "Describe your personal style and tone...",
-                  controller: _brandingController,
-                  validator: _validateBranding,
-                ),
+              /// POSITIONING
+              _buildTextArea(
+                title: "Positioning (How you want to be seen)",
+                iconPath: "assets/icons/pos.png",
+                example:
+                    "Ex: A friendly, inspiring fitness coach who helps working women stay healthy.",
+                hint: "The trusted fitness coach for busy professionals...",
+                controller: _positioningController,
+                validator: _validatePositioning,
+              ),
 
-                SizedBox(height: 35.h),
+              SizedBox(height: 35.h),
 
-                /// BUTTON
-                PrimaryButton(
-                  label: "Submit",
-                  onTap: () {
-  context.go('/why');
-}
-                ),
+              /// BRANDING
+              _buildTextArea(
+                title: "Branding (Your identity & style)",
+                iconPath: "assets/icons/brand.png",
+                example:
+                    "Ex: Calm, positive, empowering tone in everything I create.",
+                hint: "Describe your personal style and tone...",
+                controller: _brandingController,
+                validator: _validateBranding,
+              ),
 
-                SizedBox(height: 30.h),
-              ],
-            ),
+              SizedBox(height: 35.h),
+
+              /// BUTTON
+              PrimaryButton(
+                label: "Submit",
+                onTap: () {
+                  context.go('/why');
+                },
+              ),
+
+              SizedBox(height: 30.h),
+            ],
           ),
         ),
-      
+      ),
     );
   }
 }
