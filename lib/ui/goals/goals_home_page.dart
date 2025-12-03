@@ -155,7 +155,10 @@ class _GoalsPageState extends State<GoalsPage> {
                   const SizedBox(height: 16),
 
                   // Reminder Required
-                  Text("Is Reminder Required?", style: AppTypography.bodyMedium),
+                  Text(
+                    "Is Reminder Required?",
+                    style: AppTypography.bodyMedium,
+                  ),
                   const SizedBox(height: 8),
                   _reminderToggle(),
 
@@ -196,48 +199,53 @@ class _GoalsPageState extends State<GoalsPage> {
             // -------------------------------------------------
             // LIST TITLE
             // -------------------------------------------------
-           // single glass card – title + list
-_glassCard(
-  Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      //  title  moved  inside
-      Text(
-        "My Goals List",
-        style: AppTypography.sectionTitle.copyWith(fontSize: 20),
-      ),
-      const SizedBox(height: 12),
-      // goals
-      ...List.generate(goals.length, (i) {
-        return Container(
-          margin: EdgeInsets.only(bottom: i == goals.length - 1 ? 0 : 10),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.12),
-            borderRadius: BorderRadius.circular(18),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  goals[i]["title"]!,
-                  style: AppTypography.bodyMedium.copyWith(
-                    color: Colors.white,
-                    fontSize: 15,
+            // single glass card – title + list
+            _glassCard(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  //  title  moved  inside
+                  Text(
+                    "My Goals List",
+                    style: AppTypography.sectionTitle.copyWith(fontSize: 20),
                   ),
-                ),
+                  const SizedBox(height: 12),
+                  // goals
+                  ...List.generate(goals.length, (i) {
+                    return Container(
+                      margin: EdgeInsets.only(
+                        bottom: i == goals.length - 1 ? 0 : 10,
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 12,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.12),
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              goals[i]["title"]!,
+                              style: AppTypography.bodyMedium.copyWith(
+                                color: Colors.white,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          _statusChip(goals[i]["status"]!),
+                          const SizedBox(width: 8),
+                          _removeChip(() => setState(() => goals.removeAt(i))),
+                        ],
+                      ),
+                    );
+                  }),
+                ],
               ),
-              const SizedBox(width: 6),
-              _statusChip(goals[i]["status"]!),
-              const SizedBox(width: 8),
-              _removeChip(() => setState(() => goals.removeAt(i))),
-            ],
-          ),
-        );
-      }),
-    ],
-  ),
-),
+            ),
             const SizedBox(height: 44),
           ],
         ),
@@ -250,7 +258,7 @@ _glassCard(
   // ====================================================
   Widget _glassCard(Widget child) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(14,18,14,18),
+      padding: const EdgeInsets.fromLTRB(14, 18, 14, 18),
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.14),
@@ -284,8 +292,10 @@ _glassCard(
         fillColor: Colors.white.withOpacity(0.15),
         hintText: hint,
         hintStyle: AppTypography.hint.copyWith(color: Colors.white70),
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 13,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(32),
           borderSide: BorderSide(color: Colors.white.withOpacity(0.38)),
@@ -308,40 +318,47 @@ _glassCard(
   // ====================================================
   // PRIORITY PILL
   // ====================================================
-  Widget _priorityPill(String label) {
-    final bool isSelected = selectedPriority == label;
+ Widget _priorityPill(String label) {
+    final isSelected = selectedPriority == label;
 
     return GestureDetector(
       onTap: () => setState(() => selectedPriority = label),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 13),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.15),
-          borderRadius: BorderRadius.circular(26),
-          border: Border.all(
-            color: Colors.white.withOpacity(0.50),
-            width: 1.2,
-          ),
+          color: Colors.white.withOpacity(0.12),
+          borderRadius: BorderRadius.circular(22),
+          border: Border.all(color: Colors.white.withOpacity(0.9), width: 1),
         ),
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               label,
-              style: AppTypography.bodyMedium.copyWith(color: Colors.white),
+              style: AppTypography.bodyMedium.copyWith(
+                color: Colors.white,
+                fontSize: 13, // smaller text
+                fontWeight: FontWeight.w500,
+              ),
             ),
-            const SizedBox(width: 8),
+
+            const SizedBox(width: 6),
+
             Container(
-              width: 17,
-              height: 17,
+              width: 14, // smaller circle
+              height: 14,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(color: Colors.white, width: 1.3),
+                border: Border.all(
+                  color: Colors.white.withOpacity(0.9),
+                  width: 1.1,
+                ),
               ),
               child: isSelected
                   ? Center(
                       child: Container(
-                        width: 9,
-                        height: 9,
+                        width: 7,
+                        height: 7,
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.white,
@@ -356,6 +373,7 @@ _glassCard(
     );
   }
 
+
   // ====================================================
   // REMINDER TOGGLE
   // ====================================================
@@ -369,11 +387,14 @@ _glassCard(
       ),
       child: Row(
         children: [
-          Text("Yes", style: AppTypography.bodyMedium.copyWith(color: Colors.white)),
+          Text(
+            "Yes",
+            style: AppTypography.bodyMedium.copyWith(color: Colors.white),
+          ),
           const Spacer(),
           Radio<bool>(
             value: true,
-           
+
             onChanged: (_) {},
             activeColor: Colors.white,
           ),
@@ -397,9 +418,15 @@ _glassCard(
         children: [
           const Icon(Icons.music_note, color: Colors.white70),
           const SizedBox(width: 12),
-          Text("Ringtone", style: AppTypography.bodyMedium.copyWith(color: Colors.white70)),
+          Text(
+            "Ringtone",
+            style: AppTypography.bodyMedium.copyWith(color: Colors.white70),
+          ),
           const Spacer(),
-          Text(ringtone, style: AppTypography.bodyMedium.copyWith(color: Colors.white)),
+          Text(
+            ringtone,
+            style: AppTypography.bodyMedium.copyWith(color: Colors.white),
+          ),
           const SizedBox(width: 8),
           const Icon(Icons.chevron_right, color: Colors.white70),
         ],

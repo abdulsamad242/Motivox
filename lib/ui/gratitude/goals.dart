@@ -21,74 +21,71 @@ class GoalsScreen extends StatelessWidget {
 
     return Scaffold(
       body: AppBackground(
-        
-          child: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            children: [
-              const SizedBox(height: 10),
+        child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          children: [
+            const SizedBox(height: 10),
 
-              /// -----------------------------------------------------
-              ///             PERFECT MOTIVOX HEADER (REUSED)
-              /// -----------------------------------------------------
-              _buildMotivoxHeader(statusBar),
+            /// -----------------------------------------------------
+            ///             PERFECT MOTIVOX HEADER (REUSED)
+            /// -----------------------------------------------------
+            _buildMotivoxHeader(statusBar),
 
-              const SizedBox(height: 24),
+            const SizedBox(height: 24),
 
-              /// -----------------------------------------------------
-              ///            GOALS TITLE (Inside header already)
-              /// -----------------------------------------------------
+            /// -----------------------------------------------------
+            ///            GOALS TITLE (Inside header already)
+            /// -----------------------------------------------------
 
-              /// -----------------------------------------------------
-              ///                   GOALS LIST
-              /// -----------------------------------------------------
-              _goalItem(
-  title: "Reminders/Daily Tasks",
-  icon: "assets/icons/reminder.png",
-  onTap: () => context.go('/profileProgress'),
-),
+            /// -----------------------------------------------------
+            ///                   GOALS LIST
+            /// -----------------------------------------------------
+            _goalItem(
+              title: "Reminders/Daily Tasks",
+              icon: "assets/icons/reminder.png",
+              onTap: () => context.push('/sleepScreen'),
+            ),
 
-_goalItem(
-  title: "My Life Goals",
-  icon: "assets/icons/goals_home_page.png",
-  onTap: () => context.go('/goals'),
-),
+            _goalItem(
+              title: "My Life Goals",
+              icon: "assets/icons/goals_home_page.png",
+              onTap: () => context.push('/goals'),
+            ),
 
-_goalItem(
-  title: "Yearly Goals",
-  icon: "assets/icons/yearly_goals.png",
-  onTap: () => context.go('/yearly'),
-),
+            _goalItem(
+              title: "Yearly Goals",
+              icon: "assets/icons/yearly_goals.png",
+              onTap: () => context.push('/yearly'),
+            ),
 
-_goalItem(
-  title: "Quarterly Goals",
-  icon: "assets/icons/quarterly_goals.png",
-  onTap: () => context.go('/quarterly'),
-),
+            _goalItem(
+              title: "Quarterly Goals",
+              icon: "assets/icons/quarterly_goals.png",
+              onTap: () => context.push('/quarterly'),
+            ),
 
-_goalItem(
-  title: "Monthly Goals",
-  icon: "assets/icons/monthly_goals.png",
-  onTap: () => context.go('/monthly'),
-),
+            _goalItem(
+              title: "Monthly Goals",
+              icon: "assets/icons/monthly_goals.png",
+              onTap: () => context.push('/monthly'),
+            ),
 
-_goalItem(
-  title: "Weekly Goals",
-  icon: "assets/icons/weekly_goals.png",
-  onTap: () => context.go('/weekly'),
-),
+            _goalItem(
+              title: "Weekly Goals",
+              icon: "assets/icons/weekly_goals.png",
+              onTap: () => context.push('/weekly'),
+            ),
 
-_goalItem(
-  title: "Daily Goals",
-  icon: "assets/icons/daily_goals.png",
-  onTap: () => context.go('/daily'),
-),
+            _goalItem(
+              title: "Daily Goals",
+              icon: "assets/icons/daily_goals.png",
+              onTap: () => context.push('/daily'),
+            ),
 
-
-              const SizedBox(height: 50),
-            ],
-          ),
+            const SizedBox(height: 50),
+          ],
         ),
-      
+      ),
     );
   }
 
@@ -98,7 +95,7 @@ _goalItem(
   Widget _buildMotivoxHeader(double statusBar) {
     return Container(
       padding: EdgeInsets.only(
-        top: statusBar - 40,
+        top: (statusBar - 40).clamp(0, double.infinity),
         left: 10,
         right: 10,
         bottom: 12,
@@ -113,17 +110,22 @@ _goalItem(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.vertical(bottom: Radius.circular(22)),
+        borderRadius: BorderRadius.all(Radius.circular(22)),
       ),
       child: Column(
         children: [
+          SizedBox(height: 10),
+
           /// ------------------- GLASS ROW ---------------------
           ClipRRect(
             borderRadius: BorderRadius.circular(22),
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 18),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 18,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.07),
                   borderRadius: BorderRadius.circular(22),
@@ -145,7 +147,9 @@ _goalItem(
                             value: 0.60,
                             strokeWidth: 6,
                             backgroundColor: Colors.white24,
-                            valueColor: const AlwaysStoppedAnimation(Color(0xFFFF9001)),
+                            valueColor: const AlwaysStoppedAnimation(
+                              Color(0xFFFF9001),
+                            ),
                           ),
                         ),
                         Text(
@@ -236,9 +240,7 @@ _goalItem(
                   shape: BoxShape.circle,
                   color: Colors.white.withOpacity(0.18),
                 ),
-                child: Center(
-                  child: Image.asset(icon, width: 30, height: 30),
-                ),
+                child: Center(child: Image.asset(icon, width: 30, height: 30)),
               ),
 
               const SizedBox(width: 16),
@@ -255,11 +257,7 @@ _goalItem(
                 ),
               ),
 
-              Icon(
-                Icons.arrow_forward_ios,
-                color: Colors.white54,
-                size: 18,
-              ),
+              Icon(Icons.arrow_forward_ios, color: Colors.white54, size: 18),
             ],
           ),
         ),

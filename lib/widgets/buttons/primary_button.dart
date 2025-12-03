@@ -7,11 +7,7 @@ class PrimaryButton extends StatelessWidget {
   final String label;
   final VoidCallback onTap;
 
-  const PrimaryButton({
-    super.key,
-    required this.label,
-    required this.onTap,
-  });
+  const PrimaryButton({super.key, required this.label, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +21,7 @@ class PrimaryButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
           ),
         ),
-         onPressed: () => context.go('/goalsHome'),
+        onPressed: onTap,
         child: Text(label, style: AppTextStyles.button),
       ),
     );

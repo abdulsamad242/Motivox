@@ -5,7 +5,6 @@ import '../../theme/app_typography.dart';
 import '../../widgets/app_background.dart';
 import 'dart:ui';
 
-
 class ToDoListScreen extends StatefulWidget {
   const ToDoListScreen({super.key});
 
@@ -16,8 +15,9 @@ class ToDoListScreen extends StatefulWidget {
 class _ToDoListScreenState extends State<ToDoListScreen> {
   final TextEditingController taskController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
-  final TextEditingController ringtoneController =
-      TextEditingController(text: "Ringtone");
+  final TextEditingController ringtoneController = TextEditingController(
+    text: "Ringtone",
+  );
 
   String selectedPriority = "Urgent";
   String selectedReminderRequired = "No";
@@ -28,39 +28,37 @@ class _ToDoListScreenState extends State<ToDoListScreen> {
 
     return Scaffold(
       body: AppBackground(
-        
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 15),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 15),
 
-                // ======================
-                //   MOTIVOX PERFECT HEADER
-                // ======================
-                _buildMotivoxHeader(statusBar),
+              // ======================
+              //   MOTIVOX PERFECT HEADER
+              // ======================
+              _buildMotivoxHeader(statusBar),
 
-                const SizedBox(height: 22),
+              const SizedBox(height: 22),
 
-                // ======================
-                //   INTRO GLASSCARD
-                // ======================
-                _infoCard(),
+              // ======================
+              //   INTRO GLASSCARD
+              // ======================
+              _infoCard(),
 
-                const SizedBox(height: 20),
+              const SizedBox(height: 20),
 
-                // ======================
-                //   ADD TASK FORM
-                // ======================
-                _addTaskCard(),
+              // ======================
+              //   ADD TASK FORM
+              // ======================
+              _addTaskCard(),
 
-                const SizedBox(height: 30),
-              ],
-            ),
+              const SizedBox(height: 30),
+            ],
           ),
         ),
-      
+      ),
     );
   }
 
@@ -70,7 +68,8 @@ class _ToDoListScreenState extends State<ToDoListScreen> {
   Widget _buildMotivoxHeader(double statusBar) {
     return Container(
       padding: EdgeInsets.only(
-        top: statusBar - 40,
+        top: (statusBar - 40).clamp(0, double.infinity),
+
         left: 10,
         right: 10,
         bottom: 12,
@@ -85,18 +84,21 @@ class _ToDoListScreenState extends State<ToDoListScreen> {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.vertical(bottom: Radius.circular(22)),
+        borderRadius: BorderRadius.all(Radius.circular(22)),
       ),
       child: Column(
         children: [
           // Frosted Row
+          SizedBox(height: 10),
           ClipRRect(
             borderRadius: BorderRadius.circular(20),
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 16,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.08),
                   borderRadius: BorderRadius.circular(20),
@@ -119,7 +121,8 @@ class _ToDoListScreenState extends State<ToDoListScreen> {
                             strokeWidth: 5,
                             backgroundColor: Colors.white24,
                             valueColor: const AlwaysStoppedAnimation(
-                                Color(0xFFFF9001)),
+                              Color(0xFFFF9001),
+                            ),
                           ),
                         ),
                         Text(
@@ -149,8 +152,7 @@ class _ToDoListScreenState extends State<ToDoListScreen> {
           // Title glasscard
           Container(
             width: double.infinity,
-            padding:
-                const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
             decoration: BoxDecoration(
               color: Colors.white.withOpacity(0.12),
               borderRadius: BorderRadius.circular(14),
@@ -274,8 +276,7 @@ class _ToDoListScreenState extends State<ToDoListScreen> {
                 initialDate: DateTime.now(),
               );
               if (picked != null) {
-                dateController.text =
-                    DateFormat('MM/dd/yyyy').format(picked);
+                dateController.text = DateFormat('MM/dd/yyyy').format(picked);
               }
             },
           ),
@@ -306,7 +307,6 @@ class _ToDoListScreenState extends State<ToDoListScreen> {
 
           const SizedBox(height: 5),
 
-          
           _roundedDropdown(
             value: ringtoneController.text,
             items: const ["Ringtone", "Chime", "Alert"],
@@ -314,31 +314,32 @@ class _ToDoListScreenState extends State<ToDoListScreen> {
               setState(() => ringtoneController.text = v!);
             },
           ),
-const SizedBox(height: 14),
+          const SizedBox(height: 14),
 
-Center(
-  child: Text(
-    "Small daily tasks lead to big achievement - stay consistent!",
-    textAlign: TextAlign.center,
-    style: AppTypography.sectionTitle.copyWith(
-      fontSize: 14,
-      fontWeight: FontWeight.w400,
-      color: Colors.white.withOpacity(0.75),
-    ),
-  ),
-),
+          Center(
+            child: Text(
+              "Small daily tasks lead to big achievement - stay consistent!",
+              textAlign: TextAlign.center,
+              style: AppTypography.sectionTitle.copyWith(
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                color: Colors.white.withOpacity(0.75),
+              ),
+            ),
+          ),
           const SizedBox(height: 20),
 
           // SAVE BUTTON
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () => context.go('/action'),
+              onPressed: () => context.push('/todoList'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFFF9001),
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14)),
+                  borderRadius: BorderRadius.circular(14),
+                ),
                 elevation: 0,
               ),
               child: Text(
@@ -349,12 +350,8 @@ Center(
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              
             ),
-            
           ),
-          
-
         ],
       ),
     );
@@ -374,101 +371,106 @@ Center(
   //              INPUT & DROPDOWN WIDGETS
   // ======================================================
   Widget _roundedInput({
-  required TextEditingController controller,
-  required String hint,
-  IconData? icon,
-  VoidCallback? onTap,
-  bool readOnly = false,
-}) {
-  return TextField(
-    controller: controller,
-    readOnly: readOnly,
-    onTap: onTap,
-    style: AppTypography.sectionTitle.copyWith(
-      color: Colors.white,
-      fontSize: 15,
-    ),
-    decoration: InputDecoration(
-  filled: true,
-  fillColor: Colors.white.withOpacity(0.12),   // ✨ brighter field
-
-  prefixIcon: icon != null
-      ? Padding(
-          padding: const EdgeInsets.only(left: 12),
-          child: Icon(icon, color: Colors.white70, size: 20),
-        )
-      : null,
-
-  prefixIconConstraints: const BoxConstraints(minWidth: 35),
-  hintText: hint,
-  hintStyle: AppTypography.sectionTitle.copyWith(
-    color: Colors.white70,
-    fontSize: 14,
-  ),
-
-  border: OutlineInputBorder(
-    borderRadius: BorderRadius.circular(22),
-    borderSide: BorderSide(color: Colors.white.withOpacity(0.50)),
-  ),
-
-  enabledBorder: OutlineInputBorder(
-    borderRadius: BorderRadius.circular(22),
-    borderSide: BorderSide(color: Colors.white.withOpacity(0.50)),
-  ),
-
-  focusedBorder: OutlineInputBorder(
-    borderRadius: BorderRadius.circular(22),
-    borderSide: BorderSide(color: Colors.white.withOpacity(0.85), width: 1.3),
-  ),
-
-  contentPadding:
-      const EdgeInsets.symmetric(vertical: 13, horizontal: 20),
-)
-
-  );
-}
-Widget _roundedDropdown({
-  required String value,
-  required List<String> items,
-  required Function(String?) onChanged,
-}) {
-  return Container(
-  padding: const EdgeInsets.symmetric(horizontal: 14),
-  decoration: BoxDecoration(
-    color: Colors.white.withOpacity(0.12),   // ✨ added fill
-    borderRadius: BorderRadius.circular(21),
-    border: Border.all(
-      color: Colors.white.withOpacity(0.45), // slight border
-      width: 1.1,
-    ),
-  ),
-  child: DropdownButtonHideUnderline(
-    child: DropdownButton<String>(
-      isExpanded: true,
-      value: value,
-      icon: Icon(
-        Icons.keyboard_arrow_down,
-        color: Colors.white.withOpacity(0.85),
+    required TextEditingController controller,
+    required String hint,
+    IconData? icon,
+    VoidCallback? onTap,
+    bool readOnly = false,
+  }) {
+    return TextField(
+      controller: controller,
+      readOnly: readOnly,
+      onTap: onTap,
+      style: AppTypography.sectionTitle.copyWith(
+        color: Colors.white,
+        fontSize: 15,
       ),
-      dropdownColor: const Color(0xFF212A49),
-      items: items
-          .map((e) => DropdownMenuItem(
-                value: e,
-                child: Text(
-                  e,
-                  style: AppTypography.sectionTitle.copyWith(
-                    color: Colors.white,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: Colors.white.withOpacity(0.12), // ✨ brighter field
+
+        prefixIcon: icon != null
+            ? Padding(
+                padding: const EdgeInsets.only(left: 12),
+                child: Icon(icon, color: Colors.white70, size: 20),
+              )
+            : null,
+
+        prefixIconConstraints: const BoxConstraints(minWidth: 35),
+        hintText: hint,
+        hintStyle: AppTypography.sectionTitle.copyWith(
+          color: Colors.white70,
+          fontSize: 14,
+        ),
+
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(22),
+          borderSide: BorderSide(color: Colors.white.withOpacity(0.50)),
+        ),
+
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(22),
+          borderSide: BorderSide(color: Colors.white.withOpacity(0.50)),
+        ),
+
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(22),
+          borderSide: BorderSide(
+            color: Colors.white.withOpacity(0.85),
+            width: 1.3,
+          ),
+        ),
+
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 13,
+          horizontal: 20,
+        ),
+      ),
+    );
+  }
+
+  Widget _roundedDropdown({
+    required String value,
+    required List<String> items,
+    required Function(String?) onChanged,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.12), // ✨ added fill
+        borderRadius: BorderRadius.circular(21),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.45), // slight border
+          width: 1.1,
+        ),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          isExpanded: true,
+          value: value,
+          icon: Icon(
+            Icons.keyboard_arrow_down,
+            color: Colors.white.withOpacity(0.85),
+          ),
+          dropdownColor: const Color(0xFF212A49),
+          items: items
+              .map(
+                (e) => DropdownMenuItem(
+                  value: e,
+                  child: Text(
+                    e,
+                    style: AppTypography.sectionTitle.copyWith(
+                      color: Colors.white,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
-              ))
-          .toList(),
-      onChanged: (v) => onChanged(v),
-    ),
-  ),
-);
-
-}
-
+              )
+              .toList(),
+          onChanged: (v) => onChanged(v),
+        ),
+      ),
+    );
+  }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../home/bottom_nav.dart'; 
+import '../home/bottom_nav.dart';
 
 const Color _mainBg = Color(0xFF0B1732);
 const Color _cardColor = Color(0xFF212A49);
@@ -18,10 +18,27 @@ class _V1PageState extends State<MainPage> {
   // Mock screens for each tab — replace with real screens later
   final List<Widget> _screens = [
     const _HomePageContent(), // Home
-    const Center(child: Text("AI Assistant", style: TextStyle(color: Colors.white, fontSize: 24))),
-    const Center(child: Text("Favorites", style: TextStyle(color: Colors.white, fontSize: 24))),
-    const Center(child: Text("Stats", style: TextStyle(color: Colors.white, fontSize: 24))),
-    const Center(child: Text("Profile", style: TextStyle(color: Colors.white, fontSize: 24))),
+    const Center(
+      child: Text(
+        "AI Assistant",
+        style: TextStyle(color: Colors.white, fontSize: 24),
+      ),
+    ),
+    const Center(
+      child: Text(
+        "Favorites",
+        style: TextStyle(color: Colors.white, fontSize: 24),
+      ),
+    ),
+    const Center(
+      child: Text("Stats", style: TextStyle(color: Colors.white, fontSize: 24)),
+    ),
+    const Center(
+      child: Text(
+        "Profile",
+        style: TextStyle(color: Colors.white, fontSize: 24),
+      ),
+    ),
   ];
 
   @override
@@ -75,10 +92,7 @@ class _HomePageContent extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Image.asset(
-                        "assets/images/logo.png",
-                        height: 50,
-                      ),
+                      Image.asset("assets/images/logo.png", height: 50),
                       const SizedBox(width: 8),
                     ],
                   ),
@@ -95,7 +109,9 @@ class _HomePageContent extends StatelessWidget {
                               value: 0.0,
                               strokeWidth: 4,
                               backgroundColor: Colors.white.withOpacity(0.15),
-                              valueColor: AlwaysStoppedAnimation(_orangePrimary),
+                              valueColor: AlwaysStoppedAnimation(
+                                _orangePrimary,
+                              ),
                             ),
                           ),
                           const Text(
@@ -409,7 +425,6 @@ class _HomePageContent extends StatelessWidget {
         // ⚠️ Placeholder for remaining sections — you can now add them one by one!
         // For example: What Drives Me, Today's Goals, etc.
         // Keep adding sections here...
-
         const SizedBox(height: 24),
       ],
     );

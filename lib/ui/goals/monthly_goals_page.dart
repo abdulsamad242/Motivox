@@ -14,8 +14,18 @@ class MonthlyGoalsPage extends StatefulWidget {
 class _MonthlyGoalsPageState extends State<MonthlyGoalsPage> {
   // Short month labels for slider
   final List<String> months = [
-    "Jan","Feb","Mar","Apr","May","Jun",
-    "Jul","Aug","Sep","Oct","Nov","Dec"
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
 
   final goalTitleController = TextEditingController();
@@ -91,25 +101,29 @@ class _MonthlyGoalsPageState extends State<MonthlyGoalsPage> {
                   Expanded(
                     child: Text(
                       "My Monthly Goals",
-                      style:
-                          AppTypography.sectionTitle.copyWith(fontSize: 20),
+                      style: AppTypography.sectionTitle.copyWith(fontSize: 20),
                     ),
                   ),
                   ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          const Color.fromRGBO(34, 116, 240, 1), // blue
+                      backgroundColor: const Color.fromRGBO(
+                        34,
+                        116,
+                        240,
+                        1,
+                      ), // blue
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 14, vertical: 12),
+                        horizontal: 14,
+                        vertical: 12,
+                      ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
                     child: Row(
                       children: [
-                        const Icon(Icons.add,
-                            color: Colors.white, size: 18),
+                        const Icon(Icons.add, color: Colors.white, size: 18),
                         const SizedBox(width: 4),
                         Text(
                           "Add New",
@@ -120,33 +134,31 @@ class _MonthlyGoalsPageState extends State<MonthlyGoalsPage> {
                         ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
 
             const SizedBox(height: 16),
-Text(
-                    "Select the Goal from Drop Down List",
-                    style: AppTypography.bodyMedium.copyWith(
-                      color: Colors.white,
-                      fontSize: 14.5,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
+            Text(
+              "Select the Goal from Drop Down List",
+              style: AppTypography.bodyMedium.copyWith(
+                color: Colors.white,
+                fontSize: 14.5,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 8),
 
-                  // GOAL DROPDOWN
-                  _glassDropdown(
-                    items: dropDownGoals,
-                    value:
-                        dropDownValue.isEmpty ? null : dropDownValue,
-                    hint: "Suppose Making 1 CR",
-                    onChanged: (v) =>
-                        setState(() => dropDownValue = v ?? ""),
-                  ),
+            // GOAL DROPDOWN
+            _glassDropdown(
+              items: dropDownGoals,
+              value: dropDownValue.isEmpty ? null : dropDownValue,
+              hint: "Suppose Making 1 CR",
+              onChanged: (v) => setState(() => dropDownValue = v ?? ""),
+            ),
 
-                  const SizedBox(height: 14),
+            const SizedBox(height: 14),
 
             // ===================================
             // GLASS CARD: GOAL FORM
@@ -156,7 +168,7 @@ Text(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Section Header
-                  
+
                   // Goal Title
                   Text("Goal Title", style: AppTypography.bodyMedium),
                   const SizedBox(height: 6),
@@ -180,8 +192,9 @@ Text(
                         initialDate: DateTime.now(),
                       );
                       if (picked != null) {
-                        dateController.text =
-                            DateFormat('MM/dd/yyyy').format(picked);
+                        dateController.text = DateFormat(
+                          'MM/dd/yyyy',
+                        ).format(picked);
                       }
                     },
                   ),
@@ -204,8 +217,10 @@ Text(
                   const SizedBox(height: 16),
 
                   // Reminder
-                  Text("Is Reminder Required?",
-                      style: AppTypography.bodyMedium),
+                  Text(
+                    "Is Reminder Required?",
+                    style: AppTypography.bodyMedium,
+                  ),
                   const SizedBox(height: 8),
                   _reminderToggle(),
 
@@ -222,8 +237,7 @@ Text(
                     child: ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            const Color(0xFFFF861F), // orange save
+                        backgroundColor: const Color(0xFFFF861F), // orange save
                         padding: const EdgeInsets.symmetric(vertical: 15),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(13),
@@ -264,7 +278,9 @@ Text(
                     borderRadius: BorderRadius.circular(12),
                   ),
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 18, vertical: 12),
+                    horizontal: 18,
+                    vertical: 12,
+                  ),
                   child: Row(
                     children: [
                       Text(
@@ -294,13 +310,11 @@ Text(
             // HORIZONTAL MONTH SLIDER (LIKE DAY SLIDER BUT WITH MONTHS)
             // =============================
             Container(
-              padding: const EdgeInsets.symmetric(
-                  vertical: 5, horizontal: 3),
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 3),
               decoration: BoxDecoration(
                 color: Colors.white.withOpacity(0.15),
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                    color: Colors.white.withOpacity(0.15)),
+                border: Border.all(color: Colors.white.withOpacity(0.15)),
               ),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
@@ -308,12 +322,13 @@ Text(
                   children: months.map((m) {
                     final bool isSelected = selectedMonth == m;
                     return GestureDetector(
-                      onTap: () =>
-                          setState(() => selectedMonth = m),
+                      onTap: () => setState(() => selectedMonth = m),
                       child: Container(
                         margin: const EdgeInsets.only(right: 6),
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 25),
+                          horizontal: 14,
+                          vertical: 25,
+                        ),
                         decoration: BoxDecoration(
                           color: isSelected
                               ? const Color.fromRGBO(34, 116, 240, 1)
@@ -346,8 +361,7 @@ Text(
                 children: [
                   Text(
                     "My Monthly Goals List",
-                    style: AppTypography.sectionTitle
-                        .copyWith(fontSize: 20),
+                    style: AppTypography.sectionTitle.copyWith(fontSize: 20),
                   ),
                   const SizedBox(height: 14),
                   Column(
@@ -355,7 +369,9 @@ Text(
                       return Container(
                         margin: const EdgeInsets.only(bottom: 10),
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 10),
+                          horizontal: 12,
+                          vertical: 10,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.15),
                           borderRadius: BorderRadius.circular(18),
@@ -375,9 +391,7 @@ Text(
                             _statusChip(monthlyGoals[i]["status"]!),
                             const SizedBox(width: 8),
                             _removeChip(() {
-                              setState(
-                                () => monthlyGoals.removeAt(i),
-                              );
+                              setState(() => monthlyGoals.removeAt(i));
                             }),
                           ],
                         ),
@@ -421,8 +435,7 @@ Text(
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.15),
         borderRadius: BorderRadius.circular(25),
-        border: Border.all(
-            color: Colors.white.withOpacity(0.38), width: 1.1),
+        border: Border.all(color: Colors.white.withOpacity(0.38), width: 1.1),
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
@@ -431,18 +444,15 @@ Text(
           value: value,
           hint: Text(
             hint,
-            style:
-                AppTypography.hint.copyWith(color: Colors.white70),
+            style: AppTypography.hint.copyWith(color: Colors.white70),
           ),
-          icon: const Icon(Icons.keyboard_arrow_down,
-              color: Colors.white70),
+          icon: const Icon(Icons.keyboard_arrow_down, color: Colors.white70),
           items: items.map((e) {
             return DropdownMenuItem(
               value: e,
               child: Text(
                 e,
-                style: AppTypography.bodyMedium
-                    .copyWith(color: Colors.white),
+                style: AppTypography.bodyMedium.copyWith(color: Colors.white),
               ),
             );
           }).toList(),
@@ -474,14 +484,14 @@ Text(
         filled: true,
         fillColor: Colors.white.withOpacity(0.15),
         hintText: hint,
-        hintStyle:
-            AppTypography.hint.copyWith(color: Colors.white60),
+        hintStyle: AppTypography.hint.copyWith(color: Colors.white60),
         contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16, vertical: 13),
+          horizontal: 16,
+          vertical: 13,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
-          borderSide:
-              BorderSide(color: Colors.white.withOpacity(0.40)),
+          borderSide: BorderSide(color: Colors.white.withOpacity(0.40)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
@@ -492,52 +502,53 @@ Text(
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
-          borderSide:
-              BorderSide(color: Colors.white.withOpacity(0.38)),
+          borderSide: BorderSide(color: Colors.white.withOpacity(0.38)),
         ),
       ),
     );
   }
 
-  Widget _priorityPill(String label) {
+ Widget _priorityPill(String label) {
     final isSelected = selectedPriority == label;
+
     return GestureDetector(
       onTap: () => setState(() => selectedPriority = label),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 13),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.15),
-          borderRadius: BorderRadius.circular(25),
-          border: Border.all(
-            color: Colors.white,
-            width: 1,
-          ),
+          color: Colors.white.withOpacity(0.12),
+          borderRadius: BorderRadius.circular(22),
+          border: Border.all(color: Colors.white.withOpacity(0.9), width: 1),
         ),
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               label,
               style: AppTypography.bodyMedium.copyWith(
                 color: Colors.white,
-                fontSize: 14.5,
+                fontSize: 13, // smaller text
+                fontWeight: FontWeight.w500,
               ),
             ),
-            const SizedBox(width: 8),
+
+            const SizedBox(width: 6),
+
             Container(
-              width: 16,
-              height: 16,
+              width: 14, // smaller circle
+              height: 14,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: Colors.white,
-                  width: 1.3,
+                  color: Colors.white.withOpacity(0.9),
+                  width: 1.1,
                 ),
               ),
               child: isSelected
                   ? Center(
                       child: Container(
-                        width: 8,
-                        height: 8,
+                        width: 7,
+                        height: 7,
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.white,
@@ -554,8 +565,7 @@ Text(
 
   Widget _reminderToggle() {
     return Container(
-      padding:
-          const EdgeInsets.symmetric(horizontal: 14, vertical: 3),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 3),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25),
         color: Colors.white.withOpacity(0.15),
@@ -574,8 +584,7 @@ Text(
           Radio<bool>(
             value: true,
             groupValue: reminderRequired,
-            onChanged: (v) =>
-                setState(() => reminderRequired = true),
+            onChanged: (v) => setState(() => reminderRequired = true),
             activeColor: const Color(0xFF2C51FC),
           ),
         ],
@@ -593,23 +602,19 @@ Text(
       ),
       child: Row(
         children: [
-          const Icon(Icons.music_note,
-              color: Colors.white54, size: 20),
+          const Icon(Icons.music_note, color: Colors.white54, size: 20),
           const SizedBox(width: 10),
           Text(
             "Ringtone",
-            style: AppTypography.bodyMedium
-                .copyWith(color: Colors.white70),
+            style: AppTypography.bodyMedium.copyWith(color: Colors.white70),
           ),
           const Spacer(),
           Text(
             ringtoneController.text,
-            style: AppTypography.bodyMedium
-                .copyWith(color: Colors.white),
+            style: AppTypography.bodyMedium.copyWith(color: Colors.white),
           ),
           const SizedBox(width: 8),
-          const Icon(Icons.chevron_right,
-              color: Colors.white70, size: 22),
+          const Icon(Icons.chevron_right, color: Colors.white70, size: 22),
         ],
       ),
     );
@@ -618,8 +623,7 @@ Text(
   Widget _statusChip(String status) {
     final c = statusColors[status]!;
     return Container(
-      padding:
-          const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: c.withOpacity(0.12),
         borderRadius: BorderRadius.circular(16),
@@ -640,8 +644,7 @@ Text(
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding:
-            const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           color: c.withOpacity(0.12),

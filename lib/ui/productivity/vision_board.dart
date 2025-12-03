@@ -10,7 +10,6 @@ const Color _lightGlass = Color.fromRGBO(255, 255, 255, 0.08);
 const Color _orangePrimary = Color(0xFFFF9001);
 const Color _buttonBlue = Color.fromRGBO(34, 116, 240, 1);
 
-
 class VisionBoardPage extends StatelessWidget {
   const VisionBoardPage({super.key});
 
@@ -18,87 +17,87 @@ class VisionBoardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: AppBackground(
-        
-          child: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            children: [
-              const SizedBox(height: 6),
+        child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          children: [
+            const SizedBox(height: 6),
 
-              /// ----------------------------
-              /// MOTIVOX REUSABLE HEADER
-              /// ----------------------------
-              const AppHeader(),
+            /// ----------------------------
+            /// MOTIVOX REUSABLE HEADER
+            /// ----------------------------
+            const AppHeader(),
 
-              const SizedBox(height: 22),
+            const SizedBox(height: 22),
 
-              /// ----------------------------
-              /// TOP ROW → ICON + TITLE
-              /// ----------------------------
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _circleIcon("assets/icons/power.png"),
+            /// ----------------------------
+            /// TOP ROW → ICON + TITLE
+            /// ----------------------------
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _circleIcon("assets/icons/power.png"),
 
-                  const SizedBox(width: 14),
+                const SizedBox(width: 14),
 
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "My Vision Board",
-                          style: AppTypography.title.copyWith(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.w500,
-                          ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "My Vision Board",
+                        style: AppTypography.title.copyWith(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w500,
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          "A Picture of who i am Becoming Confident, Powerful, and Unstoppable.",
-                          style: AppTypography.sectionTitle.copyWith(
-                            color: Colors.white.withOpacity(0.75),
-                            fontSize: 15,
-                            height: 1.2,
-                          ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        "A Picture of who i am Becoming Confident, Powerful, and Unstoppable.",
+                        style: AppTypography.sectionTitle.copyWith(
+                          color: Colors.white.withOpacity(0.75),
+                          fontSize: 15,
+                          height: 1.2,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
+            ),
 
-              const SizedBox(height: 24),
+            const SizedBox(height: 24),
 
-              /// ----------------------------
-              /// GLASS CARD 1: My Identity
-              /// ----------------------------
-              _identityCard(),
+            /// ----------------------------
+            /// GLASS CARD 1: My Identity
+            /// ----------------------------
+            _identityCard(),
 
-              const SizedBox(height: 22),
+            const SizedBox(height: 22),
 
-              /// ----------------------------
-              /// GLASS CARD 2: Dream Life
-              /// ----------------------------
-              _dreamLifeCard(context),
+            /// ----------------------------
+            /// GLASS CARD 2: Dream Life
+            /// ----------------------------
+            _dreamLifeCard(context),
 
-              const SizedBox(height: 32),
+            const SizedBox(height: 32),
 
-              /// ----------------------------
-              /// FINAL BUTTON
-              /// ----------------------------
-              _primaryButton(
-                label: "Add Your Identity",
-                icon: Icons.add,
-                color: _buttonBlue,
-                onTap: () {},
-              ),
+            /// ----------------------------
+            /// FINAL BUTTON
+            /// ----------------------------
+            _primaryButton(
+              label: "Add Your Identity",
+              icon: Icons.add,
+              color: _buttonBlue,
+              onTap: () {
+                context.push('/addIdentity');
+              },
+            ),
 
-              const SizedBox(height: 25),
-            ],
-          ),
+            const SizedBox(height: 25),
+          ],
         ),
-      
+      ),
     );
   }
 
@@ -113,9 +112,7 @@ class VisionBoardPage extends StatelessWidget {
         shape: BoxShape.circle,
         color: Colors.white.withOpacity(0.15),
       ),
-      child: Center(
-        child: Image.asset(path, width: 26, height: 26, ),
-      ),
+      child: Center(child: Image.asset(path, width: 26, height: 26)),
     );
   }
 
@@ -241,7 +238,7 @@ class VisionBoardPage extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Image.asset("assets/icons/$icon", width: 18, ),
+          Image.asset("assets/icons/$icon", width: 18),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
@@ -314,11 +311,15 @@ class VisionBoardPage extends StatelessWidget {
               Expanded(
                 child: Column(
                   children: [
-                    _dreamCard("assets/images/startup.jpg",
-                        "Build a startup that helps people grow"),
+                    _dreamCard(
+                      "assets/images/startup.jpg",
+                      "Build a startup that helps people grow",
+                    ),
                     const SizedBox(height: 10),
                     _dreamCard(
-                        "assets/images/house.jpg", "Buy my dream house"),
+                      "assets/images/house.jpg",
+                      "Buy my dream\n house",
+                    ),
                   ],
                 ),
               ),
@@ -327,9 +328,14 @@ class VisionBoardPage extends StatelessWidget {
                 child: Column(
                   children: [
                     _dreamCard(
-                        "assets/images/bmw.jpg", "I want to own a BMW car"),
+                      "assets/images/bmw.jpg",
+                      "I want to own a\n BMW car",
+                    ),
                     const SizedBox(height: 10),
-                    _dreamCard("assets/images/travel.jpg", "Travel the world"),
+                    _dreamCard(
+                      "assets/images/travel.jpg",
+                      "Travel the world \n with us",
+                    ),
                   ],
                 ),
               ),
@@ -341,11 +347,11 @@ class VisionBoardPage extends StatelessWidget {
           /// Upload Image
           _dashedCard(
             icon: Image.asset(
-          "assets/icons/cam.png", // <-- change to your actual path
-          width: 20,
-          height: 20,
-          color: Colors.white.withOpacity(0.85),
-        ),
+              "assets/icons/cam.png", // <-- change to your actual path
+              width: 20,
+              height: 20,
+              color: Colors.white.withOpacity(0.85),
+            ),
             label: "Upload a Dream Image",
             height: 120,
           ),
@@ -362,8 +368,8 @@ class VisionBoardPage extends StatelessWidget {
             label: "Save",
             color: _orangePrimary,
             onTap: () {
-  context.go('/home');
-}
+              context.go('/home');
+            },
           ),
         ],
       ),
@@ -383,8 +389,12 @@ class VisionBoardPage extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-            child: Image.asset(path,
-                height: 100, width: double.infinity, fit: BoxFit.cover),
+            child: Image.asset(
+              path,
+              height: 100,
+              width: double.infinity,
+              fit: BoxFit.cover,
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(8),
@@ -407,132 +417,131 @@ class VisionBoardPage extends StatelessWidget {
   // DASHED BORDER BOX
   // ---------------------------------------------------------
   Widget _dashedCard({
-  required Widget icon,   // <-- CHANGED from IconData to Widget
-  required String label,
-  required double height,
-}) {
-  return Container(
-    height: height,
-    decoration: BoxDecoration(
-      color: Colors.white.withOpacity(0.05),
-      borderRadius: BorderRadius.circular(20),
-    ),
-    child: CustomPaint(
-      painter: _DashedBorderPainter(radius: 20), // supports rounded corners
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            icon, // <-- now this can be Image.asset
-            const SizedBox(height: 8),
-            Text(
-              label,
-              style: AppTypography.sectionTitle.copyWith(
-                color: Colors.white,
-                fontSize: 15,
+    required Widget icon, // <-- CHANGED from IconData to Widget
+    required String label,
+    required double height,
+  }) {
+    return Container(
+      height: height,
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.05),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: CustomPaint(
+        painter: _DashedBorderPainter(radius: 20), // supports rounded corners
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              icon, // <-- now this can be Image.asset
+              const SizedBox(height: 8),
+              Text(
+                label,
+                style: AppTypography.sectionTitle.copyWith(
+                  color: Colors.white,
+                  fontSize: 15,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 
   // ---------------------------------------------------------
   // MULTILINE DREAM INPUT
   // ---------------------------------------------------------
   Widget _dreamTextField() {
-  return Container(
-    height: 120,
-    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-    decoration: BoxDecoration(
-      color: Colors.white.withOpacity(0.07),
-      borderRadius: BorderRadius.circular(25),
-    ),
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // 🔹 Pencil Icon
-        Image.asset(
-          "assets/icons/pencil.png", // <-- change to your actual path
-          width: 20,
-          height: 20,
-          color: Colors.white.withOpacity(0.85),
-        ),
-        const SizedBox(width: 10),
+    return Container(
+      height: 120,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.07),
+        borderRadius: BorderRadius.circular(25),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // 🔹 Pencil Icon
+          Image.asset(
+            "assets/icons/pencil.png", // <-- change to your actual path
+            width: 20,
+            height: 20,
+            color: Colors.white.withOpacity(0.85),
+          ),
+          const SizedBox(width: 10),
 
-        // 🔹 TextField expands
-        Expanded(
-          child: TextField(
-            maxLines: 6,
-            style: AppTypography.sectionTitle.copyWith(
-              color: Colors.white,
-              fontSize: 14,
-            ),
-            cursorColor: Colors.white54,
-            decoration: InputDecoration(
-              hintText: "Write few lines about his/her dream.",
-              fillColor: Colors.transparent,
-              filled: false,
-              hintStyle: AppTypography.sectionTitle.copyWith(
-                color: Colors.white54,
-                fontSize: 14, // 🔥 smaller hint size
+          // 🔹 TextField expands
+          Expanded(
+            child: TextField(
+              maxLines: 6,
+              style: AppTypography.sectionTitle.copyWith(
+                color: Colors.white,
+                fontSize: 14,
               ),
-              border: InputBorder.none,
-              isCollapsed: true, // makes the text align perfectly
+              cursorColor: Colors.white54,
+              decoration: InputDecoration(
+                hintText: "Write few lines about his/her dream.",
+                fillColor: Colors.transparent,
+                filled: false,
+                hintStyle: AppTypography.sectionTitle.copyWith(
+                  color: Colors.white54,
+                  fontSize: 14, // 🔥 smaller hint size
+                ),
+                border: InputBorder.none,
+                isCollapsed: true, // makes the text align perfectly
+              ),
             ),
           ),
-        ),
-      ],
-    ),
-  );
-}
+        ],
+      ),
+    );
+  }
 
   // ---------------------------------------------------------
   // BUTTON
   // ---------------------------------------------------------
   Widget _primaryButton({
-  required String label,
-  required Color color,
-  IconData? icon,
-  required VoidCallback onTap,
-}) {
-  return SizedBox(
-    width: double.infinity, // 🔥 Full width
-    child: ElevatedButton(
-      onPressed: onTap,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: color,
-        elevation: 0,
-        padding: const EdgeInsets.symmetric(vertical: 15),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
+    required String label,
+    required Color color,
+    IconData? icon,
+    required VoidCallback onTap,
+  }) {
+    return SizedBox(
+      width: double.infinity, // 🔥 Full width
+      child: ElevatedButton(
+        onPressed: onTap,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: color,
+          elevation: 0,
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment:
+              MainAxisAlignment.center, // 🔥 Center the text/icon
+          children: [
+            if (icon != null) ...[
+              Icon(icon, color: Colors.white, size: 20),
+              const SizedBox(width: 8),
+            ],
+            Text(
+              label,
+              style: AppTypography.sectionTitle.copyWith(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
         ),
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center, // 🔥 Center the text/icon
-        children: [
-          if (icon != null) ...[
-            Icon(icon, color: Colors.white, size: 20),
-            const SizedBox(width: 8),
-          ],
-          Text(
-            label,
-            style: AppTypography.sectionTitle.copyWith(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
-}
-
+    );
+  }
 }
 
 /// Custom Painter for Dashed Border

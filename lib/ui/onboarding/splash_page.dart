@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'welcome_page.dart';
 import '../../widgets/app_background.dart';
+
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
 
@@ -22,19 +24,13 @@ class _SplashPageState extends State<SplashPage>
       duration: const Duration(milliseconds: 1600),
     );
 
-    _fade = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeIn,
-    );
+    _fade = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
 
     _controller.forward();
 
-    Future.delayed(const Duration(seconds: 10), () {
+    Future.delayed(const Duration(seconds: 3), () {
       if (!mounted) return;
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const WelcomePage()),
-      );
+      context.go('/welcome');
     });
   }
 
@@ -47,18 +43,14 @@ class _SplashPageState extends State<SplashPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-  body: AppBackground(
-    child: Center(
-      child: FadeTransition(
-        opacity: _fade,
-        child: Image.asset(
-          "assets/images/logo.png",
-          height: 200,
+      body: AppBackground(
+        child: Center(
+          child: FadeTransition(
+            opacity: _fade,
+            child: Image.asset("assets/images/logo.png", height: 200),
+          ),
         ),
       ),
-    ),
-  ),
-);
-
+    );
   }
 }

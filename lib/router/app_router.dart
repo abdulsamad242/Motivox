@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:motivix/ui/home/dashboard.dart';
 
 import '../ui/home/home_page.dart';
 import 'package:motivix/ui/account/account_page.dart';
@@ -51,12 +51,9 @@ final appRouter = GoRouter(
   routes: [
     GoRoute(
       path: '/home',
-      builder: (context, state) => const HomePage(),
+      builder: (context, state) => const UserAppDashboardView(),
     ),
-    GoRoute(
-      path: '/ai',
-      builder: (context, state) => const AiBuddyPage(),
-    ),
+    GoRoute(path: '/ai', builder: (context, state) => const AiBuddyPage()),
     GoRoute(
       path: '/account',
       builder: (context, state) => const AccountScreen(),
@@ -129,10 +126,7 @@ final appRouter = GoRouter(
       path: '/quarterly',
       builder: (context, state) => const QuarterlyGoalsPage(),
     ),
-    GoRoute(
-      path: '/goals',
-      builder: (context, state) => const GoalsPage(),
-    ),
+    GoRoute(path: '/goals', builder: (context, state) => const GoalsPage()),
     GoRoute(
       path: '/family',
       builder: (context, state) => const FamilyGratitudePage(),
@@ -169,10 +163,7 @@ final appRouter = GoRouter(
       path: '/profileProgress',
       builder: (context, state) => const ProfileProgressPage(),
     ),
-    GoRoute(
-      path: '/welcome',
-      builder: (context, state) => const WelcomePage(),
-    ),
+    GoRoute(path: '/welcome', builder: (context, state) => const WelcomePage()),
     GoRoute(
       path: '/action',
       builder: (context, state) => const ActionDashboard(),
@@ -193,10 +184,7 @@ final appRouter = GoRouter(
       path: '/vision',
       builder: (context, state) => const VisionBoardPage(),
     ),
-    GoRoute(
-      path: '/v1',
-      builder: (context, state) => const V1Page(),
-    ),
+    GoRoute(path: '/v1', builder: (context, state) => const V1Page()),
     GoRoute(
       path: '/stepone',
       builder: (context, state) => const IdentityStepOne(),
@@ -213,22 +201,9 @@ final appRouter = GoRouter(
       path: '/stepfour',
       builder: (context, state) => const IdentityStepFour(),
     ),
-    GoRoute(
-      path: '/why',
-      builder: (context, state) => const WhySummaryPage(),
-    ),
-    GoRoute(
-      path: '/splash',
-      builder: (context, state) => const SplashPage(),
-    ),
-    GoRoute(
-      path: '/why',
-      builder: (context, state) => const WhySummaryPage(),
-    ),
-    GoRoute(
-      path: '/splash',
-      builder: (context, state) => const SplashPage(),
-    ),
-   
+    GoRoute(path: '/why', builder: (context, state) => const WhySummaryPage()),
+    GoRoute(path: '/splash', builder: (context, state) => const SplashPage()),
+    GoRoute(path: '/why', builder: (context, state) => const WhySummaryPage()),
+    GoRoute(path: '/welcome', builder: (context, state) => const WelcomePage()),
   ],
 );

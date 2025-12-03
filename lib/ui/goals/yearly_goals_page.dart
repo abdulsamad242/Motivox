@@ -91,10 +91,11 @@ class _YearlyGoalsPageState extends State<YearlyGoalsPage> {
                   ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          const Color.fromRGBO(34, 116, 240, 1),
+                      backgroundColor: const Color.fromRGBO(34, 116, 240, 1),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 14, vertical: 12),
+                        horizontal: 14,
+                        vertical: 12,
+                      ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -112,7 +113,7 @@ class _YearlyGoalsPageState extends State<YearlyGoalsPage> {
                         ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -196,8 +197,10 @@ class _YearlyGoalsPageState extends State<YearlyGoalsPage> {
                   const SizedBox(height: 16),
 
                   // Reminder
-                  Text("Is Reminder Required?",
-                      style: AppTypography.bodyMedium),
+                  Text(
+                    "Is Reminder Required?",
+                    style: AppTypography.bodyMedium,
+                  ),
                   const SizedBox(height: 8),
                   _reminderToggle(),
 
@@ -240,84 +243,88 @@ class _YearlyGoalsPageState extends State<YearlyGoalsPage> {
             // YEAR SLIDER SECTION (LIKE DATE SLIDER, BUT YEARS)
             // =============================
             Row(
-            children: [Text(
-                        "Yearly Goals",
-                        style: AppTypography.sectionTitle.copyWith(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+              children: [
+                Text(
+                  "Yearly Goals",
+                  style: AppTypography.sectionTitle.copyWith(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const Spacer(),
+                Container(
+                  decoration: BoxDecoration(
+                    color: const Color.fromRGBO(34, 116, 240, 1),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 17,
+                    vertical: 10,
+                  ),
+                  child: Row(
+                    children: [
+                      Text(
+                        selectedYear.toString(),
+                        style: AppTypography.button.copyWith(
+                          fontSize: 15,
+                          color: Colors.white,
                         ),
                       ),
-                      const Spacer(),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: const Color.fromRGBO(34, 116, 240, 1),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 17, vertical: 10),
-                        child: Row(
-                          children: [
-                            Text(
-                              selectedYear.toString(),
-                              style: AppTypography.button.copyWith(
-                                fontSize: 15,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Image.asset('assets/icons/calendar-2.png', width: 18, height: 18,)
-                          ],
-                        ),
+                      const SizedBox(width: 8),
+                      Image.asset(
+                        'assets/icons/calendar-2.png',
+                        width: 18,
+                        height: 18,
                       ),
-                      const SizedBox(height: 12),
-            ],
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
+              ],
             ),
             const SizedBox(height: 15),
-                  // HORIZONTAL YEAR SELECTOR (same structure as date slider)
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 5, horizontal: 3),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.15),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: Colors.white.withOpacity(0.15),
+            // HORIZONTAL YEAR SELECTOR (same structure as date slider)
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 3),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: Colors.white.withOpacity(0.15)),
+              ),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: years.map((year) {
+                    final bool isSelected = year == selectedYear;
+                    return GestureDetector(
+                      onTap: () => setState(() => selectedYear = year),
+                      child: Container(
+                        margin: const EdgeInsets.only(right: 6),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 25,
+                        ),
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? const Color.fromRGBO(34, 116, 240, 1)
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          year.toString(),
+                          style: AppTypography.bodySmall.copyWith(
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
-                    ),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: years.map((year) {
-                          final bool isSelected = year == selectedYear;
-                          return GestureDetector(
-                            onTap: () => setState(() => selectedYear = year),
-                            child: Container(
-                              margin: const EdgeInsets.only(right: 6),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 25,
-                              ),
-                              decoration: BoxDecoration(
-                                color: isSelected
-                                    ? const Color.fromRGBO(34, 116, 240, 1)
-                                    : Colors.transparent,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Text(
-                                year.toString(),
-                                style: AppTypography.bodySmall.copyWith(
-                                  fontSize: 16,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ),
-            
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
+
             const SizedBox(height: 16),
 
             // ===================================
@@ -420,8 +427,7 @@ class _YearlyGoalsPageState extends State<YearlyGoalsPage> {
               value: e,
               child: Text(
                 e,
-                style: AppTypography.bodyMedium
-                    .copyWith(color: Colors.white),
+                style: AppTypography.bodyMedium.copyWith(color: Colors.white),
               ),
             );
           }).toList(),
@@ -454,8 +460,10 @@ class _YearlyGoalsPageState extends State<YearlyGoalsPage> {
         fillColor: Colors.white.withOpacity(0.15),
         hintText: hint,
         hintStyle: AppTypography.caption.copyWith(color: Colors.white60),
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 13,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
           borderSide: BorderSide(color: Colors.white.withOpacity(0.40)),
@@ -477,43 +485,45 @@ class _YearlyGoalsPageState extends State<YearlyGoalsPage> {
 
   Widget _priorityPill(String label) {
     final isSelected = selectedPriority == label;
+
     return GestureDetector(
       onTap: () => setState(() => selectedPriority = label),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 13),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.15),
-          borderRadius: BorderRadius.circular(25),
-          border: Border.all(
-            color: Colors.white,
-            width: 1,
-          ),
+          color: Colors.white.withOpacity(0.12),
+          borderRadius: BorderRadius.circular(22),
+          border: Border.all(color: Colors.white.withOpacity(0.9), width: 1),
         ),
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               label,
               style: AppTypography.bodyMedium.copyWith(
                 color: Colors.white,
-                fontSize: 14.5,
+                fontSize: 13, // smaller text
+                fontWeight: FontWeight.w500,
               ),
             ),
-            const SizedBox(width: 8),
+
+            const SizedBox(width: 6),
+
             Container(
-              width: 16,
-              height: 16,
+              width: 14, // smaller circle
+              height: 14,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: Colors.white,
-                  width: 1.3,
+                  color: Colors.white.withOpacity(0.9),
+                  width: 1.1,
                 ),
               ),
               child: isSelected
                   ? Center(
                       child: Container(
-                        width: 8,
-                        height: 8,
+                        width: 7,
+                        height: 7,
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.white,
@@ -551,7 +561,7 @@ class _YearlyGoalsPageState extends State<YearlyGoalsPage> {
             groupValue: reminderRequired,
             onChanged: (v) => setState(() => reminderRequired = true),
             activeColor: const Color(0xFF2C51FC),
-          )
+          ),
         ],
       ),
     );
@@ -571,18 +581,15 @@ class _YearlyGoalsPageState extends State<YearlyGoalsPage> {
           const SizedBox(width: 10),
           Text(
             "Ringtone",
-            style:
-                AppTypography.bodyMedium.copyWith(color: Colors.white70),
+            style: AppTypography.bodyMedium.copyWith(color: Colors.white70),
           ),
           const Spacer(),
           Text(
             ringtoneController.text,
-            style:
-                AppTypography.bodyMedium.copyWith(color: Colors.white),
+            style: AppTypography.bodyMedium.copyWith(color: Colors.white),
           ),
           const SizedBox(width: 8),
-          const Icon(Icons.chevron_right,
-              color: Colors.white70, size: 22),
+          const Icon(Icons.chevron_right, color: Colors.white70, size: 22),
         ],
       ),
     );

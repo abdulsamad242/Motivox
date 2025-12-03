@@ -106,22 +106,26 @@ class _TaskReminderPageState extends State<TaskReminderPage> {
                 decoration: InputDecoration(
                   hintText: "Enter your task...",
                   counterText: "",
-                  hintStyle:
-                      AppTypography.hint.copyWith(color: Colors.white54),
+                  hintStyle: AppTypography.hint.copyWith(color: Colors.white54),
                   filled: true,
                   fillColor: Colors.white.withOpacity(0.10),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide:
-                        BorderSide(color: Colors.white.withOpacity(0.25)),
+                    borderSide: BorderSide(
+                      color: Colors.white.withOpacity(0.25),
+                    ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide:
-                        const BorderSide(color: Colors.white38, width: 1.4),
+                    borderSide: const BorderSide(
+                      color: Colors.white38,
+                      width: 1.4,
+                    ),
                   ),
                   contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 13, vertical: 11),
+                    horizontal: 13,
+                    vertical: 11,
+                  ),
                 ),
                 onChanged: (v) => newTask = v,
                 onSubmitted: (v) {
@@ -150,8 +154,10 @@ class _TaskReminderPageState extends State<TaskReminderPage> {
                       onPressed: () => Navigator.of(ctx).pop(),
                       child: Text(
                         "Cancel",
-                        style: AppTypography.bodySmall
-                            .copyWith(fontSize: 15.5, color: Colors.white),
+                        style: AppTypography.bodySmall.copyWith(
+                          fontSize: 15.5,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
@@ -185,7 +191,7 @@ class _TaskReminderPageState extends State<TaskReminderPage> {
                     ),
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),
@@ -239,8 +245,10 @@ class _TaskReminderPageState extends State<TaskReminderPage> {
                       onPressed: () => Navigator.of(ctx).pop(),
                       child: Text(
                         "No",
-                        style: AppTypography.bodySmall
-                            .copyWith(fontSize: 15.5, color: Colors.white),
+                        style: AppTypography.bodySmall.copyWith(
+                          fontSize: 15.5,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
@@ -272,7 +280,7 @@ class _TaskReminderPageState extends State<TaskReminderPage> {
                     ),
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),
@@ -308,8 +316,7 @@ class _TaskReminderPageState extends State<TaskReminderPage> {
 
             // HEADER: Today To Do List
             GlassCard(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
               borderRadius: 16,
               child: Row(
                 children: [
@@ -326,7 +333,11 @@ class _TaskReminderPageState extends State<TaskReminderPage> {
                     height: 38,
                     child: ElevatedButton.icon(
                       onPressed: () => context.go('/todoAdd'),
-                      icon: const Icon(Icons.add, size: 20, color: Colors.white),
+                      icon: const Icon(
+                        Icons.add,
+                        size: 20,
+                        color: Colors.white,
+                      ),
                       label: Text(
                         "Add More",
                         style: AppTypography.bodySmall.copyWith(
@@ -335,15 +346,14 @@ class _TaskReminderPageState extends State<TaskReminderPage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      
+
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF3A67F2),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(11),
                         ),
                         elevation: 0,
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: 15),
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
                       ),
                     ),
                   ),
@@ -372,12 +382,14 @@ class _TaskReminderPageState extends State<TaskReminderPage> {
                           ),
                         ),
                       ),
-                      
+
                       GestureDetector(
                         onTap: _showMonthPicker,
                         child: Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 14, vertical: 10),
+                            horizontal: 14,
+                            vertical: 10,
+                          ),
                           decoration: BoxDecoration(
                             color: const Color(0xFF3A67F2),
                             borderRadius: BorderRadius.circular(14),
@@ -392,12 +404,12 @@ class _TaskReminderPageState extends State<TaskReminderPage> {
                                 ),
                               ),
                               const SizedBox(width: 6),
-                               Image.asset(
-              'assets/icons/calendar-2.png',
-              width: 15,
-              height: 15,
-              color: Colors.white,
-            ),
+                              Image.asset(
+                                'assets/icons/calendar-2.png',
+                                width: 15,
+                                height: 15,
+                                color: Colors.white,
+                              ),
                             ],
                           ),
                         ),
@@ -469,6 +481,7 @@ class _TaskReminderPageState extends State<TaskReminderPage> {
                       },
                     ),
                   ),
+                  const SizedBox(height: 12),
 
                   // TIMELINE + TASKS
                   TaskTimeline(
@@ -485,7 +498,6 @@ class _TaskReminderPageState extends State<TaskReminderPage> {
                 ],
               ),
             ),
-
           ],
         ),
       ),
@@ -538,8 +550,7 @@ class TaskTimeline extends StatelessWidget {
                   children: [
                     if (i != 0)
                       Positioned(
-                        left:
-                            timelineLeft + boxSize / 2 - lineThickness / 2,
+                        left: timelineLeft + boxSize / 2 - lineThickness / 2,
                         top: 0,
                         child: Container(
                           width: lineThickness,
@@ -556,25 +567,27 @@ class TaskTimeline extends StatelessWidget {
                           width: boxSize,
                           height: boxSize,
                           decoration: BoxDecoration(
-                            color:
-                                isChecked ? _accentOrange : Colors.transparent,
+                            color: isChecked
+                                ? _accentOrange
+                                : Colors.transparent,
                             border: isChecked
                                 ? null
-                                : Border.all(
-                                    color: Colors.white, width: 2),
+                                : Border.all(color: Colors.white, width: 2),
                             borderRadius: BorderRadius.circular(7),
                           ),
                           child: isChecked
-                              ? const Icon(Icons.check,
-                                  color: Colors.black, size: 17)
+                              ? const Icon(
+                                  Icons.check,
+                                  color: Colors.black,
+                                  size: 17,
+                                )
                               : null,
                         ),
                       ),
                     ),
                     if (i != tasks.length - 1)
                       Positioned(
-                        left:
-                            timelineLeft + boxSize / 2 - lineThickness / 2,
+                        left: timelineLeft + boxSize / 2 - lineThickness / 2,
                         top: verticalGap / 2 + boxSize,
                         child: Container(
                           width: lineThickness,
@@ -643,42 +656,39 @@ class TaskCard extends StatelessWidget {
               maxLines: 2,
               style: AppTypography.bodySmall.copyWith(
                 color: Colors.white,
-                fontSize:
-                    MediaQuery.of(context).size.width * 0.030,
+                fontSize: MediaQuery.of(context).size.width * 0.030,
                 fontWeight: FontWeight.w500,
-                decoration:
-                    completed ? TextDecoration.lineThrough : null,
+                decoration: completed ? TextDecoration.lineThrough : null,
                 decorationColor: _accentOrange,
                 decorationThickness: 2,
               ),
             ),
           ),
           GestureDetector(
-  onTap: onEdit,
-  child: Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 6),
-    child: Image.asset(
-      "assets/icons/wr.png",
-      width: 20,
-      height: 20,
-      color: Colors.white.withOpacity(0.85), // optional tint
-    ),
-  ),
-),
+            onTap: onEdit,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 6),
+              child: Image.asset(
+                "assets/icons/wr.png",
+                width: 20,
+                height: 20,
+                color: Colors.white.withOpacity(0.85), // optional tint
+              ),
+            ),
+          ),
 
-GestureDetector(
-  onTap: onDelete,
-  child: Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 6),
-    child: Image.asset(
-      "assets/icons/de.png",
-      width: 20,
-      height: 20,
-      color: Colors.white.withOpacity(0.75), // optional tint
-    ),
-  ),
-),
-
+          GestureDetector(
+            onTap: onDelete,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 6),
+              child: Image.asset(
+                "assets/icons/de.png",
+                width: 20,
+                height: 20,
+                color: Colors.white.withOpacity(0.75), // optional tint
+              ),
+            ),
+          ),
         ],
       ),
     );

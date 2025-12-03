@@ -12,7 +12,18 @@ class DailyGoalsPage extends StatefulWidget {
 
 class _DailyGoalsPageState extends State<DailyGoalsPage> {
   final List<String> months = [
-    "January","February","March","April","May","June","July","August","September","October","November","December"
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
 
   final goalTitleController = TextEditingController();
@@ -66,7 +77,9 @@ class _DailyGoalsPageState extends State<DailyGoalsPage> {
               m,
               style: AppTypography.bodyMedium.copyWith(
                 color: m == selectedMonth ? Color(0xFF2C51FC) : Colors.white,
-                fontWeight: m == selectedMonth ? FontWeight.bold : FontWeight.w500,
+                fontWeight: m == selectedMonth
+                    ? FontWeight.bold
+                    : FontWeight.w500,
               ),
             ),
           );
@@ -93,7 +106,6 @@ class _DailyGoalsPageState extends State<DailyGoalsPage> {
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           children: [
-
             const AppHeader(),
             const SizedBox(height: 15),
 
@@ -136,9 +148,11 @@ class _DailyGoalsPageState extends State<DailyGoalsPage> {
                   ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromRGBO(34, 116, 240, 1)
-,
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                      backgroundColor: const Color.fromRGBO(34, 116, 240, 1),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 12,
+                      ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -156,31 +170,31 @@ class _DailyGoalsPageState extends State<DailyGoalsPage> {
                         ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
 
             const SizedBox(height: 16),
- Text(
-                    "Select the Goal from Drop Down List",
-                    style: AppTypography.bodyMedium.copyWith(
-                      color: Colors.white,
-                      fontSize: 14.5,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
+            Text(
+              "Select the Goal from Drop Down List",
+              style: AppTypography.bodyMedium.copyWith(
+                color: Colors.white,
+                fontSize: 14.5,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 8),
 
-                  // GOAL DROPDOWN
-                  _glassDropdown(
-                    items: dropDownGoals,
-                    value: dropDownValue.isEmpty ? null : dropDownValue,
-                    hint: "Finding a Problem you can solve",
-                    onChanged: (v) => setState(() => dropDownValue = v ?? ""),
-                  ),
+            // GOAL DROPDOWN
+            _glassDropdown(
+              items: dropDownGoals,
+              value: dropDownValue.isEmpty ? null : dropDownValue,
+              hint: "Finding a Problem you can solve",
+              onChanged: (v) => setState(() => dropDownValue = v ?? ""),
+            ),
 
-                  const SizedBox(height: 14),
+            const SizedBox(height: 14),
             // ===================================
             // GLASS CARD: GOAL FORM
             // ===================================
@@ -188,9 +202,7 @@ class _DailyGoalsPageState extends State<DailyGoalsPage> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   // Section Header
-                 
 
                   // Goal Title
                   Text("Goal Title", style: AppTypography.bodyMedium),
@@ -215,8 +227,9 @@ class _DailyGoalsPageState extends State<DailyGoalsPage> {
                         initialDate: DateTime.now(),
                       );
                       if (picked != null) {
-                        dateController.text =
-                            DateFormat('MM/dd/yyyy').format(picked);
+                        dateController.text = DateFormat(
+                          'MM/dd/yyyy',
+                        ).format(picked);
                       }
                     },
                   ),
@@ -239,7 +252,10 @@ class _DailyGoalsPageState extends State<DailyGoalsPage> {
                   const SizedBox(height: 16),
 
                   // Reminder
-                  Text("Is Reminder Required?", style: AppTypography.bodyMedium),
+                  Text(
+                    "Is Reminder Required?",
+                    style: AppTypography.bodyMedium,
+                  ),
                   const SizedBox(height: 8),
                   _reminderToggle(),
 
@@ -256,7 +272,9 @@ class _DailyGoalsPageState extends State<DailyGoalsPage> {
                     child: ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFFF861F),  // << ORANGE SAVE BUTTON
+                        backgroundColor: const Color(
+                          0xFFFF861F,
+                        ), // << ORANGE SAVE BUTTON
                         padding: const EdgeInsets.symmetric(vertical: 15),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(13),
@@ -279,113 +297,123 @@ class _DailyGoalsPageState extends State<DailyGoalsPage> {
             const SizedBox(height: 16),
 
             // =============================
-// MONTH + DATE SELECTOR (EXACT SLEEPNOTE VERSION)
-// =============================
-Row(
-  children: [
-    Text(
-      DateFormat('MMM dd, yyyy').format(
-        DateTime(
-          currentYear,
-          months.indexOf(selectedMonth) + 1,
-          selectedDay,
-        ),
-      ),
-      style: AppTypography.sectionTitle.copyWith(
-        fontSize: 20,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-    const Spacer(),
-    InkWell(
-      onTap: _showMonthSelector,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        decoration: BoxDecoration(
-          color: const Color.fromRGBO(34, 116, 240, 1),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-        child: Row(
-          children: [
-            Text(
-              selectedMonth,
-              style: AppTypography.button.copyWith(
-                fontSize: 15,
-                letterSpacing: 0.2,
-              ),
-            ),
-            const SizedBox(width: 8),
-            Image.asset(
-              'assets/icons/calendar-2.png',
-              width: 18,
-              height: 18,
-              color: Colors.white,
-            ),
-          ],
-        ),
-      ),
-    ),
-  ],
-),
-
-const SizedBox(height: 16),
-
-// =============================
-// HORIZONTAL DAY SELECTOR
-// =============================
-Container(
-  padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 3),
-  decoration: BoxDecoration(
-    color: Colors.white.withOpacity(0.15),
-    borderRadius: BorderRadius.circular(16),
-    border: Border.all(color: Colors.white.withOpacity(0.15)),
-  ),
-  child: SingleChildScrollView(
-    scrollDirection: Axis.horizontal,
-    child: Row(
-      children: List.generate(_daysInMonth(selectedMonth), (i) {
-        final int dayNum = i + 1;
-        final bool isSelected = selectedDay == dayNum;
-
-        return GestureDetector(
-          onTap: () => setState(() => selectedDay = dayNum),
-          child: Container(
-            margin: const EdgeInsets.only(right: 6),
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-            decoration: BoxDecoration(
-              color: isSelected
-                  ? const Color.fromRGBO(34, 116, 240, 1)
-                  : Colors.transparent,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Column(
+            // MONTH + DATE SELECTOR (EXACT SLEEPNOTE VERSION)
+            // =============================
+            Row(
               children: [
                 Text(
-                  dayNum.toString(),
-                  style: AppTypography.bodySmall.copyWith(
-                    fontSize: 16,
-                    color: Colors.white,
+                  DateFormat('MMM dd, yyyy').format(
+                    DateTime(
+                      currentYear,
+                      months.indexOf(selectedMonth) + 1,
+                      selectedDay,
+                    ),
+                  ),
+                  style: AppTypography.sectionTitle.copyWith(
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  DateFormat('E').format(DateTime(currentYear,
-                      months.indexOf(selectedMonth) + 1, dayNum)),
-                  style: AppTypography.caption.copyWith(
-                    color: Colors.white,
+                const Spacer(),
+                InkWell(
+                  onTap: _showMonthSelector,
+                  borderRadius: BorderRadius.circular(12),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: const Color.fromRGBO(34, 116, 240, 1),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 18,
+                      vertical: 12,
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          selectedMonth,
+                          style: AppTypography.button.copyWith(
+                            fontSize: 15,
+                            letterSpacing: 0.2,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Image.asset(
+                          'assets/icons/calendar-2.png',
+                          width: 18,
+                          height: 18,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
             ),
-          ),
-        );
-      }),
-    ),
-  ),
-),
 
+            const SizedBox(height: 16),
+
+            // =============================
+            // HORIZONTAL DAY SELECTOR
+            // =============================
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 3),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: Colors.white.withOpacity(0.15)),
+              ),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: List.generate(_daysInMonth(selectedMonth), (i) {
+                    final int dayNum = i + 1;
+                    final bool isSelected = selectedDay == dayNum;
+
+                    return GestureDetector(
+                      onTap: () => setState(() => selectedDay = dayNum),
+                      child: Container(
+                        margin: const EdgeInsets.only(right: 6),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 14,
+                        ),
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? const Color.fromRGBO(34, 116, 240, 1)
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          children: [
+                            Text(
+                              dayNum.toString(),
+                              style: AppTypography.bodySmall.copyWith(
+                                fontSize: 16,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              DateFormat('E').format(
+                                DateTime(
+                                  currentYear,
+                                  months.indexOf(selectedMonth) + 1,
+                                  dayNum,
+                                ),
+                              ),
+                              style: AppTypography.caption.copyWith(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }),
+                ),
+              ),
+            ),
 
             const SizedBox(height: 16),
 
@@ -406,7 +434,10 @@ Container(
                     children: List.generate(monthlyGoals.length, (i) {
                       return Container(
                         margin: EdgeInsets.only(bottom: 10),
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 10,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.15),
                           borderRadius: BorderRadius.circular(18),
@@ -422,7 +453,7 @@ Container(
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 5,),
+                            const SizedBox(width: 5),
                             _statusChip(monthlyGoals[i]["status"]!),
                             const SizedBox(width: 8),
                             _removeChip(() {
@@ -477,12 +508,18 @@ Container(
           isExpanded: true,
           dropdownColor: const Color(0xFF1A2445),
           value: value,
-          hint: Text(hint, style: AppTypography.hint.copyWith(color: Colors.white70)),
+          hint: Text(
+            hint,
+            style: AppTypography.hint.copyWith(color: Colors.white70),
+          ),
           icon: const Icon(Icons.keyboard_arrow_down, color: Colors.white70),
           items: items.map((e) {
             return DropdownMenuItem(
               value: e,
-              child: Text(e, style: AppTypography.bodyMedium.copyWith(color: Colors.white)),
+              child: Text(
+                e,
+                style: AppTypography.bodyMedium.copyWith(color: Colors.white),
+              ),
             );
           }).toList(),
           onChanged: onChanged,
@@ -507,7 +544,6 @@ Container(
         fontSize: 15,
       ),
       decoration: InputDecoration(
-        
         prefixIcon: icon != null
             ? Icon(icon, color: Colors.white54, size: 18)
             : null,
@@ -515,15 +551,20 @@ Container(
         fillColor: Colors.white.withOpacity(0.15),
         hintText: hint,
         hintStyle: AppTypography.hint.copyWith(color: Colors.white60),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 13,
+        ),
         border: OutlineInputBorder(
-          
           borderRadius: BorderRadius.circular(30),
           borderSide: BorderSide(color: Colors.white.withOpacity(0.40)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
-          borderSide: BorderSide(color: Colors.white.withOpacity(0.85), width: 1.3),
+          borderSide: BorderSide(
+            color: Colors.white.withOpacity(0.85),
+            width: 1.3,
+          ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
@@ -533,45 +574,47 @@ Container(
     );
   }
 
-  Widget _priorityPill(String label) {
+ Widget _priorityPill(String label) {
     final isSelected = selectedPriority == label;
+
     return GestureDetector(
       onTap: () => setState(() => selectedPriority = label),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 13),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.15),
-          borderRadius: BorderRadius.circular(25),
-          border: Border.all(
-            color: Colors.white ,
-            width: 1 ,
-          ),
+          color: Colors.white.withOpacity(0.12),
+          borderRadius: BorderRadius.circular(22),
+          border: Border.all(color: Colors.white.withOpacity(0.9), width: 1),
         ),
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               label,
               style: AppTypography.bodyMedium.copyWith(
                 color: Colors.white,
-                fontSize: 14.5,
+                fontSize: 13, // smaller text
+                fontWeight: FontWeight.w500,
               ),
             ),
-            const SizedBox(width: 8),
+
+            const SizedBox(width: 6),
+
             Container(
-              width: 16,
-              height: 16,
+              width: 14, // smaller circle
+              height: 14,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: Colors.white,
-                  width: 1.3,
+                  color: Colors.white.withOpacity(0.9),
+                  width: 1.1,
                 ),
               ),
               child: isSelected
                   ? Center(
                       child: Container(
-                        width: 8,
-                        height: 8,
+                        width: 7,
+                        height: 7,
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.white,
@@ -585,6 +628,7 @@ Container(
       ),
     );
   }
+
 
   Widget _reminderToggle() {
     return Container(
@@ -609,7 +653,7 @@ Container(
             groupValue: reminderRequired,
             onChanged: (v) => setState(() => reminderRequired = true),
             activeColor: const Color(0xFF2C51FC),
-          )
+          ),
         ],
       ),
     );
@@ -650,7 +694,6 @@ Container(
       decoration: BoxDecoration(
         color: c.withOpacity(0.12),
         borderRadius: BorderRadius.circular(16),
-       
       ),
       child: Text(
         status,
@@ -672,7 +715,6 @@ Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           color: c.withOpacity(0.12),
-         
         ),
         child: Text(
           "Remove",

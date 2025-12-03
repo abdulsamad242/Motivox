@@ -26,18 +26,11 @@ class SocialButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(23.r),
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,  // ← CENTER CONTENT
+          mainAxisAlignment: MainAxisAlignment.center, // ← CENTER CONTENT
           children: [
-            Image.asset(
-              icon,
-              height: 20.h,
-              width: 20.h,
-            ),
+            Image.asset(icon, height: 20.h, width: 20.h, fit: BoxFit.contain),
             SizedBox(width: 12.w), // perfect spacing
-            Text(
-              label,
-              style: textStyle,
-            ),
+            Text(label, style: textStyle),
           ],
         ),
       ),

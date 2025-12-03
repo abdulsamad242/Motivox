@@ -70,10 +70,7 @@ class _WeeklyGoalsPageState extends State<WeeklyGoalsPage> {
       builder: (ctx) => SimpleDialog(
         backgroundColor: const Color(0xFF1C2344),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-        title: Text(
-          "Select Month",
-          style: AppTypography.sectionTitle,
-        ),
+        title: Text("Select Month", style: AppTypography.sectionTitle),
         children: months.map((m) {
           final bool isSelected = m == selectedMonth;
           return SimpleDialogOption(
@@ -179,31 +176,31 @@ class _WeeklyGoalsPageState extends State<WeeklyGoalsPage> {
                         ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
 
             const SizedBox(height: 16),
-Text(
-                    "Select the Goal from Drop Down List",
-                    style: AppTypography.bodyMedium.copyWith(
-                      color: Colors.white,
-                      fontSize: 14.5,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
+            Text(
+              "Select the Goal from Drop Down List",
+              style: AppTypography.bodyMedium.copyWith(
+                color: Colors.white,
+                fontSize: 14.5,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 8),
 
-                  // GOAL DROPDOWN
-                  _glassDropdown(
-                    items: dropDownGoals,
-                    value: dropDownValue.isEmpty ? null : dropDownValue,
-                    hint: "Suppose Making 1 CR",
-                    onChanged: (v) => setState(() => dropDownValue = v ?? ""),
-                  ),
+            // GOAL DROPDOWN
+            _glassDropdown(
+              items: dropDownGoals,
+              value: dropDownValue.isEmpty ? null : dropDownValue,
+              hint: "Suppose Making 1 CR",
+              onChanged: (v) => setState(() => dropDownValue = v ?? ""),
+            ),
 
-                  const SizedBox(height: 14),
+            const SizedBox(height: 14),
             // ===================================
             // GLASS CARD: GOAL FORM
             // ===================================
@@ -211,8 +208,6 @@ Text(
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  
-
                   // Goal Title
                   Text("Goal Title", style: AppTypography.bodyMedium),
                   const SizedBox(height: 6),
@@ -260,7 +255,10 @@ Text(
                   const SizedBox(height: 16),
 
                   // Reminder
-                  Text("Is Reminder Required?", style: AppTypography.bodyMedium),
+                  Text(
+                    "Is Reminder Required?",
+                    style: AppTypography.bodyMedium,
+                  ),
                   const SizedBox(height: 8),
                   _reminderToggle(),
 
@@ -335,7 +333,11 @@ Text(
                           ),
                         ),
                         const SizedBox(width: 8),
-                        Image.asset('assets/icons/calendar-2.png',width: 18, height: 18,)
+                        Image.asset(
+                          'assets/icons/calendar-2.png',
+                          width: 18,
+                          height: 18,
+                        ),
                       ],
                     ),
                   ),
@@ -379,8 +381,9 @@ Text(
                           style: AppTypography.bodySmall.copyWith(
                             fontSize: 15,
                             color: Colors.white,
-                            fontWeight:
-                                isSelected ? FontWeight.bold : FontWeight.w500,
+                            fontWeight: isSelected
+                                ? FontWeight.bold
+                                : FontWeight.w500,
                           ),
                         ),
                       ),
@@ -475,10 +478,7 @@ Text(
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.15),
         borderRadius: BorderRadius.circular(25),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.38),
-          width: 1.1,
-        ),
+        border: Border.all(color: Colors.white.withOpacity(0.38), width: 1.1),
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
@@ -495,9 +495,7 @@ Text(
               value: e,
               child: Text(
                 e,
-                style: AppTypography.bodyMedium.copyWith(
-                  color: Colors.white,
-                ),
+                style: AppTypography.bodyMedium.copyWith(color: Colors.white),
               ),
             );
           }).toList(),
@@ -530,8 +528,10 @@ Text(
         fillColor: Colors.white.withOpacity(0.15),
         hintText: hint,
         hintStyle: AppTypography.hint.copyWith(color: Colors.white60),
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 13,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
           borderSide: BorderSide(color: Colors.white.withOpacity(0.40)),
@@ -545,53 +545,53 @@ Text(
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
-          borderSide: BorderSide(
-            color: Colors.white.withOpacity(0.38),
-          ),
+          borderSide: BorderSide(color: Colors.white.withOpacity(0.38)),
         ),
       ),
     );
   }
 
-  Widget _priorityPill(String label) {
+ Widget _priorityPill(String label) {
     final isSelected = selectedPriority == label;
+
     return GestureDetector(
       onTap: () => setState(() => selectedPriority = label),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 13),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.15),
-          borderRadius: BorderRadius.circular(25),
-          border: Border.all(
-            color: Colors.white,
-            width: 1,
-          ),
+          color: Colors.white.withOpacity(0.12),
+          borderRadius: BorderRadius.circular(22),
+          border: Border.all(color: Colors.white.withOpacity(0.9), width: 1),
         ),
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               label,
               style: AppTypography.bodyMedium.copyWith(
                 color: Colors.white,
-                fontSize: 14.5,
+                fontSize: 13, // smaller text
+                fontWeight: FontWeight.w500,
               ),
             ),
-            const SizedBox(width: 8),
+
+            const SizedBox(width: 6),
+
             Container(
-              width: 16,
-              height: 16,
+              width: 14, // smaller circle
+              height: 14,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: Colors.white,
-                  width: 1.3,
+                  color: Colors.white.withOpacity(0.9),
+                  width: 1.1,
                 ),
               ),
               child: isSelected
                   ? Center(
                       child: Container(
-                        width: 8,
-                        height: 8,
+                        width: 7,
+                        height: 7,
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.white,
@@ -605,6 +605,7 @@ Text(
       ),
     );
   }
+
 
   Widget _reminderToggle() {
     return Container(

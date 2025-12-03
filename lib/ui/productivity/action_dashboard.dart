@@ -6,98 +6,96 @@ import '../../theme/app_typography.dart';
 
 const Color _orangePrimary = Color.fromRGBO(255, 134, 31, 1);
 
-
 class ActionDashboard extends StatelessWidget {
   const ActionDashboard({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AppBackground(child:  Stack(
-        children: [
-          
+      body: AppBackground(
+        child: Stack(
+          children: [
+            ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+              children: [
+                const AppHeader(),
+                const SizedBox(height: 18),
 
-          ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-            children: [
-              const AppHeader(),
-              const SizedBox(height: 18),
+                _buildHeaderRow(context),
+                const SizedBox(height: 22),
 
-              _buildHeaderRow(context),
-              const SizedBox(height: 22),
+                GlassCard(
+                  padding: const EdgeInsets.all(16),
+                  child: _buildDailySummary(),
+                ),
 
-              GlassCard(
-                padding: const EdgeInsets.all(16),
-                child: _buildDailySummary(),
-              ),
+                const SizedBox(height: 24),
 
-              const SizedBox(height: 24),
+                GlassCard(
+                  padding: const EdgeInsets.all(16),
+                  child: _buildLifetimeGoals(),
+                ),
 
-              GlassCard(
-                padding: const EdgeInsets.all(16),
-                child: _buildLifetimeGoals(),
-              ),
+                const SizedBox(height: 16),
 
-              const SizedBox(height: 16),
-
-              Row(
-                children: [
-                  Expanded(
-                    child: GlassCard(
-                      padding: const EdgeInsets.all(16),
-                      child: _buildProgressCard(
-                        title: "Daily Goals\nCompletion",
-                        percentage: 50,
+                Row(
+                  children: [
+                    Expanded(
+                      child: GlassCard(
+                        padding: const EdgeInsets.all(16),
+                        child: _buildProgressCard(
+                          title: "Daily Goals\nCompletion",
+                          percentage: 50,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: GlassCard(
-                      padding: const EdgeInsets.all(16),
-                      child: _buildProgressCard(
-                        title: "Daily To Do\nTasks",
-                        percentage: 76,
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: GlassCard(
+                        padding: const EdgeInsets.all(16),
+                        child: _buildProgressCard(
+                          title: "Daily To Do\nTasks",
+                          percentage: 76,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
 
-              const SizedBox(height: 24),
+                const SizedBox(height: 24),
 
-              GlassCard(
-                padding: const EdgeInsets.all(16),
-                child: _buildProductivitySection(),
-              ),
+                GlassCard(
+                  padding: const EdgeInsets.all(16),
+                  child: _buildProductivitySection(),
+                ),
 
-              const SizedBox(height: 24),
+                const SizedBox(height: 24),
 
-              GlassCard(
-                padding: const EdgeInsets.all(16),
-                child: _buildGiverSection(),
-              ),
+                GlassCard(
+                  padding: const EdgeInsets.all(16),
+                  child: _buildGiverSection(),
+                ),
 
-              const SizedBox(height: 24),
+                const SizedBox(height: 24),
 
-              GlassCard(
-                padding: const EdgeInsets.all(16),
-                child: _buildMoodSummarySection(),
-              ),
+                GlassCard(
+                  padding: const EdgeInsets.all(16),
+                  child: _buildMoodSummarySection(),
+                ),
 
-              const SizedBox(height: 24),
+                const SizedBox(height: 24),
 
-              GlassCard(
-                padding: const EdgeInsets.all(16),
-                child: _buildSleepNoteSection(context),
-              ),
+                GlassCard(
+                  padding: const EdgeInsets.all(16),
+                  child: _buildSleepNoteSection(context),
+                ),
 
-              const SizedBox(height: 40),
-            ],
-          ),
-        ],
+                const SizedBox(height: 40),
+              ],
+            ),
+          ],
+        ),
       ),
-    ),
     );
   }
 
@@ -106,50 +104,55 @@ class ActionDashboard extends StatelessWidget {
   // ─────────────────────────────────────────────
   Widget _buildHeaderRow(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "Productivity and Action \n Dashboard",
-          style: AppTypography.sectionTitle.copyWith(
-            color: Colors.white,
-            fontSize: 24,
-            fontWeight: FontWeight.w600,
+        // ---------- LEFT TITLE ----------
+        Expanded(
+          child: Text(
+            "Productivity and Action \nDashboard",
+            style: AppTypography.sectionTitle.copyWith(
+              color: Colors.white,
+              fontSize: 22, // auto looks better and safer
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
 
-        ElevatedButton(
-  onPressed: () {},
-  style: ElevatedButton.styleFrom(
-    backgroundColor: const Color(0xFF2196F3),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(14),
-    ),
-    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
-  ),
-  child: Row(
-    mainAxisSize: MainAxisSize.min, // Important: Makes the button only as wide as its children
-    // FIX: Text and Image are now separate items in the children list.
-    children: [
-      Text(
-        "Today",
-        style: AppTypography.sectionTitle.copyWith(
-          color: Colors.white,
-          fontSize: 16,
-        ),
-      ),
-      
-      // Add a small space between the text and the icon
-      const SizedBox(width: 6), 
+        const SizedBox(width: 10),
 
-      Image.asset(
-        "assets/icons/calendar-2.png",
-        width: 20,
-        height: 20,
-        color: Colors.white,
-      ),
-    ],
-  ),
-),
+        // ---------- RESPONSIVE BUTTON ----------
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          child: ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF2196F3),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
+              ),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "Today",
+                  style: AppTypography.sectionTitle.copyWith(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Image.asset(
+                  "assets/icons/calendar-2.png",
+                  width: 20,
+                  height: 20,
+                  color: Colors.white,
+                ),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -161,14 +164,19 @@ class ActionDashboard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Daily Summary and Dashboard",
-            style: AppTypography.sectionTitle.copyWith(fontSize: 20)),
+        Text(
+          "Daily Summary and Dashboard",
+          style: AppTypography.sectionTitle.copyWith(fontSize: 20),
+        ),
         const SizedBox(height: 10),
         Text(
           "Boost your productivity and stay on track by creating your daily To Do list.",
-          style: AppTypography.bodySmall.copyWith(color: Colors.white70, fontSize: 14),
+          style: AppTypography.bodySmall.copyWith(
+            color: Colors.white70,
+            fontSize: 14,
+          ),
         ),
-        
+
         const SizedBox(height: 16),
         _bullet("Stay focused on important tasks"),
         _bullet("Manage your time effectively"),
@@ -224,9 +232,12 @@ class ActionDashboard extends StatelessWidget {
                 valueColor: const AlwaysStoppedAnimation(_orangePrimary),
               ),
             ),
-            Text("50%", style: AppTypography.sectionTitle.copyWith(fontSize: 18))
+            Text(
+              "50%",
+              style: AppTypography.sectionTitle.copyWith(fontSize: 18),
+            ),
           ],
-        )
+        ),
       ],
     );
   }
@@ -237,12 +248,14 @@ class ActionDashboard extends StatelessWidget {
   Widget _buildProgressCard({required String title, required int percentage}) {
     return Column(
       children: [
-        Text(title,
-            textAlign: TextAlign.center,
-            style: AppTypography.bodySmall.copyWith(
-              color: Colors.white,
-              fontSize: 14,
-            )),
+        Text(
+          title,
+          textAlign: TextAlign.center,
+          style: AppTypography.bodySmall.copyWith(
+            color: Colors.white,
+            fontSize: 14,
+          ),
+        ),
         const SizedBox(height: 12),
         Stack(
           alignment: Alignment.center,
@@ -280,10 +293,9 @@ class ActionDashboard extends StatelessWidget {
       children: [
         Text("Daily Productivity", style: AppTypography.sectionTitle),
         const SizedBox(height: 14),
-        ...items.map((e) => _progressRow(
-              e['label'] as String,
-              e['percent'] as int,
-            )),
+        ...items.map(
+          (e) => _progressRow(e['label'] as String, e['percent'] as int),
+        ),
       ],
     );
   }
@@ -302,11 +314,14 @@ class ActionDashboard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(label,
-                    style: AppTypography.bodySmall.copyWith(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500)),
+                Text(
+                  label,
+                  style: AppTypography.bodySmall.copyWith(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
                 const SizedBox(height: 4),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(4),
@@ -321,7 +336,10 @@ class ActionDashboard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
-          Text("$percent%", style: AppTypography.sectionTitle.copyWith(fontSize: 14)),
+          Text(
+            "$percent%",
+            style: AppTypography.sectionTitle.copyWith(fontSize: 14),
+          ),
         ],
       ),
     );
@@ -344,10 +362,9 @@ class ActionDashboard extends StatelessWidget {
       children: [
         Text("GIVER", style: AppTypography.sectionTitle),
         const SizedBox(height: 14),
-        ...items.map((e) => _progressRow(
-              e['label'] as String,
-              e['percent'] as int,
-            )),
+        ...items.map(
+          (e) => _progressRow(e['label'] as String, e['percent'] as int),
+        ),
       ],
     );
   }
@@ -356,34 +373,34 @@ class ActionDashboard extends StatelessWidget {
   // 🔶 MOOD SUMMARY
   // ─────────────────────────────────────────────
   Widget _buildMoodSummarySection() {
-  final moods = {
-    "Happy": 80,
-    "Sad": 100,
-    "Angry": 15,
-    "Anxiety": 100,
-    "Grateful": 55,
-  };
+    final moods = {
+      "Happy": 80,
+      "Sad": 100,
+      "Angry": 15,
+      "Anxiety": 100,
+      "Grateful": 55,
+    };
 
-  const double chartHeight = 220;
-  const double barWidth = 26; // thinner bars
-  const double fullBarOpacity = 0.10; // grey background bar
+    const double chartHeight = 220;
+    const double barWidth = 26; // thinner bars
+    const double fullBarOpacity = 0.10; // grey background bar
 
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: [
-      Text(
-        "Daily Mood Summary",
-        style: AppTypography.sectionTitle.copyWith(fontSize: 18),
-        textAlign: TextAlign.center,
-      ),
-      const SizedBox(height: 14),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          "Daily Mood Summary",
+          style: AppTypography.sectionTitle.copyWith(fontSize: 18),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 14),
 
-      SizedBox(
-        height: chartHeight + 25,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-             Column(
+        SizedBox(
+          height: chartHeight + 25,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: List.generate(6, (i) {
@@ -400,14 +417,13 @@ class ActionDashboard extends StatelessWidget {
                   );
                 }),
               ),
-            
-            const SizedBox(width: 8),
 
-            // CHART AREA
-            Expanded(
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  
+              const SizedBox(width: 8),
+
+              // CHART AREA
+              Expanded(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
                     return Stack(
                       children: [
                         // HORIZONTAL LINES (better aligned)
@@ -452,92 +468,88 @@ class ActionDashboard extends StatelessWidget {
                         ),
                       ],
                     );
-                  
-                },
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
 
-      const SizedBox(height: 18),
+        const SizedBox(height: 18),
 
-      // LEGEND
-      Center(
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
+        // LEGEND
+        Center(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 14,
+                height: 14,
+                decoration: BoxDecoration(
+                  color: _orangePrimary,
+                  borderRadius: BorderRadius.circular(3),
+                  border: Border.all(
+                    color: Colors.white,
+                    width: 1.4,
+                  ), // white border
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                "Emotion Type",
+                style: AppTypography.bodySmall.copyWith(
+                  color: Colors.white,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _barWithBackground({
+    required String label,
+    required int value,
+    required double width,
+    required double height,
+  }) {
+    final barHeight = (value / 100) * height;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // STACK: Grey background → Orange foreground
+        Stack(
+          alignment: Alignment.bottomCenter,
           children: [
+            // BACKGROUND BAR (grey filler)
             Container(
-              width: 14,
-              height: 14,
-              decoration: BoxDecoration(
-                color: _orangePrimary,
-                borderRadius: BorderRadius.circular(3),
-                border: Border.all(color: Colors.white, width: 1.4), // white border
-              ),
+              width: width,
+              height: height,
+              color: Colors.white.withOpacity(0.10),
             ),
-            const SizedBox(width: 8),
-            Text(
-              "Emotion Type",
-              style: AppTypography.bodySmall.copyWith(
-                color: Colors.white,
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
+
+            // ORANGE VALUE BAR
+            Container(width: width, height: barHeight, color: _orangePrimary),
           ],
         ),
-      ),
-    ],
-  );
-}
 
+        const SizedBox(height: 6),
 
-Widget _barWithBackground({
-  required String label,
-  required int value,
-  required double width,
-  required double height,
-}) {
-  final barHeight = (value / 100) * height;
-
-  return Column(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      // STACK: Grey background → Orange foreground
-      Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          // BACKGROUND BAR (grey filler)
-          Container(
-            width: width,
-            height: height,
-            color: Colors.white.withOpacity(0.10),
+        // Label
+        Text(
+          label,
+          style: AppTypography.bodySmall.copyWith(
+            color: Colors.white,
+            fontSize: 12,
           ),
-
-          // ORANGE VALUE BAR
-          Container(
-            width: width,
-            height: barHeight,
-            color: _orangePrimary,
-          ),
-        ],
-      ),
-
-      const SizedBox(height: 6),
-
-      // Label
-      Text(
-        label,
-        style: AppTypography.bodySmall.copyWith(
-          color: Colors.white,
-          fontSize: 12,
         ),
-      ),
-    ],
-  );
-}
-
+      ],
+    );
+  }
 
   // ─────────────────────────────────────────────
   // 🔶 SLEEP NOTE SECTION

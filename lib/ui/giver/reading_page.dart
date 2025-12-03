@@ -224,8 +224,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
             Container(
               width: double.infinity,
               height: 150,
-              padding:
-                  const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
                 color: Colors.white.withOpacity(0.15),
@@ -295,10 +294,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.10),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.16),
-          width: 1.1,
-        ),
+        border: Border.all(color: Colors.white.withOpacity(0.16), width: 1.1),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -367,7 +363,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
                                 "10 Min",
                                 "15 Min",
                                 "30 Min",
-                                "60 Min"
+                                "60 Min",
                               ],
                               onChanged: (v) {
                                 setState(() {
@@ -390,7 +386,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
                                 "10 Sec",
                                 "20 Sec",
                                 "30 Sec",
-                                "50 Sec"
+                                "50 Sec",
                               ],
                               onChanged: (v) {
                                 setState(() {
@@ -428,14 +424,13 @@ class _ReadingScreenState extends State<ReadingScreen> {
                       width: double.infinity,
                       height: 54,
                       child: ElevatedButton(
-                        onPressed: () => context.go('/giverMain'),
+                        onPressed: () => context.push('/productivity'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: orangeButtonColor,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 22),
+                          padding: const EdgeInsets.symmetric(horizontal: 22),
                         ),
                         child: Text(
                           "Save",
@@ -481,17 +476,11 @@ class _ImaginationCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.15),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.15),
-          width: 1.1,
-        ),
+        border: Border.all(color: Colors.white.withOpacity(0.15), width: 1.1),
       ),
       child: Text(
         text,
-        style: AppTypography.bodyMedium.copyWith(
-          fontSize: 14.6,
-          height: 1.42,
-        ),
+        style: AppTypography.bodyMedium.copyWith(fontSize: 14.6, height: 1.42),
       ),
     );
   }
@@ -521,17 +510,18 @@ class _TimerDropdown extends StatelessWidget {
         child: DropdownButton<String>(
           value: currentValue,
           isExpanded: true,
-          icon: const Icon(Icons.arrow_drop_down, color: Colors.white, size: 20),
+          icon: const Icon(
+            Icons.arrow_drop_down,
+            color: Colors.white,
+            size: 20,
+          ),
           dropdownColor: _ReadingScreenState.cardColor,
           style: AppTypography.bodySmall.copyWith(
             color: Colors.white,
             fontSize: 15,
           ),
           items: options.map((item) {
-            return DropdownMenuItem<String>(
-              value: item,
-              child: Text(item),
-            );
+            return DropdownMenuItem<String>(value: item, child: Text(item));
           }).toList(),
           onChanged: (newValue) {
             if (newValue != null) onChanged(newValue);
@@ -578,8 +568,7 @@ class ExerciseTimerButton extends StatelessWidget {
                 CircularProgressIndicator(
                   value: progress,
                   strokeWidth: 10,
-                  valueColor:
-                      const AlwaysStoppedAnimation(Color(0xFFFF8C42)),
+                  valueColor: const AlwaysStoppedAnimation(Color(0xFFFF8C42)),
                   backgroundColor: const Color(0xFF1A4EBE),
                 ),
                 Container(
@@ -590,11 +579,7 @@ class ExerciseTimerButton extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: Center(
-                    child: Icon(
-                      icon,
-                      size: 32,
-                      color: Colors.white,
-                    ),
+                    child: Icon(icon, size: 32, color: Colors.white),
                   ),
                 ),
               ],

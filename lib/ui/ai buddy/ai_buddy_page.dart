@@ -26,48 +26,47 @@ class _AiBuddyPageState extends State<AiBuddyPage> {
 
   // Replaced with your PNG icons
   final List<Suggestion> _calmDownSuggestions = [
-  Suggestion(
-    'Take Pause',
-    'Step away from what triggered your anger, even for just 2–5 minutes.',
-    'assets/icons/pause.png',
-  ),
-  Suggestion(
-    'Deep Breathing',
-    'Inhale for 4 sec, hold for 4, exhale for 6. Repeat 3–5 times.',
-    'assets/icons/deep.png',
-  ),
-  Suggestion(
-    'Move Your Body',
-    'A walk or quick stretch releases physical tension.',
-    'assets/icons/move.png',
-  ),
-  Suggestion(
-    'Write It Out',
-    'Put your thoughts on paper instead of holding them in your head.',
-    'assets/icons/write.png',
-  ),
-  Suggestion(
-    'Listen to Music',
-    'Choose calming tracks or soft instrumentals.',
-    'assets/icons/music.png',
-  ),
-  Suggestion(
-    'Talk to Someone',
-    'Share with a trusted friend instead of bottling emotions.',
-    'assets/icons/talk.png',
-  ),
-  Suggestion(
-    'Reframe the Thought',
-    'Ask: “Will this matter in 1 day, 1 month, or 1 year?”',
-    'assets/icons/refra.png',
-  ),
-  Suggestion(
-    'Drink Water',
-    'Hydration creates a quick mental reset.',
-    'assets/icons/wat.png',
-  ),
-];
-
+    Suggestion(
+      'Take Pause',
+      'Step away from what triggered your anger, even for just 2–5 minutes.',
+      'assets/icons/pause.png',
+    ),
+    Suggestion(
+      'Deep Breathing',
+      'Inhale for 4 sec, hold for 4, exhale for 6. Repeat 3–5 times.',
+      'assets/icons/deep.png',
+    ),
+    Suggestion(
+      'Move Your Body',
+      'A walk or quick stretch releases physical tension.',
+      'assets/icons/move.png',
+    ),
+    Suggestion(
+      'Write It Out',
+      'Put your thoughts on paper instead of holding them in your head.',
+      'assets/icons/write.png',
+    ),
+    Suggestion(
+      'Listen to Music',
+      'Choose calming tracks or soft instrumentals.',
+      'assets/icons/music.png',
+    ),
+    Suggestion(
+      'Talk to Someone',
+      'Share with a trusted friend instead of bottling emotions.',
+      'assets/icons/talk.png',
+    ),
+    Suggestion(
+      'Reframe the Thought',
+      'Ask: “Will this matter in 1 day, 1 month, or 1 year?”',
+      'assets/icons/refra.png',
+    ),
+    Suggestion(
+      'Drink Water',
+      'Hydration creates a quick mental reset.',
+      'assets/icons/wat.png',
+    ),
+  ];
 
   double _aiUsageProgress = 0.85;
 
@@ -77,60 +76,58 @@ class _AiBuddyPageState extends State<AiBuddyPage> {
 
     return Scaffold(
       body: AppBackground(
-        
-          child: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            children: [
-              const SizedBox(height: 10),
+        child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          children: [
+            const SizedBox(height: 10),
 
-              _buildMotivoxHeader(statusBar),
+            _buildMotivoxHeader(statusBar),
 
-              const SizedBox(height: 24),
+            const SizedBox(height: 24),
 
-              _aiBuddyIntroCard(),
+            _aiBuddyIntroCard(),
 
-              const SizedBox(height: 20),
+            const SizedBox(height: 20),
 
-              _suggestionHeaderCard(),
+            _suggestionHeaderCard(),
 
-              const SizedBox(height: 20),
+            const SizedBox(height: 20),
 
-              ..._calmDownSuggestions
-                  .map((item) => _suggestionGlassCard(item))
-                  .toList(),
+            ..._calmDownSuggestions
+                .map((item) => _suggestionGlassCard(item))
+                .toList(),
 
-              const SizedBox(height: 20),
+            const SizedBox(height: 20),
 
-              _designNote(
-                'Optional in the app: Add a “Start 2-minute calming exercise” button with breathing visuals.',
+            _designNote(
+              'Optional in the app: Add a “Start 2-minute calming exercise” button with breathing visuals.',
+            ),
+            const SizedBox(height: 14),
+            _designNote(
+              'Do you want me to design a UI card for these suggestions with icons?',
+            ),
+
+            const SizedBox(height: 20),
+
+            _aiChatSection(),
+            const SizedBox(height: 20),
+            Center(
+              child: Text(
+                "What’s on your mind today? Ask me anything to grow your career or business.",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  height: 1.4,
+                ),
               ),
-              const SizedBox(height: 14),
-              _designNote(
-                'Do you want me to design a UI card for these suggestions with icons?',
-              ),
+            ),
 
-              const SizedBox(height: 20),
-
-              _aiChatSection(),
-              const SizedBox(height: 20),
-              Center(
-  child: Text(
-    "What’s on your mind today? Ask me anything to grow your career or business.",
-    textAlign: TextAlign.center,
-    style: TextStyle(
-      color: Colors.white70,
-      fontSize: 14,
-      fontWeight: FontWeight.w400,
-      height: 1.4,
-    ),
-  ),
-),
-
-              const SizedBox(height: 30),
-            ],
-          ),
+            const SizedBox(height: 30),
+          ],
         ),
-      
+      ),
     );
   }
 
@@ -140,7 +137,8 @@ class _AiBuddyPageState extends State<AiBuddyPage> {
   Widget _buildMotivoxHeader(double statusBar) {
     return Container(
       padding: EdgeInsets.only(
-        top: statusBar - 40,
+        top: (statusBar - 40).clamp(0.0, double.infinity),
+
         left: 10,
         right: 10,
         bottom: 12,
@@ -155,16 +153,20 @@ class _AiBuddyPageState extends State<AiBuddyPage> {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.vertical(bottom: Radius.circular(22)),
+        borderRadius: BorderRadius.all(Radius.circular(22)),
       ),
       child: Column(
         children: [
+          SizedBox(height: 10),
           ClipRRect(
             borderRadius: BorderRadius.circular(22),
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 18),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 18,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.07),
                   borderRadius: BorderRadius.circular(22),
@@ -431,7 +433,7 @@ class _AiBuddyPageState extends State<AiBuddyPage> {
               Container(
                 width: 125,
                 height: 125,
-                
+
                 child: Padding(
                   padding: const EdgeInsets.all(6),
                   child: Image.asset(
@@ -502,59 +504,57 @@ class _AiBuddyPageState extends State<AiBuddyPage> {
   }
 
   Widget _chatInputField() {
-  return Container(
-    padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 12),
-    decoration: BoxDecoration(
-      color: Colors.white.withOpacity(0.10),
-      borderRadius: BorderRadius.circular(18),
-    ),
-    child: Row(
-      children: [
-        Expanded(
-          child: TextField(
-            
-            style: AppTypography.sectionTitle.copyWith(
-              color: Colors.white,
-              fontSize: 15,
-            ),
-            cursorColor: Colors.white,
-            decoration: InputDecoration(
-              hintText: "Type your question and press enter",
-              hintStyle: AppTypography.sectionTitle.copyWith(
-                color: Colors.white.withOpacity(0.65),
-                fontSize: 14,
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.10),
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              style: AppTypography.sectionTitle.copyWith(
+                color: Colors.white,
+                fontSize: 15,
               ),
-              filled: false,
-              border: InputBorder.none,
-            ),
-          ),
-        ),
-
-        /// 🔵 Circular icon like our usual style
-        GestureDetector(
-          onTap: () {
-            print("Send clicked");
-          },
-          child: Container(
-            width: 46,
-            height: 46,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white.withOpacity(0.13), // same as other icons
-            ),
-            child: Center(
-              child: Image.asset(
-                "assets/icons/send.png",
-                width: 22,
-                height: 22,
-                color: Colors.white.withOpacity(0.85), // tint for consistency
+              cursorColor: Colors.white,
+              decoration: InputDecoration(
+                hintText: "Type your question and press enter",
+                hintStyle: AppTypography.sectionTitle.copyWith(
+                  color: Colors.white.withOpacity(0.65),
+                  fontSize: 14,
+                ),
+                filled: false,
+                border: InputBorder.none,
               ),
             ),
           ),
-        ),
-      ],
-    ),
-  );
-}
 
+          /// 🔵 Circular icon like our usual style
+          GestureDetector(
+            onTap: () {
+              print("Send clicked");
+            },
+            child: Container(
+              width: 46,
+              height: 46,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withOpacity(0.13), // same as other icons
+              ),
+              child: Center(
+                child: Image.asset(
+                  "assets/icons/send.png",
+                  width: 22,
+                  height: 22,
+                  color: Colors.white.withOpacity(0.85), // tint for consistency
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

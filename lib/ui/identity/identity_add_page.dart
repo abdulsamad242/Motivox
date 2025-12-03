@@ -1,5 +1,6 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../widgets/app_background.dart';
 import '../../widgets/app_header.dart';
 import '../../theme/app_typography.dart';
@@ -99,7 +100,9 @@ class _AddIdentityPageState extends State<AddIdentityPage> {
             Column(
               children: List.generate(identities.length, (i) {
                 return Padding(
-                  padding: EdgeInsets.only(bottom: i == identities.length - 1 ? 0 : 12),
+                  padding: EdgeInsets.only(
+                    bottom: i == identities.length - 1 ? 0 : 12,
+                  ),
                   child: _identityGlassCard(i),
                 );
               }),
@@ -139,7 +142,9 @@ class _AddIdentityPageState extends State<AddIdentityPage> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  context.push('/giverMain');
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFFF9001),
                   shape: RoundedRectangleBorder(
@@ -175,9 +180,7 @@ class _AddIdentityPageState extends State<AddIdentityPage> {
       ),
       padding: const EdgeInsets.all(16),
       child: CustomPaint(
-        painter: _DashedBorderPainter(
-          borderRadius: BorderRadius.circular(14),
-        ),
+        painter: _DashedBorderPainter(borderRadius: BorderRadius.circular(14)),
         child: Container(
           height: 150,
           decoration: BoxDecoration(
@@ -188,11 +191,7 @@ class _AddIdentityPageState extends State<AddIdentityPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Image.asset(
-                  "assets/icons/cam.png",
-                  width: 40,
-                  height: 40,
-                ),
+                Image.asset("assets/icons/cam.png", width: 40, height: 40),
                 const SizedBox(height: 8),
                 Text(
                   "Upload your picture",
@@ -213,40 +212,40 @@ class _AddIdentityPageState extends State<AddIdentityPage> {
   // GLASS IDENTITY ITEM
   // ============================================================
   Widget _identityGlassCard(int i) {
-  return Container(
-    decoration: BoxDecoration(
-      color: Colors.white.withOpacity(0.15),
-      borderRadius: BorderRadius.circular(30),
-      border: Border.all(color: Colors.white.withOpacity(0.18)),
-    ),
-    child: ListTile(
-      dense: true,                       // <─ tighter vertical size
-      minLeadingWidth: 30,               // <─ reduce leading gap
-      leading: Image.asset(
-        "assets/icons/1.${i + 1}.png",
-        width: 26,                       // slightly smaller icon
-        height: 26,
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.15),
+        borderRadius: BorderRadius.circular(30),
+        border: Border.all(color: Colors.white.withOpacity(0.18)),
       ),
-      title: Text(
-        identities[i],
-        style: AppTypography.bodySmall.copyWith(
-          fontSize: 14,
-          fontWeight: FontWeight.w600,
+      child: ListTile(
+        dense: true, // <─ tighter vertical size
+        minLeadingWidth: 30, // <─ reduce leading gap
+        leading: Image.asset(
+          "assets/icons/1.${i + 1}.png",
+          width: 26, // slightly smaller icon
+          height: 26,
+        ),
+        title: Text(
+          identities[i],
+          style: AppTypography.bodySmall.copyWith(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        trailing: Image.asset(
+          "assets/icons/del.png",
+          width: 24, // smaller delete icon
+          height: 24,
+          color: Colors.white.withOpacity(0.85),
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 18,
+          vertical: 4, // <─ was 6 → now 4
         ),
       ),
-      trailing: Image.asset(
-        "assets/icons/del.png",
-        width: 24,                       // smaller delete icon
-        height: 24,
-        color: Colors.white.withOpacity(0.85),
-      ),
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 18,
-        vertical: 4,                     // <─ was 6 → now 4
-      ),
-    ),
-  );
-}
+    );
+  }
 }
 
 // ============================================================
@@ -269,8 +268,10 @@ class _IdentityInputField extends StatelessWidget {
       child: Row(
         children: [
           _IconDropdown(
-      onChanged: (idx) {/* optional */},
-    ),
+            onChanged: (idx) {
+              /* optional */
+            },
+          ),
           const SizedBox(width: 10),
           Expanded(
             child: TextField(
@@ -324,10 +325,7 @@ class _DashedBorderPainter extends CustomPainter {
     for (ui.PathMetric metric in path.computeMetrics()) {
       double dist = 0;
       while (dist < metric.length) {
-        canvas.drawPath(
-          metric.extractPath(dist, dist + dashWidth),
-          paint,
-        );
+        canvas.drawPath(metric.extractPath(dist, dist + dashWidth), paint);
         dist += dashWidth + dashSpace;
       }
     }
@@ -336,7 +334,6 @@ class _DashedBorderPainter extends CustomPainter {
   @override
   bool shouldRepaint(_) => false;
 }
-
 
 class _IconDropdown extends StatefulWidget {
   final ValueChanged<int>? onChanged;
@@ -350,8 +347,10 @@ class _IconDropdownState extends State<_IconDropdown> {
   final LayerLink _link = LayerLink();
   OverlayEntry? _entry;
   int _selected = 0; // 1.1 default
-  final List<String> _icons =
-      List.generate(5, (i) => 'assets/icons/1.${i + 1}.png');
+  final List<String> _icons = List.generate(
+    5,
+    (i) => 'assets/icons/1.${i + 1}.png',
+  );
 
   /* ----------  open / close  ---------- */
   void _toggle() {
@@ -362,7 +361,8 @@ class _IconDropdownState extends State<_IconDropdown> {
     }
 
     final render = context.findRenderObject()! as RenderBox;
-    final overlay = Overlay.of(context).context.findRenderObject()! as RenderBox;
+    final overlay =
+        Overlay.of(context).context.findRenderObject()! as RenderBox;
 
     final offset = render.localToGlobal(Offset.zero, ancestor: overlay);
     final topY = offset.dy;
@@ -430,7 +430,11 @@ class _IconDropdownState extends State<_IconDropdown> {
             children: [
               Image.asset(_icons[_selected], width: 22, height: 22),
               const SizedBox(width: 4),
-              const Icon(Icons.arrow_drop_down, color: Colors.white70, size: 16),
+              const Icon(
+                Icons.arrow_drop_down,
+                color: Colors.white70,
+                size: 16,
+              ),
             ],
           ),
         ),

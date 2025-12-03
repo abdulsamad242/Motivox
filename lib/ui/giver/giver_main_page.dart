@@ -13,85 +13,82 @@ class GiverScreen extends StatelessWidget {
 
     return Scaffold(
       body: AppBackground(
-        
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Column(
-              children: [
-                const SizedBox(height: 10),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: Column(
+            children: [
+              const SizedBox(height: 10),
 
-                // ==========================
-                //      MOTIVOX HEADER
-                // ==========================
-                _buildMotivoxHeader(statusBar),
+              // ==========================
+              //      MOTIVOX HEADER
+              // ==========================
+              _buildMotivoxHeader(statusBar),
 
-                const SizedBox(height: 30),
+              const SizedBox(height: 30),
 
-                // ==========================
-                //        GIVER CARDS
-                // ==========================
-                InkWell(
-  onTap: () => context.go('/gratitudeJournal'),
-                child:_giverCard(
+              // ==========================
+              //        GIVER CARDS
+              // ==========================
+              InkWell(
+                onTap: () => context.push('/gratitudeJournal'),
+                child: _giverCard(
                   image: 'assets/icons/giver_gratitude.png',
                   title: "G – Gratitude",
                   description:
                       "Start your day with thankfulness and focus on what’s good. It lifts your mood, calms your mind, and fills your heart with positive energy.",
                 ),
-),
-InkWell(
-  onTap: () => context.go('/imagination'),
+              ),
+              InkWell(
+                onTap: () => context.push('/imagination'),
                 child: _giverCard(
                   image: 'assets/icons/giver_imagination.png',
                   title: "I – Imagination",
                   description:
                       "Dream beyond limits — imagination fuels creativity, unlocks new ideas, and helps you see endless possibilities ahead.",
                 ),
-),
-InkWell(
-  onTap: () => context.go('/visualization'),
+              ),
+              InkWell(
+                onTap: () => context.push('/visualization'),
                 child: _giverCard(
                   image: 'assets/icons/giver_visualization.png',
                   title: "V – Visualization",
                   description:
                       "See your goals as already achieved in your mind. Believe it, your actions start creating it.",
                 ),
-),
-InkWell(
-  onTap: () => context.go('/exercise'),
-                child:_giverCard(
+              ),
+              InkWell(
+                onTap: () => context.push('/exercise'),
+                child: _giverCard(
                   image: 'assets/icons/giver_exercise.png',
                   title: "E – Exercise",
                   description:
                       "Move your body to power your mind — a few minutes of activity can renew your energy, boost, and motivation.",
                 ),
-),
-InkWell(
-  onTap: () => context.go('/reading'),
-                child:_giverCard(
-                
+              ),
+              InkWell(
+                onTap: () => context.push('/reading'),
+                child: _giverCard(
                   image: 'assets/icons/giver_reading.png',
                   title: "R – Reading",
                   description:
                       "Feed your mind with ideas and inspiration — every new page expands your thoughts and fuels your growth.",
                 ),
-                ),
-InkWell(
-  onTap: () => context.go('/sleepNote'),
-                child:_giverCard(
+              ),
+              InkWell(
+                onTap: () => context.push('/sleepNote'),
+                child: _giverCard(
                   image: 'assets/icons/giver_sleep.png',
                   title: "Sleep Note",
                   description:
                       "The best way to close your day is gratitude in your mind and peace in your heart. Write your Sleep Note to reflect, release, and rest peacefully.",
                 ),
-),
-                const SizedBox(height: 30),
-              ],
-            ),
+              ),
+              const SizedBox(height: 30),
+            ],
           ),
         ),
-      );
-    
+      ),
+    );
   }
 
   // ======================================================
@@ -100,7 +97,7 @@ InkWell(
   Widget _buildMotivoxHeader(double statusBar) {
     return Container(
       padding: EdgeInsets.only(
-        top: statusBar - 20,
+        top: (statusBar - 20).clamp(0.0, double.infinity),
         left: 10,
         right: 10,
         bottom: 12,
@@ -115,17 +112,21 @@ InkWell(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.vertical(bottom: Radius.circular(22)),
+        borderRadius: BorderRadius.all(Radius.circular(22)),
       ),
       child: Column(
         children: [
           // Frosted row
+          SizedBox(height: 10),
           ClipRRect(
             borderRadius: BorderRadius.circular(20),
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 16,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.08),
                   borderRadius: BorderRadius.circular(20),
@@ -147,7 +148,9 @@ InkWell(
                             value: 0.6,
                             strokeWidth: 5,
                             backgroundColor: Colors.white24,
-                            valueColor: const AlwaysStoppedAnimation(Color(0xFFFF9001)),
+                            valueColor: const AlwaysStoppedAnimation(
+                              Color(0xFFFF9001),
+                            ),
                           ),
                         ),
                         Text(
@@ -223,69 +226,64 @@ InkWell(
         borderRadius: BorderRadius.circular(18),
       ),
       child: Row(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: [
-    // LEFT ICON
-    Container(
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.14),
-        shape: BoxShape.circle,
-      ),
-      child: Image.asset(
-        image,
-        width: 40,
-        height: 40,
-        fit: BoxFit.contain,
-      ),
-    ),
-
-    const SizedBox(width: 14),
-
-    // TEXT + CENTERED ARROW
-    Expanded(
-      child: Stack(
-        alignment: Alignment.centerRight,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // TEXT ON THE LEFT
-          Padding(
-            padding: const EdgeInsets.only(right: 40), // space for arrow
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: AppTypography.sectionTitle.copyWith(
-                    color: Colors.white,
-                    fontSize: 17,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  description,
-                  style: AppTypography.sectionTitle.copyWith(
-                    color: Colors.white.withOpacity(0.85),
-                    fontSize: 13.8,
-                    height: 1.45,
-                  ),
-                ),
-              ],
+          // LEFT ICON
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.14),
+              shape: BoxShape.circle,
+            ),
+            child: Image.asset(
+              image,
+              width: 40,
+              height: 40,
+              fit: BoxFit.contain,
             ),
           ),
 
-          // PERFECTLY CENTER-RIGHT ARROW
-          Icon(
-            Icons.chevron_right,
-            color: Colors.white54,
-            size: 34,
+          const SizedBox(width: 14),
+
+          // TEXT + CENTERED ARROW
+          Expanded(
+            child: Stack(
+              alignment: Alignment.centerRight,
+              children: [
+                // TEXT ON THE LEFT
+                Padding(
+                  padding: const EdgeInsets.only(right: 40), // space for arrow
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: AppTypography.sectionTitle.copyWith(
+                          color: Colors.white,
+                          fontSize: 17,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        description,
+                        style: AppTypography.sectionTitle.copyWith(
+                          color: Colors.white.withOpacity(0.85),
+                          fontSize: 13.8,
+                          height: 1.45,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // PERFECTLY CENTER-RIGHT ARROW
+                Icon(Icons.chevron_right, color: Colors.white54, size: 34),
+              ],
+            ),
           ),
         ],
       ),
-    ),
-  ],
-)
-
     );
   }
 }

@@ -12,7 +12,14 @@ class QuarterlyGoalsPage extends StatefulWidget {
 }
 
 class _QuarterlyGoalsPageState extends State<QuarterlyGoalsPage> {
-  final List<String> quarters = ["QTR1", "QTR2", "QTR3", "QTR4", "QTR5", "QTR6"];
+  final List<String> quarters = [
+    "QTR1",
+    "QTR2",
+    "QTR3",
+    "QTR4",
+    "QTR5",
+    "QTR6",
+  ];
   String selectedQuarter = "QTR3";
 
   final goalTitleController = TextEditingController();
@@ -51,7 +58,6 @@ class _QuarterlyGoalsPageState extends State<QuarterlyGoalsPage> {
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           children: [
-
             const AppHeader(),
             const SizedBox(height: 15),
 
@@ -93,7 +99,10 @@ class _QuarterlyGoalsPageState extends State<QuarterlyGoalsPage> {
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromRGBO(34, 116, 240, 1),
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 12,
+                      ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -104,30 +113,34 @@ class _QuarterlyGoalsPageState extends State<QuarterlyGoalsPage> {
                         const SizedBox(width: 5),
                         Text(
                           "Add New",
-                          style: AppTypography.button.copyWith(color: Colors.white),
+                          style: AppTypography.button.copyWith(
+                            color: Colors.white,
+                          ),
                         ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
 
             const SizedBox(height: 16),
-Text(
-                    "Select the Goal from Drop Down List",
-                    style: AppTypography.bodyMedium.copyWith(
-                      color: Colors.white, fontWeight: FontWeight.w600),
-                  ),
-                  const SizedBox(height: 8),
+            Text(
+              "Select the Goal from Drop Down List",
+              style: AppTypography.bodyMedium.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 8),
 
-                  _glassDropdown(
-                    items: dropDownGoals,
-                    value: dropDownValue.isEmpty ? null : dropDownValue,
-                    hint: "Suppose Making 1 CR",
-                    onChanged: (v) => setState(() => dropDownValue = v ?? ""),
-                  ),
-const SizedBox(height: 12,),
+            _glassDropdown(
+              items: dropDownGoals,
+              value: dropDownValue.isEmpty ? null : dropDownValue,
+              hint: "Suppose Making 1 CR",
+              onChanged: (v) => setState(() => dropDownValue = v ?? ""),
+            ),
+            const SizedBox(height: 12),
             // =====================================================
             // GLASS FORM CARD
             // =====================================================
@@ -135,8 +148,6 @@ const SizedBox(height: 12,),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
-                  
                   const SizedBox(height: 14),
 
                   Text("Goal Title", style: AppTypography.bodyMedium),
@@ -160,8 +171,9 @@ const SizedBox(height: 12,),
                         lastDate: DateTime(2100),
                       );
                       if (picked != null) {
-                        dateController.text =
-                          DateFormat('MM/dd/yyyy').format(picked);
+                        dateController.text = DateFormat(
+                          'MM/dd/yyyy',
+                        ).format(picked);
                       }
                     },
                   ),
@@ -182,7 +194,10 @@ const SizedBox(height: 12,),
 
                   const SizedBox(height: 16),
 
-                  Text("Is Reminder Required?", style: AppTypography.bodyMedium),
+                  Text(
+                    "Is Reminder Required?",
+                    style: AppTypography.bodyMedium,
+                  ),
                   const SizedBox(height: 8),
                   _reminderToggle(),
 
@@ -212,17 +227,17 @@ const SizedBox(height: 12,),
                         ),
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
 
             const SizedBox(height: 18),
-Text(
-                    "QTRLY Goals",
-                    style: AppTypography.sectionTitle.copyWith(fontSize: 18),
-                  ),
-                  const SizedBox(height: 10,),
+            Text(
+              "QTRLY Goals",
+              style: AppTypography.sectionTitle.copyWith(fontSize: 18),
+            ),
+            const SizedBox(height: 10),
             // =====================================================
             // QUARTER SELECTOR (SAME STYLE AS DATE SLIDER)
             // =====================================================
@@ -230,8 +245,6 @@ Text(
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
-
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
@@ -243,11 +256,13 @@ Text(
                           child: Container(
                             margin: const EdgeInsets.only(right: 10),
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 18, vertical: 30),
+                              horizontal: 18,
+                              vertical: 30,
+                            ),
                             decoration: BoxDecoration(
                               color: isSelected
-                                ? const Color.fromRGBO(34, 116, 240, 1)
-                                : Colors.transparent,
+                                  ? const Color.fromRGBO(34, 116, 240, 1)
+                                  : Colors.transparent,
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Text(
@@ -276,7 +291,6 @@ Text(
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   Text(
                     "My Quarterly Goals List",
                     style: AppTypography.sectionTitle.copyWith(fontSize: 20),
@@ -288,7 +302,9 @@ Text(
                       return Container(
                         margin: const EdgeInsets.only(bottom: 10),
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 10),
+                          horizontal: 12,
+                          vertical: 10,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.12),
                           borderRadius: BorderRadius.circular(16),
@@ -299,7 +315,9 @@ Text(
                               child: Text(
                                 quarterlyGoals[i]["title"]!,
                                 style: AppTypography.bodyMedium.copyWith(
-                                  color: Colors.white, fontSize: 15),
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                ),
                               ),
                             ),
                             _statusChip(quarterlyGoals[i]["status"]!),
@@ -338,9 +356,10 @@ Text(
       child: child,
     );
   }
+
   Widget _gllassCard(Widget child) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(4,3,4,3),
+      padding: const EdgeInsets.fromLTRB(4, 3, 4, 3),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.15),
         borderRadius: BorderRadius.circular(16),
@@ -369,11 +388,17 @@ Text(
           dropdownColor: const Color(0xFF1A2445),
           value: value,
           icon: const Icon(Icons.keyboard_arrow_down, color: Colors.white70),
-          hint: Text(hint, style: AppTypography.hint.copyWith(color: Colors.white70)),
+          hint: Text(
+            hint,
+            style: AppTypography.hint.copyWith(color: Colors.white70),
+          ),
           items: items.map((e) {
             return DropdownMenuItem(
               value: e,
-              child: Text(e, style: AppTypography.bodyMedium.copyWith(color: Colors.white)),
+              child: Text(
+                e,
+                style: AppTypography.bodyMedium.copyWith(color: Colors.white),
+              ),
             );
           }).toList(),
           onChanged: onChanged,
@@ -402,7 +427,10 @@ Text(
         fillColor: Colors.white.withOpacity(0.15),
         hintText: hint,
         hintStyle: AppTypography.hint.copyWith(color: Colors.white60),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 13,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
           borderSide: BorderSide(color: Colors.white.withOpacity(0.38)),
@@ -419,46 +447,61 @@ Text(
     );
   }
 
-  Widget _priorityPill(String label) {
+ Widget _priorityPill(String label) {
     final isSelected = selectedPriority == label;
+
     return GestureDetector(
       onTap: () => setState(() => selectedPriority = label),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.15),
-          borderRadius: BorderRadius.circular(25),
-          border: Border.all(color: Colors.white, width: 1),
+          color: Colors.white.withOpacity(0.12),
+          borderRadius: BorderRadius.circular(22),
+          border: Border.all(color: Colors.white.withOpacity(0.9), width: 1),
         ),
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Text(label,
-                style: AppTypography.bodyMedium
-                    .copyWith(color: Colors.white, fontSize: 14)),
-            const SizedBox(width: 10),
+            Text(
+              label,
+              style: AppTypography.bodyMedium.copyWith(
+                color: Colors.white,
+                fontSize: 13, // smaller text
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+
+            const SizedBox(width: 6),
+
             Container(
-              width: 16,
-              height: 16,
+              width: 14, // smaller circle
+              height: 14,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(color: Colors.white, width: 1.3),
+                border: Border.all(
+                  color: Colors.white.withOpacity(0.9),
+                  width: 1.1,
+                ),
               ),
               child: isSelected
                   ? Center(
                       child: Container(
-                        width: 8,
-                        height: 8,
+                        width: 7,
+                        height: 7,
                         decoration: const BoxDecoration(
-                            shape: BoxShape.circle, color: Colors.white),
+                          shape: BoxShape.circle,
+                          color: Colors.white,
+                        ),
                       ),
                     )
                   : null,
-            )
+            ),
           ],
         ),
       ),
     );
   }
+
 
   Widget _reminderToggle() {
     return Container(
@@ -470,8 +513,10 @@ Text(
       ),
       child: Row(
         children: [
-          Text("Yes",
-              style: AppTypography.bodyMedium.copyWith(color: Colors.white)),
+          Text(
+            "Yes",
+            style: AppTypography.bodyMedium.copyWith(color: Colors.white),
+          ),
           const Spacer(),
           Radio<bool>(
             value: true,
@@ -496,11 +541,15 @@ Text(
         children: [
           const Icon(Icons.music_note, color: Colors.white54, size: 20),
           const SizedBox(width: 10),
-          Text("Ringtone",
-              style: AppTypography.bodyMedium.copyWith(color: Colors.white70)),
+          Text(
+            "Ringtone",
+            style: AppTypography.bodyMedium.copyWith(color: Colors.white70),
+          ),
           const Spacer(),
-          Text(ringtoneController.text,
-              style: AppTypography.bodyMedium.copyWith(color: Colors.white)),
+          Text(
+            ringtoneController.text,
+            style: AppTypography.bodyMedium.copyWith(color: Colors.white),
+          ),
           const SizedBox(width: 6),
           Icon(Icons.chevron_right, color: Colors.white70, size: 22),
         ],
@@ -519,7 +568,10 @@ Text(
       child: Text(
         status,
         style: AppTypography.bodySmall.copyWith(
-          color: c, fontWeight: FontWeight.bold, fontSize: 13),
+          color: c,
+          fontWeight: FontWeight.bold,
+          fontSize: 13,
+        ),
       ),
     );
   }
@@ -537,7 +589,10 @@ Text(
         child: Text(
           "Remove",
           style: AppTypography.bodySmall.copyWith(
-              color: c, fontWeight: FontWeight.bold, fontSize: 13),
+            color: c,
+            fontWeight: FontWeight.bold,
+            fontSize: 13,
+          ),
         ),
       ),
     );

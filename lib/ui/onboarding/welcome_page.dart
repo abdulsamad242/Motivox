@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../theme/app_typography.dart';
 import '../../widgets/buttons/social_button.dart';
 import '../../widgets/app_background.dart';
-import '../../widgets/app_header.dart';   // ← NEW
+import '../../widgets/app_header.dart'; // ← NEW
 import '../onboarding/identity_setup_page.dart';
 
 class WelcomePage extends StatelessWidget {
@@ -14,8 +14,8 @@ class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AppBackground(
-        
+      body: SafeArea(
+        child: AppBackground(
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Padding(
@@ -23,7 +23,6 @@ class WelcomePage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-
                   /// 🔵 NEW REUSABLE HEADER (Figma style)
                   const AppHeader(),
 
@@ -55,8 +54,9 @@ class WelcomePage extends StatelessWidget {
                     ),
                   ),
 
-                  SizedBox(height: 4.h), // (Previously 6 → now tighter per your -2 spacing request)
-
+                  SizedBox(
+                    height: 4.h,
+                  ), // (Previously 6 → now tighter per your -2 spacing request)
                   /// 🔵 SUBTITLE — LEFT
                   Align(
                     alignment: Alignment.centerLeft,
@@ -74,7 +74,7 @@ class WelcomePage extends StatelessWidget {
                     label: "Continue with Google",
                     textStyle: AppTypography.social,
                     onTap: () {
-                      context.go('/stepone');
+                      context.push('/stepone');
                     },
                   ),
 
@@ -85,7 +85,7 @@ class WelcomePage extends StatelessWidget {
                     label: "Continue with Facebook",
                     textStyle: AppTypography.social,
                     onTap: () {
-                      context.go('/stepone');
+                      context.push('/stepone');
                     },
                   ),
 
@@ -96,7 +96,7 @@ class WelcomePage extends StatelessWidget {
                     label: "Continue with LinkedIn",
                     textStyle: AppTypography.social,
                     onTap: () {
-                      context.go('/stepone');
+                      context.push('/home');
                     },
                   ),
 
@@ -106,7 +106,7 @@ class WelcomePage extends StatelessWidget {
             ),
           ),
         ),
-      
+      ),
     );
   }
 }
