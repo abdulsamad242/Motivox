@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:motivix/common/models/onboarding_step_two.dart';
+
 import 'package:motivix/cubits/splash/splash_cubit.dart';
+import 'package:motivix/common/models/onboarding_step_two.dart';
 
 import '../../widgets/app_header.dart';
 import '../../widgets/step_progress.dart';
@@ -20,6 +21,7 @@ class GrowthAreaStepTwo extends StatefulWidget {
 
 class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
   final _formKey = GlobalKey<FormState>();
+
   String? _selectedNiche;
   final TextEditingController _otherNicheController = TextEditingController();
   final TextEditingController _microNicheController = TextEditingController();
@@ -31,10 +33,25 @@ class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
     super.dispose();
   }
 
-  void _onNextPressed() {
-    if (_formKey.currentState?.validate() ?? false) {
-      context.go('/stepthree');
+  /// ---------------------------
+  /// VALIDATION USING API RULES
+  /// ---------------------------
+  String? _validateDynamicField(String? value, FieldValidation? rules) {
+    if (rules == null) return null;
+
+    final text = value?.trim() ?? "";
+
+    if ((rules.requiredField ?? false) && text.isEmpty) {
+      return "This field is required";
     }
+    if (rules.minLength != null && text.length < rules.minLength!) {
+      return "Minimum ${rules.minLength} characters required";
+    }
+    if (rules.maxLength != null && text.length > rules.maxLength!) {
+      return "Maximum ${rules.maxLength} characters allowed";
+    }
+
+    return null;
   }
 
   @override
@@ -47,7 +64,7 @@ class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
     final fields = meta.form.fields;
 
     final dropdownField = fields[0];
-    final otherNicheField = fields[1];
+    final otherField = fields[1];
     final microField = fields[2];
     final buttonField = fields[3];
 
@@ -64,6 +81,8 @@ class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
               children: [
                 const AppHeader(),
                 SizedBox(height: 20.h),
+
+                /// STEPPER
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
@@ -78,7 +97,10 @@ class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
                     const StepProgress(currentStep: 2),
                   ],
                 ),
+
                 SizedBox(height: 30.h),
+
+                /// HEADING + TAGLINE
                 Center(
                   child: Text(
                     meta.heading,
@@ -95,14 +117,17 @@ class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
                     meta.tagline,
                     textAlign: TextAlign.center,
                     style: AppTypography.subtitle.copyWith(
-                      fontWeight: FontWeight.w400,
                       fontSize: 18.sp,
-                      height: 1.4,
+                      fontWeight: FontWeight.w400,
                       color: Colors.white.withOpacity(0.65),
+                      height: 1.4,
                     ),
                   ),
                 ),
+
                 SizedBox(height: 32.h),
+
+                /// NICHE SECTION TITLE
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -145,7 +170,10 @@ class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
                     ),
                   ],
                 ),
+
                 SizedBox(height: 22.h),
+
+                /// ---------- DROPDOWN FIELD (API DRIVEN) ----------
                 DropdownButtonFormField<String>(
                   dropdownColor: const Color(0xFF0F1A3D),
                   decoration: InputDecoration(
@@ -153,53 +181,60 @@ class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
                     fillColor: Colors.white.withOpacity(0.06),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(25.r),
-                      borderSide: BorderSide(
-                        color: Colors.white.withOpacity(0.25),
-                      ),
+                      borderSide:
+                          BorderSide(color: Colors.white.withOpacity(0.25)),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(25.r),
                       borderSide: const BorderSide(color: Colors.white, width: 2),
                     ),
                   ),
-                  hint: Text(dropdownField.placeholder ?? "", style: AppTypography.hint),
-                  items: nicheOptions.map((e) {
-                    return DropdownMenuItem(
-                      value: e,
-                      child: Text(
-                        e,
-                        style: AppTypography.subtitle.copyWith(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white,
+                  hint: Text(
+                    dropdownField.placeholder ?? "",
+                    style: AppTypography.hint,
+                  ),
+                  items: nicheOptions
+                      .map(
+                        (e) => DropdownMenuItem(
+                          value: e,
+                          child: Text(
+                            e,
+                            style: AppTypography.subtitle.copyWith(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
-                      ),
-                    );
-                  }).toList(),
+                      )
+                      .toList(),
                   value: _selectedNiche,
-                  onChanged: (value) => setState(() => _selectedNiche = value),
+                  onChanged: (value) {
+                    setState(() => _selectedNiche = value);
+                  },
                   validator: (value) =>
-                      value == null ? 'Please select a niche' : null,
+                      _validateDynamicField(value, dropdownField.validation),
                 ),
+
                 SizedBox(height: 32.h),
+
+                /// ---------- OTHER NICHE FIELD (Conditional + API RULES) ----------
                 if (_selectedNiche == "Other")
                   TextFormField(
                     controller: _otherNicheController,
                     style: AppTypography.subtitle.copyWith(
                       fontSize: 15.sp,
-                      fontWeight: FontWeight.w400,
                       color: Colors.white,
                     ),
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white.withOpacity(0.06),
-                      hintText: otherNicheField.placeholder,
+                      hintText: otherField.placeholder ?? "",
                       hintStyle: AppTypography.hint,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(25.r),
-                        borderSide: BorderSide(
-                          color: Colors.white.withOpacity(0.25),
-                        ),
+                        borderSide:
+                            BorderSide(color: Colors.white.withOpacity(0.25)),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(25.r),
@@ -207,15 +242,15 @@ class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
                             const BorderSide(color: Colors.white, width: 2),
                       ),
                     ),
-                    validator: (v) {
-                      if (_selectedNiche == "Other" &&
-                          (v == null || v.trim().isEmpty)) {
-                        return 'Required';
-                      }
-                      return null;
-                    },
+                    validator: (value) =>
+                        _selectedNiche == "Other"
+                            ? _validateDynamicField(value, otherField.validation)
+                            : null,
                   ),
+
                 if (_selectedNiche == "Other") SizedBox(height: 32.h),
+
+                /// MICRO-NICHE SECTION TITLE
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -249,7 +284,6 @@ class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
                             meta.microNicheTagline,
                             style: AppTypography.formLabel.copyWith(
                               fontSize: 12.sp,
-                              fontWeight: FontWeight.w400,
                               color: Colors.white.withOpacity(0.75),
                             ),
                           ),
@@ -258,18 +292,20 @@ class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
                     ),
                   ],
                 ),
+
                 SizedBox(height: 20.h),
+
+                /// ---------- MICRO NICHE INPUT (API VALIDATION) ----------
                 TextFormField(
                   controller: _microNicheController,
                   style: AppTypography.subtitle.copyWith(
                     fontSize: 15.sp,
-                    fontWeight: FontWeight.w400,
                     color: Colors.white,
                   ),
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white.withOpacity(0.06),
-                    hintText: microField.placeholder,
+                    hintText: microField.placeholder ?? "",
                     hintStyle: AppTypography.hint,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(25.r),
@@ -281,19 +317,22 @@ class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
                       borderSide: const BorderSide(color: Colors.white, width: 2),
                     ),
                   ),
-                  validator: (v) {
-                    if (v == null || v.trim().isEmpty) {
-                      return 'Required';
-                    }
-                    if (v.trim().length < 3) return 'Too short';
-                    return null;
-                  },
+                  validator: (v) =>
+                      _validateDynamicField(v, microField.validation),
                 ),
+
                 SizedBox(height: 35.h),
+
+                /// BUTTON (dynamic label)
                 PrimaryButton(
                   label: buttonField.label,
-                  onTap: _onNextPressed,
+                  onTap: () {
+                    if (_formKey.currentState?.validate() ?? false) {
+                      context.go('/stepthree');
+                    }
+                  },
                 ),
+
                 SizedBox(height: 30.h),
               ],
             ),

@@ -22,6 +22,7 @@ class PurposeStepThree extends StatefulWidget {
 class _PurposeStepThreeState extends State<PurposeStepThree> {
   final TextEditingController _missionController = TextEditingController();
   final TextEditingController _visionController = TextEditingController();
+
   bool _submitted = false;
 
   @override
@@ -31,19 +32,21 @@ class _PurposeStepThreeState extends State<PurposeStepThree> {
     super.dispose();
   }
 
-  String? _validateMission(int min) {
+  /// API-driven validation
+  String? _validateDynamic(String value, FieldValidation? rules, String fieldName) {
     if (!_submitted) return null;
-    final text = _missionController.text.trim();
-    if (text.isEmpty) return "Mission is required";
-    if (text.length < min) return "Mission must be at least $min characters";
-    return null;
-  }
+    final text = value.trim();
 
-  String? _validateVision(int min) {
-    if (!_submitted) return null;
-    final text = _visionController.text.trim();
-    if (text.isEmpty) return "Vision is required";
-    if (text.length < min) return "Vision must be at least $min characters";
+    if ((rules?.requiredField ?? false) && text.isEmpty) {
+      return "$fieldName is required";
+    }
+    if (rules?.minLength != null && text.length < rules!.minLength!) {
+      return "$fieldName must be at least ${rules.minLength} characters";
+    }
+    if (rules?.maxLength != null && text.length > rules!.maxLength!) {
+      return "$fieldName cannot exceed ${rules.maxLength} characters";
+    }
+
     return null;
   }
 
@@ -58,6 +61,7 @@ class _PurposeStepThreeState extends State<PurposeStepThree> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        /// ICON + TITLE
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -89,7 +93,10 @@ class _PurposeStepThreeState extends State<PurposeStepThree> {
             ),
           ],
         ),
+
         SizedBox(height: 14.h),
+
+        /// OUTER BOX
         Container(
           width: double.infinity,
           decoration: BoxDecoration(
@@ -100,6 +107,7 @@ class _PurposeStepThreeState extends State<PurposeStepThree> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              /// Example text
               Text(
                 example,
                 style: AppTypography.formLabel.copyWith(
@@ -109,7 +117,10 @@ class _PurposeStepThreeState extends State<PurposeStepThree> {
                   height: 1.35,
                 ),
               ),
+
               SizedBox(height: 12.h),
+
+              /// TEXT FIELD BOX
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.05),
@@ -125,8 +136,8 @@ class _PurposeStepThreeState extends State<PurposeStepThree> {
                   controller: controller,
                   minLines: 3,
                   maxLines: null,
-                  keyboardType: TextInputType.multiline,
                   cursorColor: const Color(0xFFFF8C42),
+                  keyboardType: TextInputType.multiline,
                   style: AppTypography.subtitle.copyWith(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w400,
@@ -136,16 +147,15 @@ class _PurposeStepThreeState extends State<PurposeStepThree> {
                   decoration: InputDecoration(
                     hintText: hint,
                     hintStyle: AppTypography.hint,
-                    filled: false,
-                    fillColor: Colors.transparent,
-                    contentPadding: EdgeInsets.zero,
                     border: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    focusedBorder: InputBorder.none,
                     isCollapsed: true,
+                    fillColor: Colors.transparent,
+                    filled: false
                   ),
                 ),
               ),
+
+              /// Validation error
               if (error != null)
                 Padding(
                   padding: EdgeInsets.only(top: 6.h),
@@ -167,11 +177,25 @@ class _PurposeStepThreeState extends State<PurposeStepThree> {
     final data = splashCubit.getCachedScreen("onboarding-step3") as OnboardingScreenThree;
     final meta = data.meta;
 
-    final missionField = meta.form.fields.firstWhere((e) => e.name == "mission");
-    final visionField = meta.form.fields.firstWhere((e) => e.name == "vision");
+    /// Extract Mission field
+    final missionField =
+        meta.form.fields.firstWhere((f) => f.name == "mission");
 
-    final missionError = _validateMission(missionField.validation?.minLength ?? 10);
-    final visionError = _validateVision(visionField.validation?.minLength ?? 10);
+    /// Extract Vision field
+    final visionField =
+        meta.form.fields.firstWhere((f) => f.name == "vision");
+
+    final missionError = _validateDynamic(
+      _missionController.text,
+      missionField.validation,
+      "Mission",
+    );
+
+    final visionError = _validateDynamic(
+      _visionController.text,
+      visionField.validation,
+      "Vision",
+    );
 
     return Scaffold(
       body: AppBackground(
@@ -181,7 +205,10 @@ class _PurposeStepThreeState extends State<PurposeStepThree> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const AppHeader(),
+
               SizedBox(height: 20.h),
+
+              /// Step indicator
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -196,7 +223,10 @@ class _PurposeStepThreeState extends State<PurposeStepThree> {
                   const StepProgress(currentStep: 3),
                 ],
               ),
+
               SizedBox(height: 30.h),
+
+              /// MAIN HEADING
               Center(
                 child: Text(
                   meta.heading,
@@ -207,7 +237,10 @@ class _PurposeStepThreeState extends State<PurposeStepThree> {
                   ),
                 ),
               ),
+
               SizedBox(height: 8.h),
+
+              /// SUBTITLE
               Center(
                 child: Text(
                   meta.tagline,
@@ -220,7 +253,10 @@ class _PurposeStepThreeState extends State<PurposeStepThree> {
                   ),
                 ),
               ),
+
               SizedBox(height: 32.h),
+
+              /// MISSION BLOCK
               _buildTextArea(
                 title: meta.missionTitle,
                 example: meta.missionExample,
@@ -229,7 +265,10 @@ class _PurposeStepThreeState extends State<PurposeStepThree> {
                 controller: _missionController,
                 error: missionError,
               ),
+
               SizedBox(height: 35.h),
+
+              /// VISION BLOCK
               _buildTextArea(
                 title: meta.visionTitle,
                 example: meta.visionExample,
@@ -238,16 +277,31 @@ class _PurposeStepThreeState extends State<PurposeStepThree> {
                 controller: _visionController,
                 error: visionError,
               ),
+
               SizedBox(height: 35.h),
+
+              /// CONTINUE BUTTON (dynamic label)
               PrimaryButton(
                 label: meta.form.fields.last.label,
                 onTap: () {
                   setState(() => _submitted = true);
-                  if (_validateMission(missionField.validation?.minLength ?? 10) != null) return;
-                  if (_validateVision(visionField.validation?.minLength ?? 10) != null) return;
+
+                  final missionValid = _validateDynamic(
+                      _missionController.text,
+                      missionField.validation,
+                      "Mission");
+
+                  final visionValid = _validateDynamic(
+                      _visionController.text,
+                      visionField.validation,
+                      "Vision");
+
+                  if (missionValid != null || visionValid != null) return;
+
                   context.go('/stepfour');
                 },
               ),
+
               SizedBox(height: 30.h),
             ],
           ),

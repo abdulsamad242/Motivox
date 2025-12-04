@@ -34,14 +34,26 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
     super.dispose();
   }
 
-  String? _validateField(TextEditingController controller, int minLength, String label) {
+  /// UNIVERSAL API-driven validation method
+  String? _validateDynamic(String value, FieldValidation4? rules, String label) {
     if (!_submitted) return null;
-    final text = controller.text.trim();
-    if (text.isEmpty) return "$label is required";
-    if (text.length < minLength) return "$label must be at least $minLength characters";
+
+    final text = value.trim();
+
+    if (rules?.requiredField == true && text.isEmpty) {
+      return "$label is required";
+    }
+    if (rules?.minLength != null && text.length < rules!.minLength!) {
+      return "$label must be at least ${rules.minLength} characters";
+    }
+    if (rules?.maxLength != null && text.length > rules!.maxLength!) {
+      return "$label cannot exceed ${rules.maxLength} characters";
+    }
+
     return null;
   }
 
+  /// TEXT AREA (unchanged design)
   Widget _buildTextArea({
     required String title,
     required String example,
@@ -53,6 +65,7 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        /// ICON + TITLE
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -84,7 +97,10 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
             ),
           ],
         ),
+
         SizedBox(height: 14.h),
+
+        /// OUTER BOX
         Container(
           width: double.infinity,
           decoration: BoxDecoration(
@@ -95,6 +111,7 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              /// Example
               Text(
                 example,
                 style: AppTypography.formLabel.copyWith(
@@ -104,19 +121,22 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
                   height: 1.35,
                 ),
               ),
+
               SizedBox(height: 12.h),
+
+              /// INPUT BOX
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.05),
                   borderRadius: BorderRadius.circular(16.r),
                   border: Border.all(
-                    color: error != null
-                        ? Colors.red
-                        : Colors.white.withOpacity(0.35),
+                    color:
+                        error != null ? Colors.red : Colors.white.withOpacity(0.35),
                   ),
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
                 child: TextField(
+                  
                   controller: controller,
                   minLines: 3,
                   maxLines: null,
@@ -125,19 +145,20 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
                   style: AppTypography.subtitle.copyWith(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w400,
-                    color: Colors.white,
                     height: 1.45,
+                    color: Colors.white,
                   ),
                   decoration: InputDecoration(
+                    filled: false,
+                    fillColor: Colors.transparent,
                     hintText: hint,
                     hintStyle: AppTypography.hint,
-                    filled: false,
                     border: InputBorder.none,
-                    contentPadding: EdgeInsets.zero,
                     isCollapsed: true,
                   ),
                 ),
               ),
+
               if (error != null)
                 Padding(
                   padding: EdgeInsets.only(top: 6.h),
@@ -156,21 +177,23 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
   @override
   Widget build(BuildContext context) {
     final splashCubit = context.watch<SplashCubit>();
-    final data = splashCubit.getCachedScreen("onboarding-step4") as OnboardingScreenFour;
+    final data =
+        splashCubit.getCachedScreen("onboarding-step4") as OnboardingScreenFour;
+
     final meta = data.meta;
 
-    final posField = meta.form.fields.firstWhere((e) => e.name == "positioning");
-    final brandField = meta.form.fields.firstWhere((e) => e.name == "branding");
+    final posField = meta.form.fields.firstWhere((f) => f.name == "positioning");
+    final brandField = meta.form.fields.firstWhere((f) => f.name == "branding");
 
-    final posError = _validateField(
-      _positioningController,
-      posField.validation?.minLength ?? 10,
+    final posError = _validateDynamic(
+      _positioningController.text,
+      posField.validation,
       posField.label,
     );
 
-    final brandError = _validateField(
-      _brandingController,
-      brandField.validation?.minLength ?? 10,
+    final brandError = _validateDynamic(
+      _brandingController.text,
+      brandField.validation,
       brandField.label,
     );
 
@@ -184,6 +207,7 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
               const AppHeader(),
               SizedBox(height: 20.h),
 
+              /// STEP COUNTER
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -201,6 +225,7 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
 
               SizedBox(height: 30.h),
 
+              /// TITLE
               Center(
                 child: Text(
                   meta.heading,
@@ -211,8 +236,10 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
                   ),
                 ),
               ),
+
               SizedBox(height: 8.h),
 
+              /// SUBTITLE
               Center(
                 child: Text(
                   meta.tagline,
@@ -227,6 +254,7 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
 
               SizedBox(height: 32.h),
 
+              /// POSITIONING FIELD
               _buildTextArea(
                 title: meta.positioningTitle,
                 example: meta.positioningExample,
@@ -238,6 +266,7 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
 
               SizedBox(height: 35.h),
 
+              /// BRANDING FIELD
               _buildTextArea(
                 title: meta.brandingTitle,
                 example: meta.brandingExample,
@@ -249,13 +278,25 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
 
               SizedBox(height: 35.h),
 
+              /// NEXT BUTTON
               PrimaryButton(
                 label: meta.form.fields.last.label,
                 onTap: () {
                   setState(() => _submitted = true);
 
-                  if (posError != null) return;
-                  if (brandError != null) return;
+                  final posValid = _validateDynamic(
+                    _positioningController.text,
+                    posField.validation,
+                    posField.label,
+                  );
+
+                  final brandValid = _validateDynamic(
+                    _brandingController.text,
+                    brandField.validation,
+                    brandField.label,
+                  );
+
+                  if (posValid != null || brandValid != null) return;
 
                   context.go('/why');
                 },
