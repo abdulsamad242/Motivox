@@ -3,13 +3,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:motivix/cubits/splash/splash_cubit.dart';
+import 'package:motivix/common/models/onboarding_step_four.dart';
 
 import '../../widgets/app_header.dart';
 import '../../widgets/step_progress.dart';
 import '../../widgets/buttons/primary_button.dart';
 import '../../widgets/app_background.dart';
 import '../../theme/app_typography.dart';
-import '../onboarding/why_summary_page.dart';
 
 class IdentityStepFour extends StatefulWidget {
   const IdentityStepFour({super.key});
@@ -31,52 +34,25 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
     super.dispose();
   }
 
-  String? _validatePositioning() {
+  String? _validateField(TextEditingController controller, int minLength, String label) {
     if (!_submitted) return null;
-    final text = _positioningController.text.trim();
-    if (text.isEmpty) return "Positioning is required";
-    if (text.length < 10) return "Positioning must be at least 10 characters";
+    final text = controller.text.trim();
+    if (text.isEmpty) return "$label is required";
+    if (text.length < minLength) return "$label must be at least $minLength characters";
     return null;
   }
 
-  String? _validateBranding() {
-    if (!_submitted) return null;
-    final text = _brandingController.text.trim();
-    if (text.isEmpty) return "Branding is required";
-    if (text.length < 10) return "Branding must be at least 10 characters";
-    return null;
-  }
-
-  void _onSubmit() {
-    setState(() => _submitted = true);
-
-    if (_validatePositioning() != null || _validateBranding() != null) {
-      return;
-    }
-
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => const WhySummaryPage()),
-    );
-  }
-
-  // -------------------------------
-  // REUSABLE TEXT AREA SECTION
-  // -------------------------------
   Widget _buildTextArea({
     required String title,
     required String example,
     required String hint,
     required String iconPath,
     required TextEditingController controller,
-    required String? Function() validator,
+    required String? error,
   }) {
-    final error = validator();
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        /// TITLE ROW (Perfect Alignment)
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -96,9 +72,7 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
                 ),
               ),
             ),
-
             SizedBox(width: 12.w),
-
             Expanded(
               child: Text(
                 title,
@@ -110,10 +84,7 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
             ),
           ],
         ),
-
         SizedBox(height: 14.h),
-
-        /// OUTER CONTAINER
         Container(
           width: double.infinity,
           decoration: BoxDecoration(
@@ -124,7 +95,6 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              /// EXAMPLE
               Text(
                 example,
                 style: AppTypography.formLabel.copyWith(
@@ -134,10 +104,7 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
                   height: 1.35,
                 ),
               ),
-
               SizedBox(height: 12.h),
-
-              /// INPUT BOX
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.05),
@@ -171,8 +138,6 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
                   ),
                 ),
               ),
-
-              /// ERROR TEXT
               if (error != null)
                 Padding(
                   padding: EdgeInsets.only(top: 6.h),
@@ -188,11 +153,27 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
     );
   }
 
-  // --------------------------
-  // BUILD SCREEN
-  // --------------------------
   @override
   Widget build(BuildContext context) {
+    final splashCubit = context.watch<SplashCubit>();
+    final data = splashCubit.getCachedScreen("onboarding-step4") as OnboardingScreenFour;
+    final meta = data.meta;
+
+    final posField = meta.form.fields.firstWhere((e) => e.name == "positioning");
+    final brandField = meta.form.fields.firstWhere((e) => e.name == "branding");
+
+    final posError = _validateField(
+      _positioningController,
+      posField.validation?.minLength ?? 10,
+      posField.label,
+    );
+
+    final brandError = _validateField(
+      _brandingController,
+      brandField.validation?.minLength ?? 10,
+      brandField.label,
+    );
+
     return Scaffold(
       body: AppBackground(
         child: SingleChildScrollView(
@@ -200,11 +181,9 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              /// HEADER
               const AppHeader(),
               SizedBox(height: 20.h),
 
-              /// STEP INDICATOR
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -222,10 +201,9 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
 
               SizedBox(height: 30.h),
 
-              /// MAIN TITLE
               Center(
                 child: Text(
-                  "Build Your Unique Identity",
+                  meta.heading,
                   textAlign: TextAlign.center,
                   style: AppTypography.title.copyWith(
                     fontSize: 24.sp,
@@ -235,13 +213,11 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
               ),
               SizedBox(height: 8.h),
 
-              /// SUBTITLE
               Center(
                 child: Text(
-                  "Define how the world sees you — your values, voice, and vision.",
+                  meta.tagline,
                   textAlign: TextAlign.center,
                   style: AppTypography.subtitle.copyWith(
-                    fontWeight: FontWeight.w400,
                     fontSize: 18.sp,
                     color: Colors.white.withOpacity(0.70),
                     height: 1.4,
@@ -251,36 +227,36 @@ class _IdentityStepFourState extends State<IdentityStepFour> {
 
               SizedBox(height: 32.h),
 
-              /// POSITIONING
               _buildTextArea(
-                title: "Positioning (How you want to be seen)",
+                title: meta.positioningTitle,
+                example: meta.positioningExample,
+                hint: posField.placeholder ?? "",
                 iconPath: "assets/icons/pos.png",
-                example:
-                    "Ex: A friendly, inspiring fitness coach who helps working women stay healthy.",
-                hint: "The trusted fitness coach for busy professionals...",
                 controller: _positioningController,
-                validator: _validatePositioning,
+                error: posError,
               ),
 
               SizedBox(height: 35.h),
 
-              /// BRANDING
               _buildTextArea(
-                title: "Branding (Your identity & style)",
+                title: meta.brandingTitle,
+                example: meta.brandingExample,
+                hint: brandField.placeholder ?? "",
                 iconPath: "assets/icons/brand.png",
-                example:
-                    "Ex: Calm, positive, empowering tone in everything I create.",
-                hint: "Describe your personal style and tone...",
                 controller: _brandingController,
-                validator: _validateBranding,
+                error: brandError,
               ),
 
               SizedBox(height: 35.h),
 
-              /// BUTTON
               PrimaryButton(
-                label: "Submit",
+                label: meta.form.fields.last.label,
                 onTap: () {
+                  setState(() => _submitted = true);
+
+                  if (posError != null) return;
+                  if (brandError != null) return;
+
                   context.go('/why');
                 },
               ),

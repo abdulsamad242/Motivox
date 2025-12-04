@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:motivix/cubits/splash/splash_cubit.dart';
+import 'package:motivix/common/models/onboarding_step_three.dart';
 
 import '../../widgets/app_header.dart';
 import '../../widgets/step_progress.dart';
 import '../../widgets/buttons/primary_button.dart';
 import '../../widgets/app_background.dart';
 import '../../theme/app_typography.dart';
-import '../onboarding/identity_step_four.dart';
 
 class PurposeStepThree extends StatefulWidget {
   const PurposeStepThree({super.key});
@@ -19,7 +22,6 @@ class PurposeStepThree extends StatefulWidget {
 class _PurposeStepThreeState extends State<PurposeStepThree> {
   final TextEditingController _missionController = TextEditingController();
   final TextEditingController _visionController = TextEditingController();
-
   bool _submitted = false;
 
   @override
@@ -29,30 +31,20 @@ class _PurposeStepThreeState extends State<PurposeStepThree> {
     super.dispose();
   }
 
-  String? _validateMission() {
+  String? _validateMission(int min) {
     if (!_submitted) return null;
     final text = _missionController.text.trim();
     if (text.isEmpty) return "Mission is required";
-    if (text.length < 10) return "Mission must be at least 10 characters";
+    if (text.length < min) return "Mission must be at least $min characters";
     return null;
   }
 
-  String? _validateVision() {
+  String? _validateVision(int min) {
     if (!_submitted) return null;
     final text = _visionController.text.trim();
     if (text.isEmpty) return "Vision is required";
-    if (text.length < 10) return "Vision must be at least 10 characters";
+    if (text.length < min) return "Vision must be at least $min characters";
     return null;
-  }
-
-  void _onContinue() {
-    setState(() => _submitted = true);
-    if (_validateMission() != null || _validateVision() != null) return;
-
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => const IdentityStepFour()),
-    );
   }
 
   Widget _buildTextArea({
@@ -61,14 +53,11 @@ class _PurposeStepThreeState extends State<PurposeStepThree> {
     required String hint,
     required String iconPath,
     required TextEditingController controller,
-    required String? Function() validator,
+    required String? error,
   }) {
-    final error = validator();
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        /// ICON + TITLE (perfect alignment)
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -88,9 +77,7 @@ class _PurposeStepThreeState extends State<PurposeStepThree> {
                 ),
               ),
             ),
-
             SizedBox(width: 12.w),
-
             Expanded(
               child: Text(
                 title,
@@ -102,10 +89,7 @@ class _PurposeStepThreeState extends State<PurposeStepThree> {
             ),
           ],
         ),
-
         SizedBox(height: 14.h),
-
-        /// TEXTAREA OUTER CONTAINER
         Container(
           width: double.infinity,
           decoration: BoxDecoration(
@@ -125,9 +109,7 @@ class _PurposeStepThreeState extends State<PurposeStepThree> {
                   height: 1.35,
                 ),
               ),
-
               SizedBox(height: 12.h),
-
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.05),
@@ -139,7 +121,6 @@ class _PurposeStepThreeState extends State<PurposeStepThree> {
                   ),
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
-
                 child: TextField(
                   controller: controller,
                   minLines: 3,
@@ -155,7 +136,7 @@ class _PurposeStepThreeState extends State<PurposeStepThree> {
                   decoration: InputDecoration(
                     hintText: hint,
                     hintStyle: AppTypography.hint,
-                    filled: false, // no bg
+                    filled: false,
                     fillColor: Colors.transparent,
                     contentPadding: EdgeInsets.zero,
                     border: InputBorder.none,
@@ -165,7 +146,6 @@ class _PurposeStepThreeState extends State<PurposeStepThree> {
                   ),
                 ),
               ),
-
               if (error != null)
                 Padding(
                   padding: EdgeInsets.only(top: 6.h),
@@ -183,6 +163,16 @@ class _PurposeStepThreeState extends State<PurposeStepThree> {
 
   @override
   Widget build(BuildContext context) {
+    final splashCubit = context.watch<SplashCubit>();
+    final data = splashCubit.getCachedScreen("onboarding-step3") as OnboardingScreenThree;
+    final meta = data.meta;
+
+    final missionField = meta.form.fields.firstWhere((e) => e.name == "mission");
+    final visionField = meta.form.fields.firstWhere((e) => e.name == "vision");
+
+    final missionError = _validateMission(missionField.validation?.minLength ?? 10);
+    final visionError = _validateVision(visionField.validation?.minLength ?? 10);
+
     return Scaffold(
       body: AppBackground(
         child: SingleChildScrollView(
@@ -190,11 +180,8 @@ class _PurposeStepThreeState extends State<PurposeStepThree> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              /// HEADER
               const AppHeader(),
               SizedBox(height: 20.h),
-
-              /// STEP INDICATOR
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -209,13 +196,10 @@ class _PurposeStepThreeState extends State<PurposeStepThree> {
                   const StepProgress(currentStep: 3),
                 ],
               ),
-
               SizedBox(height: 30.h),
-
-              /// MAIN TITLE
               Center(
                 child: Text(
-                  "Define Your Purpose",
+                  meta.heading,
                   textAlign: TextAlign.center,
                   style: AppTypography.title.copyWith(
                     fontSize: 24.sp,
@@ -224,11 +208,9 @@ class _PurposeStepThreeState extends State<PurposeStepThree> {
                 ),
               ),
               SizedBox(height: 8.h),
-
-              /// SUBTITLE
               Center(
                 child: Text(
-                  "Tell us what drives you, so Motivo can guide you every day.",
+                  meta.tagline,
                   textAlign: TextAlign.center,
                   style: AppTypography.subtitle.copyWith(
                     fontWeight: FontWeight.w400,
@@ -238,43 +220,34 @@ class _PurposeStepThreeState extends State<PurposeStepThree> {
                   ),
                 ),
               ),
-
               SizedBox(height: 32.h),
-
-              /// MISSION SECTION
               _buildTextArea(
-                title: "Your Mission (Your Goal / Why You Do It)",
+                title: meta.missionTitle,
+                example: meta.missionExample,
+                hint: missionField.placeholder ?? "",
                 iconPath: "assets/icons/mis.png",
-                example:
-                    "Example: “I want to help 1 million working women stay fit and healthy to live happier lives.”",
-                hint: "Helping people live healthier lives...",
                 controller: _missionController,
-                validator: _validateMission,
+                error: missionError,
               ),
-
               SizedBox(height: 35.h),
-
-              /// VISION SECTION
               _buildTextArea(
-                title: "Your Vision (The Bigger Picture)",
+                title: meta.visionTitle,
+                example: meta.visionExample,
+                hint: visionField.placeholder ?? "",
                 iconPath: "assets/icons/vis.png",
-                example:
-                    "Ex: To empower working women to build a culture of fitness, confidence & joy.",
-                hint: "Share the impact you dream of creating...",
                 controller: _visionController,
-                validator: _validateVision,
+                error: visionError,
               ),
-
               SizedBox(height: 35.h),
-
-              /// CONTINUE BUTTON
               PrimaryButton(
-                label: "Continue",
+                label: meta.form.fields.last.label,
                 onTap: () {
+                  setState(() => _submitted = true);
+                  if (_validateMission(missionField.validation?.minLength ?? 10) != null) return;
+                  if (_validateVision(visionField.validation?.minLength ?? 10) != null) return;
                   context.go('/stepfour');
                 },
               ),
-
               SizedBox(height: 30.h),
             ],
           ),

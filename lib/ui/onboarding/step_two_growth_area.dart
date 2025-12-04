@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:motivix/common/models/onboarding_step_two.dart';
+import 'package:motivix/cubits/splash/splash_cubit.dart';
 
 import '../../widgets/app_header.dart';
 import '../../widgets/step_progress.dart';
 import '../../widgets/buttons/primary_button.dart';
 import '../../widgets/app_background.dart';
 import '../../theme/app_typography.dart';
-import '../onboarding/purpose_step_three.dart';
 
 class GrowthAreaStepTwo extends StatefulWidget {
   const GrowthAreaStepTwo({super.key});
@@ -18,35 +20,39 @@ class GrowthAreaStepTwo extends StatefulWidget {
 
 class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _microNicheController = TextEditingController();
-
   String? _selectedNiche;
-  final List<String> _nicheOptions = [
-    "Business",
-    "Fitness & Health",
-    "Marketing",
-    "Content Creation",
-    "Finance",
-    "Tech & Automation",
-    "Other",
-  ];
+  final TextEditingController _otherNicheController = TextEditingController();
+  final TextEditingController _microNicheController = TextEditingController();
 
   @override
   void dispose() {
+    _otherNicheController.dispose();
     _microNicheController.dispose();
     super.dispose();
   }
 
   void _onNextPressed() {
     if (_formKey.currentState?.validate() ?? false) {
-      if (_formKey.currentState?.validate() ?? false) {
-        context.go('/stepthree');
-      }
+      context.go('/stepthree');
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final splashCubit = context.watch<SplashCubit>();
+    final onboarding =
+        splashCubit.getCachedScreen("onboarding-step2") as OnboardingScreenTwo;
+
+    final meta = onboarding.meta;
+    final fields = meta.form.fields;
+
+    final dropdownField = fields[0];
+    final otherNicheField = fields[1];
+    final microField = fields[2];
+    final buttonField = fields[3];
+
+    final List<String> nicheOptions = dropdownField.options ?? [];
+
     return Scaffold(
       body: AppBackground(
         child: SingleChildScrollView(
@@ -56,11 +62,8 @@ class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                /// HEADER
                 const AppHeader(),
                 SizedBox(height: 20.h),
-
-                /// STEP INDICATOR + PROGRESS
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
@@ -75,13 +78,10 @@ class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
                     const StepProgress(currentStep: 2),
                   ],
                 ),
-
                 SizedBox(height: 30.h),
-
-                /// MAIN TITLE
                 Center(
                   child: Text(
-                    "Choose your growth area",
+                    meta.heading,
                     textAlign: TextAlign.center,
                     style: AppTypography.title.copyWith(
                       fontSize: 24.sp,
@@ -89,13 +89,10 @@ class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
                     ),
                   ),
                 ),
-
                 SizedBox(height: 8.h),
-
-                /// SUBTITLE
                 Center(
                   child: Text(
-                    "Pick a field you want to focus on. This helps us suggest relevant content.",
+                    meta.tagline,
                     textAlign: TextAlign.center,
                     style: AppTypography.subtitle.copyWith(
                       fontWeight: FontWeight.w400,
@@ -105,12 +102,7 @@ class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
                     ),
                   ),
                 ),
-
                 SizedBox(height: 32.h),
-
-                // ----------------------------------------------------
-                //                     NICHE SECTION
-                // ----------------------------------------------------
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -128,13 +120,12 @@ class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
                       ),
                     ),
                     SizedBox(width: 12.w),
-
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Niche (Expertise / Focus Area)",
+                            meta.nicheTitle,
                             style: AppTypography.sectionTitle.copyWith(
                               fontSize: 16.sp,
                               fontWeight: FontWeight.w500,
@@ -142,7 +133,7 @@ class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
                           ),
                           SizedBox(height: 4.h),
                           Text(
-                            "Your niche is where your skills, passion, and purpose come together",
+                            meta.nicheTagline,
                             style: AppTypography.formLabel.copyWith(
                               fontSize: 12.sp,
                               fontWeight: FontWeight.w500,
@@ -154,10 +145,7 @@ class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
                     ),
                   ],
                 ),
-
                 SizedBox(height: 22.h),
-
-                /// NICHE DROPDOWN
                 DropdownButtonFormField<String>(
                   dropdownColor: const Color(0xFF0F1A3D),
                   decoration: InputDecoration(
@@ -171,18 +159,15 @@ class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(25.r),
-                      borderSide: const BorderSide(
-                        color: Colors.white,
-                        width: 2,
-                      ),
+                      borderSide: const BorderSide(color: Colors.white, width: 2),
                     ),
                   ),
-                  hint: Text("Ex: Fitness & Health", style: AppTypography.hint),
-                  items: _nicheOptions.map((niche) {
+                  hint: Text(dropdownField.placeholder ?? "", style: AppTypography.hint),
+                  items: nicheOptions.map((e) {
                     return DropdownMenuItem(
-                      value: niche,
+                      value: e,
                       child: Text(
-                        niche,
+                        e,
                         style: AppTypography.subtitle.copyWith(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w400,
@@ -192,18 +177,45 @@ class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
                     );
                   }).toList(),
                   value: _selectedNiche,
-                  onChanged: (value) => setState(() {
-                    _selectedNiche = value;
-                  }),
+                  onChanged: (value) => setState(() => _selectedNiche = value),
                   validator: (value) =>
                       value == null ? 'Please select a niche' : null,
                 ),
-
                 SizedBox(height: 32.h),
-
-                // ----------------------------------------------------
-                //                 MICRO NICHE SECTION
-                // ----------------------------------------------------
+                if (_selectedNiche == "Other")
+                  TextFormField(
+                    controller: _otherNicheController,
+                    style: AppTypography.subtitle.copyWith(
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.white,
+                    ),
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white.withOpacity(0.06),
+                      hintText: otherNicheField.placeholder,
+                      hintStyle: AppTypography.hint,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25.r),
+                        borderSide: BorderSide(
+                          color: Colors.white.withOpacity(0.25),
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25.r),
+                        borderSide:
+                            const BorderSide(color: Colors.white, width: 2),
+                      ),
+                    ),
+                    validator: (v) {
+                      if (_selectedNiche == "Other" &&
+                          (v == null || v.trim().isEmpty)) {
+                        return 'Required';
+                      }
+                      return null;
+                    },
+                  ),
+                if (_selectedNiche == "Other") SizedBox(height: 32.h),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -221,13 +233,12 @@ class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
                       ),
                     ),
                     SizedBox(width: 12.w),
-
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Micro Niche (Narrow Down Your Focus)",
+                            meta.microNicheTitle,
                             style: AppTypography.sectionTitle.copyWith(
                               fontSize: 16.sp,
                               fontWeight: FontWeight.w500,
@@ -235,7 +246,7 @@ class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
                           ),
                           SizedBox(height: 4.h),
                           Text(
-                            "Helping Working Moms Stay Fit with Yoga",
+                            meta.microNicheTagline,
                             style: AppTypography.formLabel.copyWith(
                               fontSize: 12.sp,
                               fontWeight: FontWeight.w400,
@@ -247,10 +258,7 @@ class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
                     ),
                   ],
                 ),
-
                 SizedBox(height: 20.h),
-
-                /// MICRO NICHE INPUT
                 TextFormField(
                   controller: _microNicheController,
                   style: AppTypography.subtitle.copyWith(
@@ -261,43 +269,31 @@ class _GrowthAreaStepTwoState extends State<GrowthAreaStepTwo> {
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white.withOpacity(0.06),
-                    hintText: "Ex: Helping Working Moms Stay Fit with Yoga",
+                    hintText: microField.placeholder,
                     hintStyle: AppTypography.hint,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(25.r),
-                      borderSide: BorderSide(
-                        color: Colors.white.withOpacity(0.25),
-                      ),
+                      borderSide:
+                          BorderSide(color: Colors.white.withOpacity(0.25)),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(25.r),
-                      borderSide: const BorderSide(
-                        color: Colors.white,
-                        width: 2,
-                      ),
+                      borderSide: const BorderSide(color: Colors.white, width: 2),
                     ),
                   ),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Micro niche is required';
+                  validator: (v) {
+                    if (v == null || v.trim().isEmpty) {
+                      return 'Required';
                     }
-                    if (value.trim().length < 3) {
-                      return 'Must be at least 3 characters';
-                    }
+                    if (v.trim().length < 3) return 'Too short';
                     return null;
                   },
                 ),
-
                 SizedBox(height: 35.h),
-
-                /// NEXT BUTTON
                 PrimaryButton(
-                  label: "Next",
-                  onTap: () {
-                    context.go('/stepthree');
-                  },
+                  label: buttonField.label,
+                  onTap: _onNextPressed,
                 ),
-
                 SizedBox(height: 30.h),
               ],
             ),
